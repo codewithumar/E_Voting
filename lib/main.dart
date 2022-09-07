@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'E-Voting',
       theme: ThemeData(
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.yellow,
       ),
       home: const SplashScreen(),
     );
