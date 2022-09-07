@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.e_voting">
+    <uses-permission android:name="android.permission.INTERNET" /> 
+    
    <application
         android:label="e_voting"
         android:name="${applicationName}"
