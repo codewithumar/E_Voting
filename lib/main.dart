@@ -1,4 +1,7 @@
-import 'package:e_voting/screens/splashscreen.dart';
+import 'package:e_voting/screens/login_screen.dart';
+import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/screens/profile_creation.dart';
+import 'package:e_voting/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
@@ -21,9 +24,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'E-Voting',
       theme: ThemeData(
-        primarySwatch: Colors.yellow,
+        fontFamily: "Mulish",
+        primarySwatch: Colors.teal,
       ),
-      home: const SplashScreen(),
+      home: const LoginScreen(),
     );
   }
 }

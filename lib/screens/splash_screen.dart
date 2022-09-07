@@ -1,4 +1,5 @@
-import 'package:e_voting/screens/loginscreen.dart';
+import 'package:e_voting/screens/login_screen.dart';
+import 'package:e_voting/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
             children: const [
               Center(
                 child: Image(
-                  image: AssetImage('lib/assets/splashicon.png'),
+                  image: AssetImage('assets/images/splashicon.png'),
                 ),
               ),
               SizedBox(height: 25),
