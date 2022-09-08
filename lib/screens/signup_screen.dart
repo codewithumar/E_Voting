@@ -1,6 +1,8 @@
+import 'package:e_voting/screens/create_profile.dart';
+import 'package:e_voting/screens/homepage.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/screens/profile.dart';
-import 'package:e_voting/screens/profile_creation.dart';
+import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -126,11 +128,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
     )
         .then(
       (value) {
-        Fluttertoast.showToast(msg: "sccess");
+        final user = UserData(
+          fullName: namecontroller.text,
+          cnic: cniccontroller.text,
+          doe: doecontroller.text,
+          email: emailcontroller.text,
+          password: passwordcontroller.text,
+          number: "null",
+          mName: "null",
+          perAddress: "null",
+          currAddress: "null",
+        );
+        UserData.savePassToFirestore(user);
+
+        Fluttertoast.showToast(msg: "Signup Successful");
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const Profile(),
+              builder: (context) => const CreateProfile(),
             ),
             (route) => false);
       },

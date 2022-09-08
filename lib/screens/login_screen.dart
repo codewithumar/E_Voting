@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final auth = FirebaseAuth.instance;
+    // final auth = FirebaseAuth.instance;
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
     )
         .then(
       (value) {
-        Fluttertoast.showToast(msg: "sccess");
+        Fluttertoast.showToast(msg: "Logged in Successfully");
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(

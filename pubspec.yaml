@@ -40,6 +40,8 @@ dependencies:
   flutter_signin_button: ^2.0.0
   firebase_auth: ^3.7.0
   fluttertoast: ^8.0.9
+  cloud_firestore: ^3.4.2
+  floating_bottom_navigation_bar: ^1.5.2
 
 dev_dependencies:
   flutter_test:

@@ -1,48 +1,50 @@
-import 'package:e_voting/screens/edit_profile.dart';
+// ignore_for_file: must_be_immutable
+
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_voting/screens/homepage.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _EditProfileState extends State<EditProfile> {
   late double height = MediaQuery.of(context).size.height;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Profile',
-          style: TextStyle(color: Constants.primarycolor),
+          "Edit Profile",
+          style: TextStyle(
+            color: Constants.primarycolor,
+            fontSize: 20,
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
-        actions: <Widget>[
-          MaterialButton(
-            textColor: Colors.white,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const EditProfile(),
-                ),
-              );
-            },
-            shape:
-                const CircleBorder(side: BorderSide(color: Colors.transparent)),
-            child: const Text(
-              "Edit",
-              style: TextStyle(color: Colors.black, fontSize: 14),
-            ),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
           ),
-        ],
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(4.0),
           child: Container(
@@ -64,7 +66,7 @@ class _ProfileState extends State<Profile> {
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final users = snapshot.data!;
-              return ProfileStream(users);
+              return EditProfileStream(users, context);
             }
           } else {
             return const Center(
@@ -78,12 +80,22 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-class ProfileStream extends StatelessWidget {
-  const ProfileStream(
-    this.users, {
+class EditProfileStream extends StatelessWidget {
+  EditProfileStream(
+    this.users,
+    this.context, {
     Key? key,
   }) : super(key: key);
   final List<UserData> users;
+  BuildContext context;
+
+  late TextEditingController numberController =
+      TextEditingController(text: users[0].number);
+  late TextEditingController curAddressController =
+      TextEditingController(text: users[0].currAddress);
+  late TextEditingController doeController =
+      TextEditingController(text: users[0].doe);
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -148,59 +160,46 @@ class ProfileStream extends StatelessWidget {
                 ),
               ),
               InputField(
-                label: 'Full Name',
-                labelText: users[0].fullName,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Email',
-                labelText: users[0].email,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Password',
-                labelText: users[0].password,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'CNIC',
-                labelText: users[0].cnic,
-                readOnly: true,
-              ),
-              InputField(
                 label: 'Date of Expiry',
                 labelText: users[0].doe,
-                readOnly: true,
+                controller: doeController,
               ),
               InputField(
                 label: 'Phone Number',
                 labelText: users[0].number,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Full Name',
-                labelText: users[0].fullName,
-                readOnly: true,
-              ),
-              InputField(
-                label: "Mother's Name",
-                labelText: users[0].mName,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Permanent Address',
-                labelText: users[0].perAddress,
-                readOnly: true,
+                controller: numberController,
               ),
               InputField(
                 label: 'Current Address',
                 labelText: users[0].currAddress,
-                readOnly: true,
+                controller: curAddressController,
               ),
+              SignupLoginButton(btnText: 'Update', function: updateProfile),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> updateProfile() async {
+    final docUser = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(users[0].id);
+    log(FirebaseAuth.instance.currentUser!.email!);
+    log('${doeController.text}, ${numberController.text}');
+
+    docUser.update(
+      {
+        "DoE": doeController.text,
+        "number": numberController.text,
+        "currAddress": curAddressController.text,
+      },
+    );
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const Homepage(),
+        ),
+        (route) => false);
   }
 }
