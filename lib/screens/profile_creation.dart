@@ -1,7 +1,7 @@
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
-import 'package:e_voting/widgets/signup_login_button.dart';
+
 import 'package:flutter/material.dart';
 
 class ProfileCreation extends StatefulWidget {
@@ -13,6 +13,11 @@ class ProfileCreation extends StatefulWidget {
 
 class _ProfileCreationState extends State<ProfileCreation> {
   late double height = MediaQuery.of(context).size.height;
+  TextEditingController phonecontroller = TextEditingController();
+  TextEditingController mothernamecontroller = TextEditingController();
+  TextEditingController currentaddresscontroller = TextEditingController();
+  TextEditingController permanentaddresscontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,27 +100,32 @@ class _ProfileCreationState extends State<ProfileCreation> {
                     ),
                   ),
                 ),
-                const InputField(
+                InputField(
                   label: 'Phone Number',
                   labelText: '0900-78601',
+                  controller: phonecontroller,
                 ),
-                const InputField(
+                InputField(
                   label: "Mother's Name",
                   labelText: "Alexa",
+                  controller: mothernamecontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'Permanent Adress',
                   labelText: 'Rab Nawaz Colony',
+                  controller: permanentaddresscontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'Email',
                   labelText: 'example@gmail.com',
+                  controller: emailcontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'Current Address',
                   labelText: 'Mullah Ki Basti',
+                  controller: currentaddresscontroller,
                 ),
-                const SignupLoginButton(btnText: 'Create Profile'),
+                //  const SignupLoginButton(btnText: 'Create Profile'),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
                   child: Row(

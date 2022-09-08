@@ -1,7 +1,11 @@
 import 'package:e_voting/screens/login_screen.dart';
+import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/screens/profile_creation.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widgets/sign_up_fields.dart';
 
@@ -14,6 +18,11 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   late double height = MediaQuery.of(context).size.height;
+  TextEditingController namecontroller = TextEditingController();
+  TextEditingController cniccontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
+  TextEditingController doecontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,28 +49,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(
                   height: height * 0.05,
                 ),
-                const InputField(
+                InputField(
                   label: 'Name',
                   labelText: 'Enter Your Name',
+                  controller: namecontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'CNIC',
                   labelText: '37406-3675252-1',
+                  controller: cniccontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'Date of Expiry',
                   labelText: '02/22',
+                  controller: doecontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'Email',
                   labelText: 'example@gmail.com',
+                  controller: emailcontroller,
                 ),
-                const InputField(
+                InputField(
                   label: 'Password',
                   labelText: '***************',
+                  controller: passwordcontroller,
                   obscure: true,
                 ),
-                const SignupLoginButton(btnText: 'Continue'),
+                SignupLoginButton(
+                  btnText: 'Continue',
+                  function: registeruser,
+                ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
                   child: Row(
@@ -76,11 +93,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                              (Route<dynamic> route) => false);
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
+                          );
                         },
                         child: const Text(
                           " Login",
@@ -98,6 +115,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future<void> registeruser() async {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: emailcontroller.text,
+      password: passwordcontroller.text,
+    )
+        .then(
+      (value) {
+        Fluttertoast.showToast(msg: "sccess");
+        if (!mounted) return;
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Profile(),
+            ),
+            (route) => false);
+      },
+    ).onError(
+      (error, stackTrace) {
+        Fluttertoast.showToast(msg: error.toString());
+      },
     );
   }
 }

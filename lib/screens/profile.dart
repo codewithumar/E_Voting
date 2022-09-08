@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
-import 'package:e_voting/widgets/sign_up_fields.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -104,43 +103,43 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                const InputField(
-                  label: 'Full Name',
-                  labelText: 'Your Full Name here',
-                ),
-                const InputField(
-                  label: 'Email',
-                  labelText: 'example@gmail.com',
-                ),
-                const InputField(
-                  label: 'Password',
-                  labelText: '***************',
-                  obscure: true,
-                ),
-                const InputField(
-                  label: 'CNIC',
-                  labelText: '37406-3675252-1',
-                ),
-                const InputField(
-                  label: 'Date of Expiry',
-                  labelText: '02/22',
-                ),
-                const InputField(
-                  label: 'Phone Number',
-                  labelText: '0900-78601',
-                ),
-                const InputField(
-                  label: "Mother's Name",
-                  labelText: "Alexa",
-                ),
-                const InputField(
-                  label: 'Permanent Adress',
-                  labelText: 'Rab Nawaz Colony',
-                ),
-                const InputField(
-                  label: 'Current Address',
-                  labelText: 'Mullah Ki Basti',
-                ),
+                // const InputField(
+                //   label: 'Full Name',
+                //   labelText: 'Your Full Name here',
+                // ),
+                // const InputField(
+                //   label: 'Email',
+                //   labelText: 'example@gmail.com',
+                // ),
+                // const InputField(
+                //   label: 'Password',
+                //   labelText: '***************',
+                //   obscure: true,
+                // ),
+                // const InputField(
+                //   label: 'CNIC',
+                //   labelText: '37406-3675252-1',
+                // ),
+                // const InputField(
+                //   label: 'Date of Expiry',
+                //   labelText: '02/22',
+                // ),
+                // const InputField(
+                //   label: 'Phone Number',
+                //   labelText: '0900-78601',
+                // ),
+                // const InputField(
+                //   label: "Mother's Name",
+                //   labelText: "Alexa",
+                // ),
+                // const InputField(
+                //   label: 'Permanent Adress',
+                //   labelText: 'Rab Nawaz Colony',
+                // ),
+                // const InputField(
+                //   label: 'Current Address',
+                //   labelText: 'Mullah Ki Basti',
+                // ),
               ],
             ),
           ),

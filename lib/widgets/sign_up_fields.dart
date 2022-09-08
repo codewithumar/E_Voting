@@ -4,14 +4,16 @@ import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
-  const InputField({
-    Key? key,
-    required this.label,
-    required this.labelText,
-    this.obscure,
-  }) : super(key: key);
+  InputField(
+      {Key? key,
+      required this.label,
+      required this.labelText,
+      this.obscure,
+      required this.controller})
+      : super(key: key);
   final String label;
   final String labelText;
+  TextEditingController controller;
   final bool? obscure;
 
   @override
@@ -39,6 +41,7 @@ class _InputFieldState extends State<InputField> {
           height: 55,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
+            controller: widget.controller,
             obscureText: _obscureText,
             decoration: InputDecoration(
               suffixIcon: (widget.obscure == true)
