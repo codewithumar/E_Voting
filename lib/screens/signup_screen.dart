@@ -40,23 +40,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(
                   height: height * 0.05,
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Name',
                   labelText: 'Enter Your Name',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'CNIC',
                   labelText: '37406-3675252-1',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Date of Expiry',
                   labelText: '02/22',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Email',
                   labelText: 'example@gmail.com',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Password',
                   labelText: '***************',
                   obscure: true,

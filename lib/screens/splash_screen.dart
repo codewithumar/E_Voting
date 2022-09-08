@@ -1,6 +1,5 @@
-import 'package:e_voting/screens/login_screen.dart';
-import 'package:e_voting/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:e_voting/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

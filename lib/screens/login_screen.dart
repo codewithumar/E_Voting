@@ -1,8 +1,9 @@
-import 'package:e_voting/screens/profile.dart';
+import 'package:flutter/material.dart';
+
+import 'package:e_voting/widgets/socialbuttons.dart';
 import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
-import 'package:flutter/material.dart';
 
 import '../widgets/signup_login_button.dart';
 
@@ -49,11 +50,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: height * 0.1,
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Email',
                   labelText: 'example@gmail.com',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Password',
                   labelText: '***************',
                   obscure: true,
@@ -68,16 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                // ElevatedButton(
-                //   onPressed: (() => Navigator.of(context).push(
-                //         MaterialPageRoute(
-                //           builder: (context) => const Profile(),
-                //         ),
-                //       )),
-                //   child: const SignupLoginButton(
-                //     btnText: 'Signin',
-                //   ),
-                // ),
                 const SignupLoginButton(
                   btnText: 'Signin',
                 ),
@@ -145,48 +136,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget buildFacebookLogin() {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 0,
-        horizontal: 10,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Constants.greyColor,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(30),
-        ),
-      ),
-      child: IconButton(
-        icon: Image.asset('assets/images/icons/facebook.png'),
-        onPressed: () {},
-      ),
-    );
-  }
-
-  Widget buildGoogleLogin() {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 0,
-        horizontal: 10,
-      ),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Constants.greyColor,
-        ),
-        borderRadius: const BorderRadius.all(
-          Radius.circular(30),
-        ),
-      ),
-      child: IconButton(
-        icon: Image.asset('assets/images/icons/google.png'),
-        onPressed: () {},
       ),
     );
   }

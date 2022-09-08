@@ -1,6 +1,3 @@
-import 'package:e_voting/screens/login_screen.dart';
-import 'package:e_voting/screens/profile.dart';
-import 'package:e_voting/screens/profile_creation.dart';
 import 'package:e_voting/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Mulish",
         primarySwatch: Colors.teal,
       ),
-      home: const LoginScreen(),
+      home: const SplashScreen(),
     );
   }
 }

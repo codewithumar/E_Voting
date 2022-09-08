@@ -1,8 +1,7 @@
-import 'package:e_voting/screens/login_screen.dart';
+import 'package:flutter/material.dart';
+
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
-import 'package:e_voting/widgets/signup_login_button.dart';
-import 'package:flutter/material.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -105,40 +104,40 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Full Name',
                   labelText: 'Your Full Name here',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Email',
                   labelText: 'example@gmail.com',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Password',
                   labelText: '***************',
                   obscure: true,
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'CNIC',
                   labelText: '37406-3675252-1',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Date of Expiry',
                   labelText: '02/22',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Phone Number',
                   labelText: '0900-78601',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: "Mother's Name",
                   labelText: "Alexa",
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Permanent Adress',
                   labelText: 'Rab Nawaz Colony',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Current Address',
                   labelText: 'Mullah Ki Basti',
                 ),

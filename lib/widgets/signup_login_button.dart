@@ -1,5 +1,7 @@
-import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/material.dart';
+
+import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/utils/constants.dart';
 
 class SignupLoginButton extends StatelessWidget {
   const SignupLoginButton({
@@ -22,7 +24,14 @@ class SignupLoginButton extends StatelessWidget {
           ),
           color: Constants.primarycolor,
           textColor: Constants.buttontextcolor,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const Profile(),
+              ),
+            );
+          },
           child: Text(
             btnText,
             style: const TextStyle(fontSize: 16),

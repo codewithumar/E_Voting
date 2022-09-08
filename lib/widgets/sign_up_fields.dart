@@ -3,8 +3,8 @@
 import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/material.dart';
 
-class SignUpFields extends StatefulWidget {
-  const SignUpFields({
+class InputField extends StatefulWidget {
+  const InputField({
     Key? key,
     required this.label,
     required this.labelText,
@@ -15,10 +15,10 @@ class SignUpFields extends StatefulWidget {
   final bool? obscure;
 
   @override
-  State<SignUpFields> createState() => _SignUpFieldsState();
+  State<InputField> createState() => _InputFieldState();
 }
 
-class _SignUpFieldsState extends State<SignUpFields> {
+class _InputFieldState extends State<InputField> {
   bool _obscureText = false;
 
   @override

@@ -95,23 +95,23 @@ class _ProfileCreationState extends State<ProfileCreation> {
                     ),
                   ),
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Phone Number',
                   labelText: '0900-78601',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: "Mother's Name",
                   labelText: "Alexa",
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Permanent Adress',
                   labelText: 'Rab Nawaz Colony',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Email',
                   labelText: 'example@gmail.com',
                 ),
-                const SignUpFields(
+                const InputField(
                   label: 'Current Address',
                   labelText: 'Mullah Ki Basti',
                 ),
