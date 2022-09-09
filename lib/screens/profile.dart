@@ -147,56 +147,56 @@ class ProfileStream extends StatelessWidget {
                   ),
                 ),
               ),
-              InputField(
-                label: 'Full Name',
-                labelText: users[0].fullName,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Email',
-                labelText: users[0].email,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Password',
-                labelText: users[0].password,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'CNIC',
-                labelText: users[0].cnic,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Date of Expiry',
-                labelText: users[0].doe,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Phone Number',
-                labelText: users[0].number,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Full Name',
-                labelText: users[0].fullName,
-                readOnly: true,
-              ),
-              InputField(
-                label: "Mother's Name",
-                labelText: users[0].mName,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Permanent Address',
-                labelText: users[0].perAddress,
-                readOnly: true,
-              ),
-              InputField(
-                label: 'Current Address',
-                labelText: users[0].currAddress,
-                readOnly: true,
-              ),
+              // InputField(
+              //   label: 'Full Name',
+              //   labelText: users[0].fullName,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Email',
+              //   labelText: users[0].email,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Password',
+              //   labelText: users[0].password,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'CNIC',
+              //   labelText: users[0].cnic,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Date of Expiry',
+              //   labelText: users[0].doe,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Phone Number',
+              //   labelText: users[0].number,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Full Name',
+              //   labelText: users[0].fullName,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: "Mother's Name",
+              //   labelText: users[0].mName,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Permanent Address',
+              //   labelText: users[0].perAddress,
+              //   readOnly: true,
+              // ),
+              // InputField(
+              //   label: 'Current Address',
+              //   labelText: users[0].currAddress,
+              //   readOnly: true,
+              // ),
             ],
           ),
         ),

@@ -3,15 +3,24 @@
 import 'package:flutter/material.dart';
 import 'package:e_voting/utils/constants.dart';
 
-class SignupLoginButton extends StatelessWidget {
+class SignupLoginButton extends StatefulWidget {
   const SignupLoginButton({
     Key? key,
     required this.btnText,
     required this.function,
+    this.formkey,
+    // required this.onpress,
   }) : super(key: key);
   final String btnText;
   final VoidCallback function;
+  final GlobalKey<FormState>? formkey;
+  //Function() onpress;
 
+  @override
+  State<SignupLoginButton> createState() => _SignupLoginButtonState();
+}
+
+class _SignupLoginButtonState extends State<SignupLoginButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -27,9 +36,13 @@ class SignupLoginButton extends StatelessWidget {
           ),
           color: Constants.primarycolor,
           textColor: Constants.buttontextcolor,
-          onPressed: () => function(),
+          onPressed: () {
+            if (widget.formkey!.currentState!.validate()) {
+              widget.function();
+            }
+          },
           child: Text(
-            btnText,
+            widget.btnText,
             style: const TextStyle(fontSize: 16),
           ),
         ),

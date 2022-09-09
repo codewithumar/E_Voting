@@ -1,9 +1,10 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:e_voting/services/dash_formatter.dart';
-import 'package:e_voting/utils/constants.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/services.dart';
+import 'package:pattern_formatter/date_formatter.dart';
 
 class InputField extends StatefulWidget {
   const InputField(
@@ -12,6 +13,8 @@ class InputField extends StatefulWidget {
       required this.labelText,
       this.obscure,
       this.controller,
+      required this.errormessage,
+      this.fieldmessage,
       this.readOnly})
       : super(key: key);
   final String label;
@@ -19,6 +22,9 @@ class InputField extends StatefulWidget {
   final TextEditingController? controller;
   final bool? obscure;
   final bool? readOnly;
+  final String errormessage;
+  final String? fieldmessage;
+
   @override
   State<InputField> createState() => _InputFieldState();
 }
@@ -41,14 +47,22 @@ class _InputFieldState extends State<InputField> {
           ),
         ),
         Container(
-          height: 55,
+          height: 65,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
+            keyboardType:
+                (widget.fieldmessage == "Cnic" || widget.fieldmessage == "DOE")
+                    ? TextInputType.number
+                    : TextInputType.text,
             controller: widget.controller,
-            // inputFormatters: <TextInputFormatter>[
-            //   LengthLimitingTextInputFormatter(15),
-            //   DashFormatter(),
-            // ],
+            inputFormatters: (widget.fieldmessage == "Cnic")
+                ? [
+                    FilteringTextInputFormatter.allow(
+                      RegExp(r'[0-9]'),
+                    ),
+                    LengthLimitingTextInputFormatter(13),
+                  ]
+                : [],
             obscureText: _obscureText,
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
@@ -86,12 +100,19 @@ class _InputFieldState extends State<InputField> {
               ),
               errorStyle: const TextStyle(
                 color: Colors.redAccent,
-                fontSize: 14,
+                fontSize: 10,
               ),
             ),
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your full name';
+              if (widget.fieldmessage == null && value!.isEmpty) {
+                return widget.errormessage;
+              } else if (widget.fieldmessage == "Cnic" &&
+                  (value!.isEmpty) &&
+                  value.length < 13) {
+                return "Please enter correct 13 digit Cnic";
+              } else if (widget.fieldmessage == "email" &&
+                  !EmailValidator.validate(value!)) {
+                return "Please enter correct email";
               }
               return null;
             },

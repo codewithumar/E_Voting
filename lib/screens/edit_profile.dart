@@ -11,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -60,7 +59,7 @@ class _EditProfileState extends State<EditProfile> {
             return Text('${snapshot.data}');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Waiting');
+            return const Center(child: Text('Waiting....'));
           }
           if (snapshot.connectionState == ConnectionState.active ||
               snapshot.connectionState == ConnectionState.done) {
@@ -159,22 +158,22 @@ class EditProfileStream extends StatelessWidget {
                   ),
                 ),
               ),
-              InputField(
-                label: 'Date of Expiry',
-                labelText: users[0].doe,
-                controller: doeController,
-              ),
-              InputField(
-                label: 'Phone Number',
-                labelText: users[0].number,
-                controller: numberController,
-              ),
-              InputField(
-                label: 'Current Address',
-                labelText: users[0].currAddress,
-                controller: curAddressController,
-              ),
-              SignupLoginButton(btnText: 'Update', function: updateProfile),
+              // InputField(
+              //   label: 'Date of Expiry',
+              //   labelText: users[0].doe,
+              //   controller: doeController,
+              // ),
+              // InputField(
+              //   label: 'Phone Number',
+              //   labelText: users[0].number,
+              //   controller: numberController,
+              // ),
+              // InputField(
+              //   label: 'Current Address',
+              //   labelText: users[0].currAddress,
+              //   controller: curAddressController,
+              // ),
+              // SignupLoginButton(btnText: 'Update', function: updateProfile),
             ],
           ),
         ),

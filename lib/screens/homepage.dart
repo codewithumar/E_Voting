@@ -1,7 +1,9 @@
 import 'package:e_voting/screens/dashboard.dart';
+import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/screens/profile.dart';
 import 'package:e_voting/screens/reports.dart';
 import 'package:e_voting/utils/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Homepage extends StatefulWidget {
@@ -28,29 +30,27 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Row(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: [
-      //       const Text("Welcome User"),
-      //       ElevatedButton(
-      //         onPressed: () async => {
-      //           // await signOut123(),
-      //           // Navigator.pushAndRemoveUntil(
-      //           //     context,
-      //           //     MaterialPageRoute(
-      //           //       builder: (context) => const LoginPage(
-      //           //         title: 'title',
-      //           //       ),
-      //           //     ),
-      //           //     (route) => false)
-      //         },
-      //         style: ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
-      //         child: const Text('Logout'),
-      //       )
-      //     ],
-      //   ),
-      // ),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("Welcome User"),
+            ElevatedButton(
+              onPressed: () async => {
+                await signOut123(),
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
+                    (route) => false)
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.blueGrey),
+              child: const Text('Logout'),
+            )
+          ],
+        ),
+      ),
       body: widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(10),
@@ -89,10 +89,9 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  // Future<void> signOut123() async {
-  //   await FirebaseAuth.instance.signOut();
-  //   GoogleSignIn googleSignIn = GoogleSignIn();
-  //   await googleSignIn.signOut();
-  // }
-
+  Future<void> signOut123() async {
+    await FirebaseAuth.instance.signOut();
+    // GoogleSignIn googleSignIn = GoogleSignIn();
+    // await googleSignIn.signOut();
+  }
 }

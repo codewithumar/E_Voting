@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/homepage.dart';
-import 'package:e_voting/screens/login_screen.dart';
+
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
@@ -149,30 +147,30 @@ class CreateProfileStream extends StatelessWidget {
                   ),
                 ),
               ),
-              InputField(
-                label: 'Phone Number',
-                labelText: '0900-78601',
-                controller: phonecontroller,
-              ),
-              InputField(
-                label: "Mother's Name",
-                labelText: "Alexa",
-                controller: mothernamecontroller,
-              ),
-              InputField(
-                label: 'Permanent Adress',
-                labelText: 'Rab Nawaz Colony',
-                controller: permanentaddresscontroller,
-              ),
-              InputField(
-                label: 'Current Address',
-                labelText: 'Mullah Ki Basti',
-                controller: currentaddresscontroller,
-              ),
-              SignupLoginButton(
-                btnText: 'Create Profile',
-                function: createProfile,
-              ),
+              // InputField(
+              //   label: 'Phone Number',
+              //   labelText: '0900-78601',
+              //   controller: phonecontroller,
+              // ),
+              // InputField(
+              //   label: "Mother's Name",
+              //   labelText: "Alexa",
+              //   controller: mothernamecontroller,
+              // ),
+              // InputField(
+              //   label: 'Permanent Adress',
+              //   labelText: 'Rab Nawaz Colony',
+              //   controller: permanentaddresscontroller,
+              // ),
+              // InputField(
+              //   label: 'Current Address',
+              //   labelText: 'Mullah Ki Basti',
+              //   controller: currentaddresscontroller,
+              // ),
+              // SignupLoginButton(
+              //   btnText: 'Create Profile',
+              //   function: createProfile,
+              // ),
             ],
           ),
         ),
