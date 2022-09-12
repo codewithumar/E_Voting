@@ -1,4 +1,3 @@
-import 'package:e_voting/screens/homepage.dart';
 import 'package:e_voting/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/widgets/snackbar.dart';
@@ -150,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const Homepage(),
+              builder: (context) => const Profile(),
             ),
             (route) => false);
       },

@@ -3,7 +3,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_voting/screens/homepage.dart';
+import 'package:e_voting/screens/profile.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
@@ -216,7 +216,7 @@ class EditProfileStream extends StatelessWidget {
       );
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => const Homepage(),
+            builder: (context) => const Profile(),
           ),
           (route) => false);
     }).onError((error, stackTrace) {

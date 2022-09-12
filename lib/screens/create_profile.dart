@@ -1,13 +1,17 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_voting/screens/homepage.dart';
+import 'package:e_voting/screens/profile.dart';
 
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/widgets/snackbar.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
 
@@ -68,6 +72,7 @@ class CreateProfileStream extends StatelessWidget {
   late TextEditingController permanentaddresscontroller =
       TextEditingController(text: users[0].perAddress);
   final createprofileformkey = GlobalKey<FormState>();
+  FilePickerResult? pickedFile;
 
   @override
   Widget build(BuildContext context) {
@@ -215,8 +220,40 @@ class CreateProfileStream extends StatelessWidget {
     });
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => const Homepage(),
+          builder: (context) => const Profile(),
         ),
         (route) => false);
+  }
+
+  Future _selectFile() async {
+    File? _file;
+    PlatformFile? _platformFile;
+    final id = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(users[0].id);
+
+    pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
+
+    if (pickedFile != null) {
+      // setState(() {
+      _file = File(pickedFile!.files.single.path!);
+      _platformFile = pickedFile!.files.first;
+      // print("Size: ");
+      // print(_platformFile?.size);
+      // });
+    }
+    final path = '/profileimages/$id/${pickedFile!.files.first.name}';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(_file!);
+
+    // loadingController.forward();
+  }
+
+  Future uploadFile() async {
+    final id = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(users[0].id);
+    final path = '/profileimages/$id/${pickedFile!.names}';
   }
 }

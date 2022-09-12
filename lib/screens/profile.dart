@@ -1,9 +1,15 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_voting/screens/create_profile.dart';
 import 'package:e_voting/screens/edit_profile.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
 import 'package:e_voting/widgets/snackbar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
@@ -106,11 +112,12 @@ class _ProfileState extends State<Profile> {
 }
 
 class ProfileStream extends StatelessWidget {
-  const ProfileStream(
+  ProfileStream(
     this.users, {
     Key? key,
   }) : super(key: key);
   final List<UserData> users;
+  FilePickerResult? pickedFile;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -141,7 +148,9 @@ class ProfileStream extends StatelessWidget {
                         Icons.add_photo_alternate_rounded,
                         color: Constants.primarycolor,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _selectFile();
+                      },
                     ),
                   ),
                 ),
@@ -229,5 +238,30 @@ class ProfileStream extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future _selectFile() async {
+    File? _file;
+    PlatformFile? _platformFile;
+    final id = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(users[0].id);
+
+    pickedFile = await FilePicker.platform.pickFiles(
+        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
+
+    if (pickedFile != null) {
+      // setState(() {
+      _file = File(pickedFile!.files.single.path!);
+      _platformFile = pickedFile!.files.first;
+      // print("Size: ");
+      // print(_platformFile?.size);
+      // });
+    }
+    final path = '/profileimages/$id/${pickedFile!.files.first.name}';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(_file!);
+
+    // loadingController.forward();
   }
 }

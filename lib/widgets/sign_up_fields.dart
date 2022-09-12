@@ -30,7 +30,7 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
-  bool _obscureText = false;
+  late bool _obscureText = (widget.obscure == true) ? true : false;
 
   @override
   Widget build(BuildContext context) {
