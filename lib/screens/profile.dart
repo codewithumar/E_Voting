@@ -249,8 +249,8 @@ class _ProfileStreamState extends State<ProfileStream> {
   }
 
   Future _selectFile() async {
-    File? _file;
-    PlatformFile? _platformFile;
+    File? file;
+    PlatformFile? platformFile;
     final id = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
         .doc(widget.users[0].id);
@@ -260,16 +260,16 @@ class _ProfileStreamState extends State<ProfileStream> {
 
     if (pickedFile != null) {
       setState(() {
-        _file = File(pickedFile!.files.single.path!);
-        _platformFile = pickedFile!.files.first;
-        final path = '/profileimages/$id/${pickedFile!.files.first.name}';
-        final ref = FirebaseStorage.instance.ref().child(path);
-        ref.putFile(_file!);
-        log('$ref,dsfsdfsdfsd $path');
+        file = File(pickedFile!.files.single.path!);
+        platformFile = pickedFile!.files.first;
         log("Size: ");
-        log('${_platformFile?.size}');
+        log('${platformFile?.size}');
       });
     }
+    final path = '/profileimages/$id/${pickedFile!.files.first.name}';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(file!);
+    log('$ref,dsfsdfsdfsd $path');
 
     // loadingController.forward();
   }
