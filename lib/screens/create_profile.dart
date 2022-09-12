@@ -5,6 +5,7 @@ import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:e_voting/widgets/snackbar.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -195,7 +196,23 @@ class CreateProfileStream extends StatelessWidget {
         "currAddress": currentaddresscontroller.text,
         "perAddress": permanentaddresscontroller.text,
       },
-    );
+    ).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        showsnackbar(
+          Constants.greensnackbarColor,
+          "Changes Applied Successfully",
+          context,
+        ),
+      );
+    }).onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        showsnackbar(
+          Constants.redsnackbarColor,
+          "Could Not Apply Changes",
+          context,
+        ),
+      );
+    });
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const Homepage(),

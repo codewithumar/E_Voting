@@ -1,3 +1,4 @@
+import 'package:e_voting/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -27,6 +28,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController doecontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   final signupformkey = GlobalKey<FormState>();
+  final toast = FToast();
+  @override
+  void initState() {
+    super.initState();
+    toast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,7 +163,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         );
         UserData.savePassToFirestore(user);
 
-        Fluttertoast.showToast(msg: "Signup Successful");
+        toast.showToast(
+            child: buildtoast("Sign In successful", "success"),
+            gravity: ToastGravity.BOTTOM);
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(

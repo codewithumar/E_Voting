@@ -8,4 +8,5 @@ class Constants {
   static const greensnackbarColor = Color(0xff2DD36F);
   static const redsnackbarColor = Color(0xffFF3939);
   static const yellowsnackbarColor = Color(0xffFFC409);
+  static const textcolor = Color(0xffffffff);
 }

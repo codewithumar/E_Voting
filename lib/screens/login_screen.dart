@@ -1,4 +1,5 @@
 import 'package:e_voting/screens/homepage.dart';
+import 'package:e_voting/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,7 @@ import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,6 +24,12 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   final loginformkey = GlobalKey<FormState>();
+  final toast = FToast();
+  @override
+  void initState() {
+    super.initState();
+    toast.init(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
     )
         .then(
       (value) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          showsnackbar(
-            Constants.greensnackbarColor,
-            "Sign In successful",
-            context,
-          ),
-        );
+        toast.showToast(
+            child: buildtoast("Sign In successful", "success"),
+            gravity: ToastGravity.BOTTOM);
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(
@@ -152,13 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
       },
     ).onError(
       (error, stackTrace) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          showsnackbar(
-            Constants.redsnackbarColor,
-            "Sign In unsuccessful",
-            context,
-          ),
-        );
+        toast.showToast(
+            child: buildtoast("Sign In unsuccessful", "error"),
+            gravity: ToastGravity.BOTTOM);
       },
     );
   }

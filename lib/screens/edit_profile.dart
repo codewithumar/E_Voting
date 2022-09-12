@@ -7,6 +7,7 @@ import 'package:e_voting/screens/homepage.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:e_voting/widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -169,13 +170,13 @@ class EditProfileStream extends StatelessWidget {
                 ),
                 InputField(
                   label: 'Phone Number',
-                  labelText: users[0].number!,
+                  labelText: users[0].number,
                   controller: numberController,
                   errormessage: "Please Enter phone number",
                 ),
                 InputField(
                   label: 'Current Address',
-                  labelText: users[0].currAddress!,
+                  labelText: users[0].currAddress,
                   controller: curAddressController,
                   errormessage: "Please enter correct address",
                 ),
@@ -205,11 +206,27 @@ class EditProfileStream extends StatelessWidget {
         "number": numberController.text,
         "currAddress": curAddressController.text,
       },
-    );
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const Homepage(),
+    ).then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        showsnackbar(
+          Constants.greensnackbarColor,
+          "Changes Applied Successfully",
+          context,
         ),
-        (route) => false);
+      );
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const Homepage(),
+          ),
+          (route) => false);
+    }).onError((error, stackTrace) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        showsnackbar(
+          Constants.redsnackbarColor,
+          "Entry Unsuccessful",
+          context,
+        ),
+      );
+    });
   }
 }
