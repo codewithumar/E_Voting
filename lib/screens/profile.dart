@@ -1,6 +1,9 @@
 import 'package:e_voting/screens/edit_profile.dart';
+import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:e_voting/widgets/snackbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
@@ -18,6 +21,28 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () async => {
+            await FirebaseAuth.instance.signOut(),
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+                (route) => false),
+            ScaffoldMessenger.of(context).showSnackBar(
+              showsnackbar(
+                Colors.black,
+                "Sign out Successful",
+                context,
+              ),
+            )
+          },
+          icon: const Icon(
+            Icons.logout_outlined,
+            color: Colors.black,
+          ),
+        ),
         title: const Text(
           'Profile',
           style: TextStyle(color: Constants.primarycolor),
@@ -55,10 +80,12 @@ class _ProfileState extends State<Profile> {
         stream: UserData.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('${snapshot.data}');
+            return Center(child: Text('${snapshot.data}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Waiting');
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
           if (snapshot.connectionState == ConnectionState.active ||
               snapshot.connectionState == ConnectionState.done) {
@@ -147,56 +174,56 @@ class ProfileStream extends StatelessWidget {
                   ),
                 ),
               ),
-              // InputField(
-              //   label: 'Full Name',
-              //   labelText: users[0].fullName,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Email',
-              //   labelText: users[0].email,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Password',
-              //   labelText: users[0].password,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'CNIC',
-              //   labelText: users[0].cnic,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Date of Expiry',
-              //   labelText: users[0].doe,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Phone Number',
-              //   labelText: users[0].number,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Full Name',
-              //   labelText: users[0].fullName,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: "Mother's Name",
-              //   labelText: users[0].mName,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Permanent Address',
-              //   labelText: users[0].perAddress,
-              //   readOnly: true,
-              // ),
-              // InputField(
-              //   label: 'Current Address',
-              //   labelText: users[0].currAddress,
-              //   readOnly: true,
-              // ),
+              InputField(
+                label: 'Full Name',
+                labelText: users[0].fullName,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Email',
+                labelText: users[0].email,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'CNIC',
+                labelText: users[0].cnic,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Date of Expiry',
+                labelText: users[0].doe,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Phone Number',
+                labelText: users[0].number,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Full Name',
+                labelText: users[0].fullName,
+                readOnly: true,
+              ),
+              InputField(
+                label: "Mother's Name",
+                labelText: users[0].mName,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Permanent Address',
+                labelText: users[0].perAddress,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Current Address',
+                labelText: users[0].currAddress,
+                readOnly: true,
+              ),
+              InputField(
+                label: 'Password',
+                labelText: users[0].password,
+                readOnly: true,
+              ),
             ],
           ),
         ),

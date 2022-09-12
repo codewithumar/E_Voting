@@ -1,10 +1,10 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:e_voting/utils/constants.dart';
+
 import 'package:flutter/services.dart';
-import 'package:pattern_formatter/date_formatter.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:e_voting/utils/constants.dart';
 
 class InputField extends StatefulWidget {
   const InputField(
@@ -13,7 +13,7 @@ class InputField extends StatefulWidget {
       required this.labelText,
       this.obscure,
       this.controller,
-      required this.errormessage,
+      this.errormessage,
       this.fieldmessage,
       this.readOnly})
       : super(key: key);
@@ -22,7 +22,7 @@ class InputField extends StatefulWidget {
   final TextEditingController? controller;
   final bool? obscure;
   final bool? readOnly;
-  final String errormessage;
+  final String? errormessage;
   final String? fieldmessage;
 
   @override

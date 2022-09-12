@@ -148,10 +148,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
           doe: doecontroller.text,
           email: emailcontroller.text,
           password: passwordcontroller.text,
-          number: "null",
-          mName: "null",
-          perAddress: "null",
-          currAddress: "null",
+          number: " ",
+          mName: " ",
+          perAddress: " ",
+          currAddress: " ",
         );
         UserData.savePassToFirestore(user);
 

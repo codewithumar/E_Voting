@@ -5,4 +5,7 @@ class Constants {
   static const buttontextcolor = Color(0xFFFBFAFA);
   static const greyColor = Color(0xFF8893AC);
   static const lightGreen = Color(0xFF7FB787);
+  static const greensnackbarColor = Color(0xff2DD36F);
+  static const redsnackbarColor = Color(0xffFF3939);
+  static const yellowsnackbarColor = Color(0xffFFC409);
 }

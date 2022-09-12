@@ -94,87 +94,98 @@ class EditProfileStream extends StatelessWidget {
       TextEditingController(text: users[0].currAddress);
   late TextEditingController doeController =
       TextEditingController(text: users[0].doe);
+  final editprofileformkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(15),
-        child: SizedBox(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    decoration: BoxDecoration(
-                      border: Border.all(
+    return Form(
+      key: editprofileformkey,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: SizedBox(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 70,
+                      width: 70,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Constants.greyColor,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.add_photo_alternate_rounded,
+                          color: Constants.primarycolor,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      users[0].fullName,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff027314),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 30),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      users[0].email,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
                         color: Constants.greyColor,
                       ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.add_photo_alternate_rounded,
-                        color: Constants.primarycolor,
-                      ),
-                      onPressed: () {},
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    users[0].fullName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xff027314),
-                    ),
-                  ),
+                InputField(
+                  label: 'Date of Expiry',
+                  labelText: users[0].doe,
+                  controller: doeController,
+                  errormessage: "Please Select a corrrect Date",
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 30),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    users[0].email,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Constants.greyColor,
-                    ),
-                  ),
+                InputField(
+                  label: 'Phone Number',
+                  labelText: users[0].number!,
+                  controller: numberController,
+                  errormessage: "Please Enter phone number",
                 ),
-              ),
-              // InputField(
-              //   label: 'Date of Expiry',
-              //   labelText: users[0].doe,
-              //   controller: doeController,
-              // ),
-              // InputField(
-              //   label: 'Phone Number',
-              //   labelText: users[0].number,
-              //   controller: numberController,
-              // ),
-              // InputField(
-              //   label: 'Current Address',
-              //   labelText: users[0].currAddress,
-              //   controller: curAddressController,
-              // ),
-              // SignupLoginButton(btnText: 'Update', function: updateProfile),
-            ],
+                InputField(
+                  label: 'Current Address',
+                  labelText: users[0].currAddress!,
+                  controller: curAddressController,
+                  errormessage: "Please enter correct address",
+                ),
+                SignupLoginButton(
+                  btnText: 'Update',
+                  function: updateProfile,
+                  formkey: editprofileformkey,
+                ),
+              ],
+            ),
           ),
         ),
       ),
