@@ -1,6 +1,5 @@
 import 'package:e_voting/widgets/toast.dart';
 import 'package:flutter/material.dart';
-import 'package:e_voting/widgets/snackbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:e_voting/screens/profile.dart';
@@ -136,29 +135,35 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> loginuser() async {
-    await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
-      email: emailcontroller.text,
-      password: passwordcontroller.text,
-    )
-        .then(
-      (value) {
-        toast.showToast(
-            child: buildtoast("Sign In successful", "success"),
-            gravity: ToastGravity.BOTTOM);
-        if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Profile(),
-            ),
-            (route) => false);
-      },
-    ).onError(
-      (error, stackTrace) {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+        email: emailcontroller.text,
+        password: passwordcontroller.text,
+      )
+          .then(
+        (value) {
+          toast.showToast(
+              child: buildtoast("Sign In successful", "success"),
+              gravity: ToastGravity.BOTTOM);
+          if (!mounted) return;
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const Profile(),
+              ),
+              (route) => false);
+        },
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
         toast.showToast(
             child: buildtoast("Sign In unsuccessful", "error"),
             gravity: ToastGravity.BOTTOM);
-      },
-    );
+      } else if (e.code == 'wrong-password') {
+        toast.showToast(
+            child: buildtoast("Sign In unsuccessful", "error"),
+            gravity: ToastGravity.BOTTOM);
+      }
+    }
   }
 }

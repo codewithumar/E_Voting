@@ -1,3 +1,4 @@
+import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
@@ -10,6 +11,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await UserSimplePreferences.init();
+
   runApp(const MyApp());
 }
 

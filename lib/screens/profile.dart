@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_voting/screens/create_profile.dart';
 import 'package:e_voting/screens/edit_profile.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/services/user_data.dart';
+import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/widgets/sign_up_fields.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -113,18 +113,30 @@ class _ProfileState extends State<Profile> {
 }
 
 class ProfileStream extends StatefulWidget {
-  ProfileStream(
+  const ProfileStream(
     this.users, {
     Key? key,
   }) : super(key: key);
   final List<UserData> users;
 
   @override
-  State<ProfileStream> createState() => _ProfileStreamState();
+  State<ProfileStream> createState() => ProfileStreamState();
 }
 
-class _ProfileStreamState extends State<ProfileStream> {
-  FilePickerResult? pickedFile;
+String? urlDownload;
+
+class ProfileStreamState extends State<ProfileStream> {
+  late final idURL = FirebaseFirestore.instance
+      .collection(FirebaseAuth.instance.currentUser!.email!)
+      .doc(widget.users[0].id)
+      .toString();
+  PlatformFile? pickedFile;
+  UploadTask? upload;
+  @override
+  void initState() {
+    super.initState();
+    urlDownload = UserSimplePreferences.getURL(idURL);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +155,14 @@ class _ProfileStreamState extends State<ProfileStream> {
                   child: Container(
                     height: 70,
                     width: 70,
+                    foregroundDecoration: (urlDownload != null)
+                        ? BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(urlDownload!),
+                              fit: BoxFit.fill,
+                            ),
+                          )
+                        : null,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Constants.greyColor,
@@ -152,12 +172,17 @@ class _ProfileStreamState extends State<ProfileStream> {
                       ),
                     ),
                     child: IconButton(
-                      icon: const Icon(
-                        Icons.add_photo_alternate_rounded,
-                        color: Constants.primarycolor,
-                      ),
-                      onPressed: () {
-                        _selectFile();
+                      icon: (urlDownload == null)
+                          ? const Icon(
+                              Icons.add_photo_alternate_rounded,
+                              color: Constants.primarycolor,
+                            )
+                          : Image.asset(urlDownload!),
+                      iconSize: 50,
+                      onPressed: () async {
+                        log('before = $urlDownload');
+                        await selectFile();
+                        log('$urlDownload 1234567890');
                       },
                     ),
                   ),
@@ -248,29 +273,25 @@ class _ProfileStreamState extends State<ProfileStream> {
     );
   }
 
-  Future _selectFile() async {
+  Future selectFile() async {
     File? file;
-    PlatformFile? platformFile;
-    final id = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(widget.users[0].id);
-
-    pickedFile = await FilePicker.platform.pickFiles(
+    // final id = FirebaseFirestore.instance
+    //     .collection(FirebaseAuth.instance.currentUser!.email!)
+    //     .doc(widget.users[0].id);
+    final result = await FilePicker.platform.pickFiles(
         type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
 
-    if (pickedFile != null) {
-      setState(() {
-        file = File(pickedFile!.files.single.path!);
-        platformFile = pickedFile!.files.first;
-        log("Size: ");
-        log('${platformFile?.size}');
-      });
+    if (result != null) {
+      pickedFile = result.files.first;
+      file = File(pickedFile!.path!);
     }
-    final path = '/profileimages/$id/${pickedFile!.files.first.name}';
+    final path = '/profileimages/$idURL/${pickedFile?.name}';
     final ref = FirebaseStorage.instance.ref().child(path);
     ref.putFile(file!);
-    log('$ref,dsfsdfsdfsd $path');
-
-    // loadingController.forward();
+    upload = ref.putFile(file);
+    final snapshot = await upload?.whenComplete(() {});
+    urlDownload = await snapshot?.ref.getDownloadURL();
+    UserSimplePreferences.storeURL(idURL, urlDownload!);
+    setState(() {});
   }
 }
