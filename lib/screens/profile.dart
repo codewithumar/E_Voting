@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -111,13 +112,20 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-class ProfileStream extends StatelessWidget {
+class ProfileStream extends StatefulWidget {
   ProfileStream(
     this.users, {
     Key? key,
   }) : super(key: key);
   final List<UserData> users;
+
+  @override
+  State<ProfileStream> createState() => _ProfileStreamState();
+}
+
+class _ProfileStreamState extends State<ProfileStream> {
   FilePickerResult? pickedFile;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -160,7 +168,7 @@ class ProfileStream extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    users[0].fullName,
+                    widget.users[0].fullName,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -174,7 +182,7 @@ class ProfileStream extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    users[0].email,
+                    widget.users[0].email,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -185,52 +193,52 @@ class ProfileStream extends StatelessWidget {
               ),
               InputField(
                 label: 'Full Name',
-                labelText: users[0].fullName,
+                labelText: widget.users[0].fullName,
                 readOnly: true,
               ),
               InputField(
                 label: 'Email',
-                labelText: users[0].email,
+                labelText: widget.users[0].email,
                 readOnly: true,
               ),
               InputField(
                 label: 'CNIC',
-                labelText: users[0].cnic,
+                labelText: widget.users[0].cnic,
                 readOnly: true,
               ),
               InputField(
                 label: 'Date of Expiry',
-                labelText: users[0].doe,
+                labelText: widget.users[0].doe,
                 readOnly: true,
               ),
               InputField(
                 label: 'Phone Number',
-                labelText: users[0].number,
+                labelText: widget.users[0].number,
                 readOnly: true,
               ),
               InputField(
                 label: 'Full Name',
-                labelText: users[0].fullName,
+                labelText: widget.users[0].fullName,
                 readOnly: true,
               ),
               InputField(
                 label: "Mother's Name",
-                labelText: users[0].mName,
+                labelText: widget.users[0].mName,
                 readOnly: true,
               ),
               InputField(
                 label: 'Permanent Address',
-                labelText: users[0].perAddress,
+                labelText: widget.users[0].perAddress,
                 readOnly: true,
               ),
               InputField(
                 label: 'Current Address',
-                labelText: users[0].currAddress,
+                labelText: widget.users[0].currAddress,
                 readOnly: true,
               ),
               InputField(
                 label: 'Password',
-                labelText: users[0].password,
+                labelText: widget.users[0].password,
                 readOnly: true,
               ),
             ],
@@ -245,22 +253,23 @@ class ProfileStream extends StatelessWidget {
     PlatformFile? _platformFile;
     final id = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(users[0].id);
+        .doc(widget.users[0].id);
 
     pickedFile = await FilePicker.platform.pickFiles(
         type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
 
     if (pickedFile != null) {
-      // setState(() {
-      _file = File(pickedFile!.files.single.path!);
-      _platformFile = pickedFile!.files.first;
-      // print("Size: ");
-      // print(_platformFile?.size);
-      // });
+      setState(() {
+        _file = File(pickedFile!.files.single.path!);
+        _platformFile = pickedFile!.files.first;
+        final path = '/profileimages/$id/${pickedFile!.files.first.name}';
+        final ref = FirebaseStorage.instance.ref().child(path);
+        ref.putFile(_file!);
+        log('$ref,dsfsdfsdfsd $path');
+        log("Size: ");
+        log('${_platformFile?.size}');
+      });
     }
-    final path = '/profileimages/$id/${pickedFile!.files.first.name}';
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(_file!);
 
     // loadingController.forward();
   }
