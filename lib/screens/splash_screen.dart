@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/screens/login_screen.dart';
 
@@ -52,9 +53,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 'E-Voting',
                 style: TextStyle(
                   fontSize: 40,
-                  color: Color(
-                    0xffFBFAFA,
-                  ),
+                  color: Constants.textcolor,
+                ),
+              ),
+              Text(
+                'Cast Your Vote Online',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Constants.textcolor,
                 ),
               ),
             ]),

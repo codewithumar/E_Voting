@@ -4,7 +4,7 @@ import 'package:e_voting/utils/constants.dart';
 
 Widget buildtoast(String message, String iconname) => Container(
       height: 52,
-      width: 180,
+      width: 380,
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
         color: Color(0xff151619),

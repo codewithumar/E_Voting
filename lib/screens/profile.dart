@@ -181,7 +181,7 @@ class ProfileStreamState extends State<ProfileStream> {
                       iconSize: 50,
                       onPressed: () async {
                         log('before = $urlDownload');
-                        await selectFile();
+                        //  await selectFile();
                         log('$urlDownload 1234567890');
                       },
                     ),
@@ -265,6 +265,7 @@ class ProfileStreamState extends State<ProfileStream> {
                 label: 'Password',
                 labelText: widget.users[0].password,
                 readOnly: true,
+                fieldmessage: "password",
               ),
             ],
           ),

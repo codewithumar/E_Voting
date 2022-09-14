@@ -12,7 +12,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await UserSimplePreferences.init();
-
   runApp(const MyApp());
 }
 

@@ -114,14 +114,7 @@ class CreateProfileStream extends StatelessWidget {
                     child: Container(
                       height: 58,
                       width: 58,
-                      foregroundDecoration: (urlDownload != null)
-                          ? BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(urlDownload!),
-                                fit: BoxFit.fill,
-                              ),
-                            )
-                          : null,
+                      foregroundDecoration: null,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Constants.greyColor,

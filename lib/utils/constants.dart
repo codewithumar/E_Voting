@@ -9,4 +9,5 @@ class Constants {
   static const redsnackbarColor = Color(0xffFF3939);
   static const yellowsnackbarColor = Color(0xffFFC409);
   static const textcolor = Color(0xffffffff);
+  static const errorcolor = Color(0xffff0000);
 }

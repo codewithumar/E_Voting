@@ -1,5 +1,7 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -50,19 +52,28 @@ class _InputFieldState extends State<InputField> {
           height: 65,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
-            keyboardType:
-                (widget.fieldmessage == "Cnic" || widget.fieldmessage == "DOE")
-                    ? TextInputType.number
-                    : TextInputType.text,
+            keyboardType: (widget.fieldmessage == "Cnic" ||
+                    widget.fieldmessage == "DOE" ||
+                    widget.fieldmessage == "phone")
+                ? TextInputType.text
+                : TextInputType.text,
             controller: widget.controller,
-            inputFormatters: (widget.fieldmessage == "Cnic")
+            inputFormatters: (widget.fieldmessage == "Cnic" ||
+                    widget.fieldmessage == "phone")
                 ? [
-                    FilteringTextInputFormatter.allow(
-                      RegExp(r'[0-9]'),
-                    ),
+                    // FilteringTextInputFormatter.allow(
+                    //   RegExp(r"^[0-9]"),
+                    // ),
                     LengthLimitingTextInputFormatter(13),
                   ]
-                : [],
+                : (widget.fieldmessage == "DOE")
+                    ? [
+                        // FilteringTextInputFormatter.allow(
+                        //   RegExp(r"^[0-9]"),
+                        // ),
+                        LengthLimitingTextInputFormatter(5),
+                      ]
+                    : [],
             obscureText: _obscureText,
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
@@ -78,12 +89,21 @@ class _InputFieldState extends State<InputField> {
                         });
                       })
                   : const Text(''),
-              hintText: widget.labelText,
+              hintText: (widget.fieldmessage == "password")
+                  ? "*********"
+                  : widget.labelText,
               labelStyle: const TextStyle(
                 fontSize: 14,
               ),
               alignLabelWithHint: true,
               prefixText: "  ",
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  width: 2,
+                  color: Constants.errorcolor,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   width: 2,
@@ -105,14 +125,23 @@ class _InputFieldState extends State<InputField> {
             ),
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
+                log("1");
                 return widget.errormessage;
               } else if (widget.fieldmessage == "Cnic" &&
                   (value!.isEmpty) &&
                   value.length < 13) {
+                log("2");
                 return "Please enter correct 13 digit Cnic";
               } else if (widget.fieldmessage == "email" &&
                   !EmailValidator.validate(value!)) {
-                return "Please enter correct email";
+                log("3");
+                return widget.errormessage;
+              } else if (widget.fieldmessage == "DOE" &&
+                  value!.isEmpty &&
+                  value[2] == "/" &&
+                  value.length != 5) {
+                log("4");
+                return widget.errormessage;
               }
               return null;
             },

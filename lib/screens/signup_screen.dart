@@ -164,7 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         UserData.savePassToFirestore(user);
 
         toast.showToast(
-            child: buildtoast("Sign In successful", "success"),
+            child: buildtoast("Sign Up successful", "success"),
             gravity: ToastGravity.BOTTOM);
         if (!mounted) return;
         Navigator.of(context).pushAndRemoveUntil(
@@ -175,7 +175,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
     ).onError(
       (error, stackTrace) {
-        Fluttertoast.showToast(msg: error.toString());
+        toast.showToast(
+            child: buildtoast("Sign Up unsuccessful", "error"),
+            gravity: ToastGravity.BOTTOM);
       },
     );
   }

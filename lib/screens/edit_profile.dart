@@ -187,6 +187,7 @@ class EditProfileStream extends StatelessWidget {
                   labelText: users[0].number,
                   controller: numberController,
                   errormessage: "Please Enter phone number",
+                  fieldmessage: "phone",
                 ),
                 InputField(
                   label: 'Current Address',
