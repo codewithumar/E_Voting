@@ -1,3 +1,4 @@
+import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'E-Voting',
+      title: Constants.appname,
+      themeMode: ThemeMode.system,
       theme: ThemeData(
         fontFamily: "Mulish",
         primarySwatch: Colors.teal,

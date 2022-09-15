@@ -4,8 +4,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import 'package:flutter/services.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:e_voting/utils/constants.dart';
 
 class PasswordField extends StatefulWidget {

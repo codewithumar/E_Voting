@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, depend_on_referenced_packages
 
 import 'dart:developer';
 
@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:e_voting/utils/constants.dart';
-import 'package:pattern_formatter/date_formatter.dart';
 
 class InputField extends StatefulWidget {
   const InputField(
@@ -61,11 +60,7 @@ class _InputFieldState extends State<InputField> {
                 ? [
                     LengthLimitingTextInputFormatter(13),
                   ]
-                : (widget.fieldmessage == "DOE")
-                    ? [
-                        LengthLimitingTextInputFormatter(15),
-                      ]
-                    : [],
+                : [],
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
               suffix: (widget.fieldmessage == "DOE")
@@ -84,7 +79,7 @@ class _InputFieldState extends State<InputField> {
                         if (pickedDate != null) {
                           setState(() {
                             widget.controller!.text =
-                                DateFormat('yyyy-MM').format(pickedDate);
+                                DateFormat('MM/yyyy').format(pickedDate);
                           });
                         }
                       })
@@ -143,19 +138,13 @@ class _InputFieldState extends State<InputField> {
                   !EmailValidator.validate(value!)) {
                 log("3");
                 return widget.errormessage;
-              } else if (widget.fieldmessage == "DOE" &&
-                  value!.isEmpty &&
-                  value[2] == "/" &&
-                  value.length != 5) {
-                log("4");
-                return widget.errormessage;
               }
               return null;
             },
           ),
         ),
         const SizedBox(
-          height: 15,
+          height: 10,
         )
       ],
     );

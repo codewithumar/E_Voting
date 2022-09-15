@@ -66,14 +66,11 @@ class CreateProfileStream extends StatelessWidget {
   List<UserData> users;
 
   late double height = MediaQuery.of(context).size.height;
-  late TextEditingController phonecontroller =
-      TextEditingController(text: users[0].number);
-  late TextEditingController mothernamecontroller =
-      TextEditingController(text: users[0].mName);
-  late TextEditingController currentaddresscontroller =
-      TextEditingController(text: users[0].currAddress);
+  late TextEditingController phonecontroller = TextEditingController();
+  late TextEditingController mothernamecontroller = TextEditingController();
+  late TextEditingController currentaddresscontroller = TextEditingController();
   late TextEditingController permanentaddresscontroller =
-      TextEditingController(text: users[0].perAddress);
+      TextEditingController();
   final createprofileformkey = GlobalKey<FormState>();
   FilePickerResult? pickedFile;
 
@@ -175,12 +172,12 @@ class CreateProfileStream extends StatelessWidget {
                 ),
                 InputField(
                   label: 'Permanent Adress',
-                  labelText: 'Rab Nawaz Colony',
+                  labelText: 'Address',
                   controller: permanentaddresscontroller,
                 ),
                 InputField(
                   label: 'Current Address',
-                  labelText: 'Mullah Ki Basti',
+                  labelText: 'Address',
                   controller: currentaddresscontroller,
                 ),
                 SignupLoginButton(

@@ -1,21 +1,15 @@
-import 'dart:developer';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:provider/provider.dart';
 import 'package:e_voting/providers/firebase_auth_provider.dart';
 import 'package:e_voting/widgets/passwordfield.dart';
 import 'package:e_voting/widgets/toast.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-
-import 'package:e_voting/screens/create_profile_screen.dart';
 
 import 'package:e_voting/screens/login_screen.dart';
 
-import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
-import 'package:provider/provider.dart';
 
 import '../widgets/input_field.dart';
 
@@ -84,7 +78,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   InputField(
                     label: 'Date of Expiry',
-                    labelText: '02/22',
+                    labelText: '- - / - - - -',
                     controller: doecontroller,
                     errormessage: "Enter valid date",
                     fieldmessage: "DOE",
@@ -153,44 +147,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Future<void> registeruser() async {
     try {
-      await context
-          .read<FirebaseAuthProvider>()
-          .signuowithEmailandPassword(
-              emailcontroller.text, passwordcontroller.text)
-          .then(
-        (value) {
-          final user = UserData(
-            fullName: namecontroller.text,
-            cnic: cniccontroller.text,
-            doe: doecontroller.text,
-            email: emailcontroller.text,
-            password: passwordcontroller.text,
-            number: " ",
-            mName: " ",
-            perAddress: " ",
-            currAddress: " ",
-          );
-          UserData.savePassToFirestore(user);
-
-          toast.showToast(
-              child: buildtoast("Sign Up successful", "success"),
-              gravity: ToastGravity.BOTTOM);
-          if (!mounted) return;
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => const CreateProfile(),
-              ),
-              (route) => false);
-        },
-      ).onError(
-        (error, stackTrace) {
-          toast.showToast(
-              child: buildtoast("Sign Up unsuccessful", "error"),
-              gravity: ToastGravity.BOTTOM);
-        },
-      );
+      await context.read<FirebaseAuthProvider>().signupwithEmailandPassword(
+          emailcontroller.text, passwordcontroller.text);
     } catch (e) {
-      log(e.toString());
+      toast.showToast(
+          child: buildtoast("User already exsist", "success"),
+          gravity: ToastGravity.BOTTOM);
     }
   }
 }
