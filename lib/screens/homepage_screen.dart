@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/screens/profile_screen.dart';
 
 import 'package:e_voting/utils/constants.dart';
 

@@ -3,17 +3,17 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:e_voting/utils/constants.dart';
+import 'package:pattern_formatter/date_formatter.dart';
 
 class InputField extends StatefulWidget {
   const InputField(
       {Key? key,
       required this.label,
       required this.labelText,
-      this.obscure,
       this.controller,
       this.errormessage,
       this.fieldmessage,
@@ -22,7 +22,7 @@ class InputField extends StatefulWidget {
   final String label;
   final String labelText;
   final TextEditingController? controller;
-  final bool? obscure;
+
   final bool? readOnly;
   final String? errormessage;
   final String? fieldmessage;
@@ -32,8 +32,6 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
-  late bool _obscureText = (widget.obscure == true) ? true : false;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -55,38 +53,40 @@ class _InputFieldState extends State<InputField> {
             keyboardType: (widget.fieldmessage == "Cnic" ||
                     widget.fieldmessage == "DOE" ||
                     widget.fieldmessage == "phone")
-                ? TextInputType.text
+                ? TextInputType.number
                 : TextInputType.text,
             controller: widget.controller,
             inputFormatters: (widget.fieldmessage == "Cnic" ||
                     widget.fieldmessage == "phone")
                 ? [
-                    // FilteringTextInputFormatter.allow(
-                    //   RegExp(r"^[0-9]"),
-                    // ),
                     LengthLimitingTextInputFormatter(13),
                   ]
                 : (widget.fieldmessage == "DOE")
                     ? [
-                        // FilteringTextInputFormatter.allow(
-                        //   RegExp(r"^[0-9]"),
-                        // ),
-                        LengthLimitingTextInputFormatter(5),
+                        LengthLimitingTextInputFormatter(15),
                       ]
                     : [],
-            obscureText: _obscureText,
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
-              suffixIcon: (widget.obscure == true)
+              suffix: (widget.fieldmessage == "DOE")
                   ? IconButton(
-                      icon: Icon(
-                        !_obscureText ? Icons.visibility : Icons.visibility_off,
+                      icon: const Icon(
+                        Icons.calendar_today,
                         color: Constants.lightGreen,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
+                      onPressed: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2050),
+                        );
+                        if (pickedDate != null) {
+                          setState(() {
+                            widget.controller!.text =
+                                DateFormat('yyyy-MM').format(pickedDate);
+                          });
+                        }
                       })
                   : const Text(''),
               hintText: (widget.fieldmessage == "password")
@@ -111,6 +111,13 @@ class _InputFieldState extends State<InputField> {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: Constants.errorcolor,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
               focusedBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
                   width: 2,
@@ -128,8 +135,8 @@ class _InputFieldState extends State<InputField> {
                 log("1");
                 return widget.errormessage;
               } else if (widget.fieldmessage == "Cnic" &&
-                  (value!.isEmpty) &&
-                  value.length < 13) {
+                  value!.length < 13 &&
+                  value.isEmpty) {
                 log("2");
                 return "Please enter correct 13 digit Cnic";
               } else if (widget.fieldmessage == "email" &&

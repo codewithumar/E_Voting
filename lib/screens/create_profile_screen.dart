@@ -3,12 +3,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/screens/profile_screen.dart';
 
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/utils/constants.dart';
-import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -83,7 +83,7 @@ class CreateProfileStream extends StatelessWidget {
       key: createprofileformkey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(16),
           child: SizedBox(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -184,6 +184,7 @@ class CreateProfileStream extends StatelessWidget {
                   controller: currentaddresscontroller,
                 ),
                 SignupLoginButton(
+                  isLoading: false,
                   btnText: 'Create Profile',
                   function: createProfile,
                   formkey: createprofileformkey,
@@ -249,6 +250,7 @@ class CreateProfileStream extends StatelessWidget {
     final upload = ref.putFile(file);
     final snapshot = await upload.whenComplete(() {});
     urlDownload = await snapshot.ref.getDownloadURL();
+
     UserSimplePreferences.storeURL(id.toString(), urlDownload!);
   }
 }

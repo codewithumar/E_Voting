@@ -1,26 +1,24 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:e_voting/providers/firebase_auth_provider.dart';
 import 'package:e_voting/utils/constants.dart';
 
-class SignupLoginButton extends StatefulWidget {
+class SignupLoginButton extends StatelessWidget {
   const SignupLoginButton({
     Key? key,
     required this.btnText,
     required this.function,
     this.formkey,
-    // required this.onpress,
+    required this.isLoading,
   }) : super(key: key);
   final String btnText;
   final VoidCallback function;
   final GlobalKey<FormState>? formkey;
-  //Function() onpress;
+  final bool isLoading;
 
-  @override
-  State<SignupLoginButton> createState() => _SignupLoginButtonState();
-}
-
-class _SignupLoginButtonState extends State<SignupLoginButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,15 +34,23 @@ class _SignupLoginButtonState extends State<SignupLoginButton> {
           ),
           color: Constants.primarycolor,
           textColor: Constants.buttontextcolor,
-          onPressed: () {
-            if (widget.formkey!.currentState!.validate()) {
-              widget.function();
-            }
-          },
-          child: Text(
-            widget.btnText,
-            style: const TextStyle(fontSize: 16),
-          ),
+          onPressed: context.watch<FirebaseAuthProvider>().isLoading
+              ? null
+              : () {
+                  if (formkey!.currentState!.validate()) {
+                    function();
+                  }
+                },
+          child: context.watch<FirebaseAuthProvider>().isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  ),
+                )
+              : Text(
+                  btnText,
+                  style: const TextStyle(fontSize: 16),
+                ),
         ),
       ),
     );

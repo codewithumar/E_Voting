@@ -1,17 +1,23 @@
+import 'dart:developer';
+
+import 'package:e_voting/providers/firebase_auth_provider.dart';
+import 'package:e_voting/widgets/passwordfield.dart';
 import 'package:e_voting/widgets/toast.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:e_voting/screens/create_profile.dart';
+import 'package:e_voting/screens/create_profile_screen.dart';
 
 import 'package:e_voting/screens/login_screen.dart';
 
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:provider/provider.dart';
 
-import '../widgets/sign_up_fields.dart';
+import '../widgets/input_field.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -42,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Form(
           key: signupformkey,
           child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(16),
             child: SizedBox(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     errormessage: "Enter valid email",
                     fieldmessage: "email",
                   ),
-                  InputField(
+                  PasswordField(
                     label: 'Password',
                     labelText: '*********',
                     controller: passwordcontroller,
@@ -98,8 +104,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     errormessage: "Enter valid password 8-50",
                   ),
                   SignupLoginButton(
+                    isLoading: context.watch<FirebaseAuthProvider>().isLoading,
                     btnText: 'Continue',
-                    function: registeruser,
+                    function: () async {
+                      await registeruser();
+                    },
                     formkey: signupformkey,
                   ),
                   Padding(
@@ -143,42 +152,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> registeruser() async {
-    await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-      email: emailcontroller.text,
-      password: passwordcontroller.text,
-    )
-        .then(
-      (value) {
-        final user = UserData(
-          fullName: namecontroller.text,
-          cnic: cniccontroller.text,
-          doe: doecontroller.text,
-          email: emailcontroller.text,
-          password: passwordcontroller.text,
-          number: " ",
-          mName: " ",
-          perAddress: " ",
-          currAddress: " ",
-        );
-        UserData.savePassToFirestore(user);
+    try {
+      await context
+          .read<FirebaseAuthProvider>()
+          .signuowithEmailandPassword(
+              emailcontroller.text, passwordcontroller.text)
+          .then(
+        (value) {
+          final user = UserData(
+            fullName: namecontroller.text,
+            cnic: cniccontroller.text,
+            doe: doecontroller.text,
+            email: emailcontroller.text,
+            password: passwordcontroller.text,
+            number: " ",
+            mName: " ",
+            perAddress: " ",
+            currAddress: " ",
+          );
+          UserData.savePassToFirestore(user);
 
-        toast.showToast(
-            child: buildtoast("Sign Up successful", "success"),
-            gravity: ToastGravity.BOTTOM);
-        if (!mounted) return;
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const CreateProfile(),
-            ),
-            (route) => false);
-      },
-    ).onError(
-      (error, stackTrace) {
-        toast.showToast(
-            child: buildtoast("Sign Up unsuccessful", "error"),
-            gravity: ToastGravity.BOTTOM);
-      },
-    );
+          toast.showToast(
+              child: buildtoast("Sign Up successful", "success"),
+              gravity: ToastGravity.BOTTOM);
+          if (!mounted) return;
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const CreateProfile(),
+              ),
+              (route) => false);
+        },
+      ).onError(
+        (error, stackTrace) {
+          toast.showToast(
+              child: buildtoast("Sign Up unsuccessful", "error"),
+              gravity: ToastGravity.BOTTOM);
+        },
+      );
+    } catch (e) {
+      log(e.toString());
+    }
   }
 }

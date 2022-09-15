@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_voting/screens/edit_profile.dart';
+import 'package:e_voting/screens/edit_profile_screen.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/services/user_simple_preferences.dart';
-import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -142,14 +142,14 @@ class ProfileStreamState extends State<ProfileStream> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(15),
+        padding: const EdgeInsets.all(16),
         child: SizedBox(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Align(
                   alignment: Alignment.center,
                   child: Container(

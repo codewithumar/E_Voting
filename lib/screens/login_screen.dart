@@ -1,14 +1,17 @@
+import 'package:e_voting/providers/firebase_auth_provider.dart';
+import 'package:e_voting/widgets/passwordfield.dart';
 import 'package:e_voting/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 
 import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/utils/constants.dart';
-import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:e_voting/widgets/input_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -36,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
         key: loginformkey,
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(15),
+            padding: const EdgeInsets.all(16),
             child: SizedBox(
               height: height,
               child: Column(
@@ -65,6 +68,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: height * 0.1,
                   ),
+                  const InputField(
+                    label: 'Cnic',
+                    labelText: '33303-1234567-8',
+                    fieldmessage: "Cnic",
+                    errormessage: "Please input valid Cnic",
+                  ),
                   InputField(
                     label: 'Email',
                     labelText: 'example@gmail.com',
@@ -72,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     errormessage: "Please Enter valid email",
                     fieldmessage: "email",
                   ),
-                  InputField(
+                  PasswordField(
                     label: 'Password',
                     labelText: '***************',
                     controller: passwordcontroller,
@@ -90,8 +99,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SignupLoginButton(
-                    btnText: 'Signin',
-                    function: loginuser,
+                    isLoading: true,
+                    btnText: 'Sign in',
+                    function: () async {
+                      await loginuser();
+                    },
                     formkey: loginformkey,
                   ),
                   Padding(
@@ -136,23 +148,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> loginuser() async {
     try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-        email: emailcontroller.text,
-        password: passwordcontroller.text,
-      )
-          .then(
-        (value) {
-          toast.showToast(
-              child: buildtoast("Sign In successful", "success"),
-              gravity: ToastGravity.BOTTOM);
-          if (!mounted) return;
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) => const Profile(),
-              ),
-              (route) => false);
-        },
+      await context.read<FirebaseAuthProvider>().signInwithEmailandPassword(
+            emailcontroller.text,
+            passwordcontroller.text,
+          );
+
+      toast.showToast(
+        child: buildtoast("Sign In successful", "success"),
+        gravity: ToastGravity.BOTTOM,
+      );
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const Profile(),
+        ),
       );
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

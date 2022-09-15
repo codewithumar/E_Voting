@@ -4,10 +4,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:e_voting/screens/profile.dart';
+import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/services/user_simple_preferences.dart';
-import 'package:e_voting/widgets/sign_up_fields.dart';
+import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -107,7 +107,7 @@ class EditProfileStream extends StatelessWidget {
       key: editprofileformkey,
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(15),
+          padding: const EdgeInsets.all(16),
           child: SizedBox(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -181,6 +181,7 @@ class EditProfileStream extends StatelessWidget {
                   labelText: users[0].doe,
                   controller: doeController,
                   errormessage: "Please Select a corrrect Date",
+                  fieldmessage: "DOE",
                 ),
                 InputField(
                   label: 'Phone Number',
@@ -196,6 +197,7 @@ class EditProfileStream extends StatelessWidget {
                   errormessage: "Please enter correct address",
                 ),
                 SignupLoginButton(
+                  isLoading: false,
                   btnText: 'Update',
                   function: updateProfile,
                   formkey: editprofileformkey,

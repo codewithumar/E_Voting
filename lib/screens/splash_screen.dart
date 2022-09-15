@@ -1,6 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
+import 'package:e_voting/screens/homepage_screen.dart';
+import 'package:e_voting/screens/profile_screen.dart';
+import 'package:e_voting/services/firebase_auth_service.dart';
 import 'package:e_voting/utils/constants.dart';
+
 import 'package:flutter/material.dart';
 import 'package:e_voting/screens/login_screen.dart';
 
@@ -11,27 +17,11 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-Future<void> wait(BuildContext context) async {
-  await Future.delayed(
-    const Duration(seconds: 3),
-  );
-  move(context);
-}
-
-void move(BuildContext context) {
-  Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-      (route) => false);
-}
-
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    wait(context);
+    _wait();
   }
 
   @override
@@ -66,5 +56,19 @@ class _SplashScreenState extends State<SplashScreen> {
             ]),
       ),
     );
+  }
+
+  Future<void> _wait() async {
+    await Future.delayed(const Duration(seconds: 3), () {
+      final auth = FirebaseAuthService();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              (auth.user == null) ? const LoginScreen() : const Profile(),
+        ),
+      );
+    });
   }
 }
