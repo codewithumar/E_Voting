@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/screens/profile_screen.dart';
 
-import 'package:e_voting/models/user_data.dart';
-import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
@@ -56,7 +56,7 @@ class _CreateProfileState extends State<CreateProfile> {
   }
 }
 
-class CreateProfileStream extends StatelessWidget {
+class CreateProfileStream extends StatefulWidget {
   CreateProfileStream(
     this.context,
     this.users, {
@@ -65,14 +65,27 @@ class CreateProfileStream extends StatelessWidget {
   BuildContext context;
   List<UserData> users;
 
-  late double height = MediaQuery.of(context).size.height;
+  @override
+  State<CreateProfileStream> createState() => _CreateProfileStreamState();
+}
+
+class _CreateProfileStreamState extends State<CreateProfileStream> {
+  late double height = MediaQuery.of(widget.context).size.height;
+
   late TextEditingController phonecontroller = TextEditingController();
+
   late TextEditingController mothernamecontroller = TextEditingController();
+
   late TextEditingController currentaddresscontroller = TextEditingController();
+
   late TextEditingController permanentaddresscontroller =
       TextEditingController();
+
   final createprofileformkey = GlobalKey<FormState>();
+
   FilePickerResult? pickedFile;
+
+  bool checkBoxValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +124,14 @@ class CreateProfileStream extends StatelessWidget {
                     child: Container(
                       height: 58,
                       width: 58,
-                      foregroundDecoration: null,
+                      foregroundDecoration: (widget.users[0].url != 'null')
+                          ? BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(widget.users[0].url),
+                                fit: BoxFit.fill,
+                              ),
+                            )
+                          : null,
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: Constants.greyColor,
@@ -126,7 +146,9 @@ class CreateProfileStream extends StatelessWidget {
                           color: Constants.primarycolor,
                         ),
                         onPressed: () {
-                          _selectFile();
+                          setState(() {
+                            selectFile(widget.users[0].id);
+                          });
                         },
                       ),
                     ),
@@ -174,11 +196,44 @@ class CreateProfileStream extends StatelessWidget {
                   labeltext: 'Permanent Adress',
                   hintText: 'Address',
                   controller: permanentaddresscontroller,
+                  fieldmessage: 'Address',
                 ),
                 InputField(
                   labeltext: 'Current Address',
                   hintText: 'Address',
                   controller: currentaddresscontroller,
+                  fieldmessage: 'Address',
+                ),
+                SizedBox(
+                  child: CheckboxListTile(
+                    title: const Text(
+                      'Same as Permanent Address',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Constants.greyColor,
+                      ),
+                    ),
+                    checkColor: Colors.white,
+                    selectedTileColor: Constants.lightGreen,
+                    activeColor: Constants.lightGreen,
+                    value: checkBoxValue,
+                    onChanged: (newValue) {
+                      setState(() {
+                        log(checkBoxValue.toString());
+                        checkBoxValue = newValue!;
+                        if (checkBoxValue == true) {
+                          permanentaddresscontroller = currentaddresscontroller;
+                        } else {
+                          currentaddresscontroller = TextEditingController(
+                              text: currentaddresscontroller.text);
+                          permanentaddresscontroller = TextEditingController(
+                              text: permanentaddresscontroller.text);
+                        }
+                      });
+                    },
+                    controlAffinity: ListTileControlAffinity.leading,
+                  ),
                 ),
                 SignupLoginButton(
                   isLoading: false,
@@ -197,7 +252,7 @@ class CreateProfileStream extends StatelessWidget {
   Future<void> createProfile() async {
     final docUser = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(users[0].id);
+        .doc(widget.users[0].id);
     docUser.update(
       {
         "motherName": mothernamecontroller.text,
@@ -206,48 +261,56 @@ class CreateProfileStream extends StatelessWidget {
         "perAddress": permanentaddresscontroller.text,
       },
     ).then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(widget.context).showSnackBar(
         showsnackbar(
           Constants.greensnackbarColor,
           "Changes Applied Successfully",
-          context,
+          widget.context,
         ),
       );
     }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(widget.context).showSnackBar(
         showsnackbar(
           Constants.redsnackbarColor,
           "Could Not Apply Changes",
-          context,
+          widget.context,
         ),
       );
     });
-    Navigator.of(context).pushAndRemoveUntil(
+    Navigator.of(widget.context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const Profile(),
         ),
         (route) => false);
   }
+}
 
-  Future _selectFile() async {
-    File? file;
-    final id = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(users[0].id);
-    final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
-    PlatformFile? pickedFile;
-    if (result != null) {
-      pickedFile = result.files.first;
-      file = File(pickedFile.path!);
-    }
-    final path = '/profileimages/$id/${pickedFile?.name}';
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(file!);
-    final upload = ref.putFile(file);
-    final snapshot = await upload.whenComplete(() {});
-    urlDownload = await snapshot.ref.getDownloadURL();
-
-    UserSimplePreferences.storeURL(id.toString(), urlDownload!);
+Future selectFile(String docID) async {
+  File? file;
+  String? urlDownload;
+  final id = FirebaseFirestore.instance
+      .collection(FirebaseAuth.instance.currentUser!.email!)
+      .doc(docID);
+  final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
+  PlatformFile? pickedFile;
+  if (result != null) {
+    pickedFile = result.files.first;
+    file = File(pickedFile.path!);
   }
+  final path = '/profileimages/$id/${pickedFile?.name}';
+  final ref = FirebaseStorage.instance.ref().child(path);
+  ref.putFile(file!);
+  final upload = ref.putFile(file);
+  final snapshot = await upload.whenComplete(() {});
+  urlDownload = await snapshot.ref.getDownloadURL();
+  log('url is = $urlDownload');
+  final docUser = FirebaseFirestore.instance
+      .collection(FirebaseAuth.instance.currentUser!.email!)
+      .doc(docID);
+  docUser.update(
+    {
+      "dpURL": urlDownload,
+    },
+  );
 }

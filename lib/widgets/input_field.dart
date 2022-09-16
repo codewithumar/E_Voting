@@ -46,7 +46,7 @@ class _InputFieldState extends State<InputField> {
           ),
         ),
         Container(
-          height: 65,
+          height: (widget.fieldmessage == 'Address') ? 80 : 65,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
             keyboardType: (widget.fieldmessage == "Cnic" ||
@@ -125,6 +125,8 @@ class _InputFieldState extends State<InputField> {
                 fontSize: 10,
               ),
             ),
+            maxLength: (widget.fieldmessage == 'Address') ? 250 : null,
+            maxLines: (widget.fieldmessage == 'Address') ? 10 : null,
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
                 log("1");

@@ -172,6 +172,10 @@ class _LoginScreenState extends State<LoginScreen> {
         toast.showToast(
             child: buildtoast("Sign In unsuccessful", "error"),
             gravity: ToastGravity.BOTTOM);
+      } else {
+        toast.showToast(
+            child: buildtoast("Something went wrong", "error"),
+            gravity: ToastGravity.BOTTOM);
       }
     }
   }

@@ -1,3 +1,6 @@
+import 'package:e_voting/models/user_data.dart';
+import 'package:e_voting/screens/create_profile_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -36,6 +39,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   @override
+  void dispose() {
+    namecontroller.dispose();
+    cniccontroller.dispose();
+    emailcontroller.dispose();
+    doecontroller.dispose();
+    passwordcontroller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -46,7 +59,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: SizedBox(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                // crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     height: height * 0.1,
@@ -148,11 +160,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Future<void> registeruser() async {
     try {
       await context.read<FirebaseAuthProvider>().signupwithEmailandPassword(
-          emailcontroller.text, passwordcontroller.text);
+            emailcontroller.text,
+            passwordcontroller.text,
+          );
+      if (!mounted) return;
+      final docUser = UserData(
+        fullName: namecontroller.text,
+        cnic: cniccontroller.text,
+        doe: doecontroller.text,
+        email: emailcontroller.text,
+        password: passwordcontroller.text,
+        number: 'null',
+        mName: 'null',
+        perAddress: 'null',
+        currAddress: 'null',
+        url: 'null',
+      );
+      UserData.savePassToFirestore(docUser);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const CreateProfile(),
+        ),
+        (route) => false,
+      );
     } catch (e) {
       toast.showToast(
-          child: buildtoast("User already exsist", "success"),
-          gravity: ToastGravity.BOTTOM);
+        child: buildtoast("User already exsist", "success"),
+        gravity: ToastGravity.BOTTOM,
+      );
     }
   }
 }
