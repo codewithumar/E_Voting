@@ -1,5 +1,6 @@
-import 'package:e_voting/utils/constants.dart';
 import 'package:flutter/material.dart';
+
+import 'package:e_voting/utils/constants.dart';
 
 Widget buildFacebookLogin() {
   return Container(

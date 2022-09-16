@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -79,6 +78,5 @@ class UserData {
     final json = user.toJson();
     log('json = $json, userid = ${user.id}');
     await docUser.set(json);
-    // await docUser.set(json);
   }
 }

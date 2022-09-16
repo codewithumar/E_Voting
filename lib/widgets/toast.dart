@@ -12,7 +12,6 @@ Widget buildtoast(String message, String iconname) => Container(
           Radius.circular(16.0),
         ),
       ),
-      // color: const Color(0xff151619),
       child: Row(
         children: [
           Image(

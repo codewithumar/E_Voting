@@ -1,17 +1,16 @@
+import 'package:flutter/material.dart';
+
+import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 import 'package:e_voting/providers/firebase_auth_provider.dart';
 import 'package:e_voting/widgets/password_field.dart';
 import 'package:e_voting/widgets/toast.dart';
-import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
-
 import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -102,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     isLoading: true,
                     btnText: 'Sign in',
                     function: () async {
-                      await loginuser();
+                      await loginUser();
                     },
                     formkey: loginformkey,
                   ),
@@ -146,37 +145,29 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> loginuser() async {
-    try {
-      await context.read<FirebaseAuthProvider>().signInwithEmailandPassword(
-            emailcontroller.text,
-            passwordcontroller.text,
-          );
-
+  Future<void> loginUser() async {
+    await context.read<FirebaseAuthProvider>().signInwithEmailandPassword(
+          emailcontroller.text,
+          passwordcontroller.text,
+        );
+    if (!mounted) return;
+    final authProvider = context.read<FirebaseAuthProvider>();
+    if (authProvider.hasError) {
       toast.showToast(
-        child: buildtoast("Sign In successful", "success"),
+        child: buildtoast(authProvider.errorMsg, "success"),
         gravity: ToastGravity.BOTTOM,
       );
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const Profile(),
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        toast.showToast(
-            child: buildtoast("Sign In unsuccessful", "error"),
-            gravity: ToastGravity.BOTTOM);
-      } else if (e.code == 'wrong-password') {
-        toast.showToast(
-            child: buildtoast("Sign In unsuccessful", "error"),
-            gravity: ToastGravity.BOTTOM);
-      } else {
-        toast.showToast(
-            child: buildtoast("Something went wrong", "error"),
-            gravity: ToastGravity.BOTTOM);
-      }
+      return;
     }
+    toast.showToast(
+      child: buildtoast("Sign In successful", "success"),
+      gravity: ToastGravity.BOTTOM,
+    );
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const Profile(),
+      ),
+    );
   }
 }

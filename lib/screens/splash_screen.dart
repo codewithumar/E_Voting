@@ -1,11 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/services/firebase_auth_service.dart';
 import 'package:e_voting/utils/constants.dart';
-
 import 'package:e_voting/screens/login_screen.dart';
 
 class SplashScreen extends StatefulWidget {

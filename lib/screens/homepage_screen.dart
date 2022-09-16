@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:e_voting/screens/profile_screen.dart';
-
 import 'package:e_voting/utils/constants.dart';
+import 'package:e_voting/screens/profile_screen.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -15,8 +14,6 @@ class _HomepageState extends State<Homepage> {
   final editingController = TextEditingController();
   int _selectedIndex = 0;
   static List<Widget> widgetOptions = <Widget>[
-    //const Dashboard(),
-    //const Reports(),
     const Profile(),
   ];
   void _onItemTapped(int index) {

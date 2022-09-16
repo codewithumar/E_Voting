@@ -1,12 +1,12 @@
 // ignore_for_file: must_be_immutable, depend_on_referenced_packages
+import 'package:flutter/material.dart';
 
 import 'dart:developer';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:email_validator/email_validator.dart';
 
 import 'package:e_voting/screens/signup_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:flutter/services.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:e_voting/utils/constants.dart';
 
 class InputField extends StatefulWidget {
@@ -129,7 +129,6 @@ class _InputFieldState extends State<InputField> {
               ),
             ),
             maxLength: (widget.fieldmessage == FieldMsg.address) ? 250 : null,
-            maxLines: (widget.fieldmessage == FieldMsg.address) ? 10 : null,
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
                 log("1");

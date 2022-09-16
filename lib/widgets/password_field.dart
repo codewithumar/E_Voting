@@ -1,8 +1,7 @@
 // ignore_for_file: must_be_immutable
+import 'package:flutter/material.dart';
 
 import 'dart:developer';
-
-import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
 
@@ -47,7 +46,6 @@ class _PasswordFieldState extends State<PasswordField> {
           ),
         ),
         Container(
-          // height: 65,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
             textAlign: TextAlign.left,
