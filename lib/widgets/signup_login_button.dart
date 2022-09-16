@@ -22,7 +22,7 @@ class SignupLoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: SizedBox(
         height: 50,
         width: MediaQuery.of(context).size.width,

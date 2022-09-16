@@ -6,7 +6,6 @@ import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:e_voting/providers/firebase_auth_provider.dart';
-import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/screens/splash_screen.dart';
 
 Future<void> main() async {
@@ -14,7 +13,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await UserSimplePreferences.init();
   runApp(
     MultiProvider(
       providers: [

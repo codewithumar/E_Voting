@@ -1,18 +1,15 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_voting/screens/create_profile_screen.dart';
 import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/services/user_data.dart';
-import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/widgets/snackbar.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
@@ -120,10 +117,10 @@ class EditProfileStream extends StatelessWidget {
                     child: Container(
                       height: 70,
                       width: 70,
-                      foregroundDecoration: (urlDownload != null)
+                      foregroundDecoration: (users[0].url != 'null')
                           ? BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(urlDownload!),
+                                image: NetworkImage(users[0].url),
                                 fit: BoxFit.fill,
                               ),
                             )
@@ -142,7 +139,7 @@ class EditProfileStream extends StatelessWidget {
                           color: Constants.primarycolor,
                         ),
                         onPressed: () {
-                          _selectFile();
+                          selectFile(users[0].id);
                         },
                       ),
                     ),
@@ -245,26 +242,5 @@ class EditProfileStream extends StatelessWidget {
         ),
       );
     });
-  }
-
-  Future _selectFile() async {
-    File? file;
-    final id = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(users[0].id);
-    final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
-    PlatformFile? pickedFile;
-    if (result != null) {
-      pickedFile = result.files.first;
-      file = File(pickedFile.path!);
-    }
-    final path = '/profileimages/$id/${pickedFile?.name}';
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(file!);
-    final upload = ref.putFile(file);
-    final snapshot = await upload.whenComplete(() {});
-    urlDownload = await snapshot.ref.getDownloadURL();
-    UserSimplePreferences.storeURL(id.toString(), urlDownload!);
   }
 }

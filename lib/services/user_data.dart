@@ -14,6 +14,7 @@ class UserData {
   final String mName;
   final String perAddress;
   final String currAddress;
+  final String url;
   UserData({
     this.id = '',
     required this.fullName,
@@ -25,6 +26,7 @@ class UserData {
     required this.mName,
     required this.perAddress,
     required this.currAddress,
+    required this.url,
   });
 
   Map<String, dynamic> toJson() => {
@@ -38,6 +40,7 @@ class UserData {
         'motherName': mName,
         'perAddress': perAddress,
         'currAddress': currAddress,
+        'dpURL': url,
       };
 
   static UserData fromJson(Map<String, dynamic> json) => UserData(
@@ -51,13 +54,21 @@ class UserData {
         mName: json['motherName'],
         perAddress: json['perAddress'],
         currAddress: json['currAddress'],
+        url: json['dpURL'],
       );
 
   static Stream<List<UserData>> readUsers() => FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser!.email!)
       .snapshots()
-      .map((snapshot) =>
-          snapshot.docs.map((doc) => UserData.fromJson(doc.data())).toList());
+      .map(
+        (snapshot) => snapshot.docs
+            .map(
+              (doc) => UserData.fromJson(
+                doc.data(),
+              ),
+            )
+            .toList(),
+      );
 
   static Future savePassToFirestore(UserData user) async {
     final docUser = FirebaseFirestore.instance

@@ -1,11 +1,9 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/edit_profile_screen.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/services/user_data.dart';
-import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:file_picker/file_picker.dart';
@@ -123,8 +121,6 @@ class ProfileStream extends StatefulWidget {
   State<ProfileStream> createState() => ProfileStreamState();
 }
 
-String? urlDownload;
-
 class ProfileStreamState extends State<ProfileStream> {
   late final idURL = FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser!.email!)
@@ -132,11 +128,6 @@ class ProfileStreamState extends State<ProfileStream> {
       .toString();
   PlatformFile? pickedFile;
   UploadTask? upload;
-  @override
-  void initState() {
-    super.initState();
-    urlDownload = UserSimplePreferences.getURL(idURL);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +146,12 @@ class ProfileStreamState extends State<ProfileStream> {
                   child: Container(
                     height: 70,
                     width: 70,
-                    foregroundDecoration: (urlDownload != null)
+                    foregroundDecoration: (widget.users[0].url != 'null')
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(urlDownload!),
-                              fit: BoxFit.fill,
-                            ),
+                                image: NetworkImage(widget.users[0].id),
+                                fit: BoxFit.fill,
+                                scale: 0.5),
                           )
                         : null,
                     decoration: BoxDecoration(
@@ -172,18 +163,14 @@ class ProfileStreamState extends State<ProfileStream> {
                       ),
                     ),
                     child: IconButton(
-                      icon: (urlDownload == null)
+                      icon: (widget.users[0].url == 'null')
                           ? const Icon(
                               Icons.add_photo_alternate_rounded,
                               color: Constants.primarycolor,
                             )
-                          : Image.asset(urlDownload!),
+                          : Image.asset(widget.users[0].url),
                       iconSize: 50,
-                      onPressed: () async {
-                        log('before = $urlDownload');
-                        //  await selectFile();
-                        log('$urlDownload 1234567890');
-                      },
+                      onPressed: () {},
                     ),
                   ),
                 ),
@@ -272,27 +259,5 @@ class ProfileStreamState extends State<ProfileStream> {
         ),
       ),
     );
-  }
-
-  Future selectFile() async {
-    File? file;
-    // final id = FirebaseFirestore.instance
-    //     .collection(FirebaseAuth.instance.currentUser!.email!)
-    //     .doc(widget.users[0].id);
-    final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
-
-    if (result != null) {
-      pickedFile = result.files.first;
-      file = File(pickedFile!.path!);
-    }
-    final path = '/profileimages/$idURL/${pickedFile?.name}';
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(file!);
-    upload = ref.putFile(file);
-    final snapshot = await upload?.whenComplete(() {});
-    urlDownload = await snapshot?.ref.getDownloadURL();
-    UserSimplePreferences.storeURL(idURL, urlDownload!);
-    setState(() {});
   }
 }
