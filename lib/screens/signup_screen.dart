@@ -5,7 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:provider/provider.dart';
 import 'package:e_voting/providers/firebase_auth_provider.dart';
-import 'package:e_voting/widgets/passwordfield.dart';
+import 'package:e_voting/widgets/password_field.dart';
 import 'package:e_voting/widgets/toast.dart';
 
 import 'package:e_voting/screens/login_screen.dart';
@@ -21,6 +21,8 @@ class SignUpScreen extends StatefulWidget {
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
+
+enum FieldMsg { name, cnic, phone, doe, email, password, address }
 
 class _SignUpScreenState extends State<SignUpScreen> {
   late double height = MediaQuery.of(context).size.height;
@@ -85,21 +87,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     labelText: '37406-3675252-1',
                     controller: cniccontroller,
                     errormessage: "Please Enter valid Cnic",
-                    fieldmessage: "Cnic",
+                    fieldmessage: FieldMsg.cnic,
                   ),
                   InputField(
                     label: 'Date of Expiry',
                     labelText: '- - / - - - -',
                     controller: doecontroller,
                     errormessage: "Enter valid date",
-                    fieldmessage: "DOE",
+                    fieldmessage: FieldMsg.doe,
                   ),
                   InputField(
                     label: 'Email',
                     labelText: 'example@gmail.com',
                     controller: emailcontroller,
                     errormessage: "Enter valid email",
-                    fieldmessage: "email",
+                    fieldmessage: FieldMsg.email,
                   ),
                   PasswordField(
                     label: 'Password',

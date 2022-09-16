@@ -47,9 +47,10 @@ class _PasswordFieldState extends State<PasswordField> {
           ),
         ),
         Container(
-          height: 65,
+          // height: 65,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
+            textAlign: TextAlign.left,
             controller: widget.controller,
             obscureText: _obscureText,
             readOnly: (widget.readOnly == true) ? true : false,
@@ -85,6 +86,13 @@ class _PasswordFieldState extends State<PasswordField> {
                 borderSide: const BorderSide(
                   width: 2,
                   color: Color.fromARGB(255, 203, 217, 205),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              errorBorder: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  width: 1,
+                  color: Constants.errorcolor,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),

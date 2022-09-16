@@ -5,6 +5,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/profile_screen.dart';
+import 'package:e_voting/screens/signup_screen.dart';
 
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/utils/constants.dart';
@@ -196,13 +197,13 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                   label: 'Permanent Adress',
                   labelText: 'Address',
                   controller: permanentaddresscontroller,
-                  fieldmessage: 'Address',
+                  fieldmessage: FieldMsg.address,
                 ),
                 InputField(
                   label: 'Current Address',
                   labelText: 'Address',
                   controller: currentaddresscontroller,
-                  fieldmessage: 'Address',
+                  fieldmessage: FieldMsg.address,
                 ),
                 SizedBox(
                   child: CheckboxListTile(

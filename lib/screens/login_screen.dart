@@ -1,5 +1,5 @@
 import 'package:e_voting/providers/firebase_auth_provider.dart';
-import 'package:e_voting/widgets/passwordfield.dart';
+import 'package:e_voting/widgets/password_field.dart';
 import 'package:e_voting/widgets/toast.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const InputField(
                     label: 'Cnic',
                     labelText: '33303-1234567-8',
-                    fieldmessage: "Cnic",
+                    fieldmessage: FieldMsg.cnic,
                     errormessage: "Please input valid Cnic",
                   ),
                   InputField(
@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     labelText: 'example@gmail.com',
                     controller: emailcontroller,
                     errormessage: "Please Enter valid email",
-                    fieldmessage: "email",
+                    fieldmessage: FieldMsg.email,
                   ),
                   PasswordField(
                     label: 'Password',

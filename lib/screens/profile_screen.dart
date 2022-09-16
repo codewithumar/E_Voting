@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/edit_profile_screen.dart';
 import 'package:e_voting/screens/login_screen.dart';
+import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/snackbar.dart';
@@ -252,7 +251,7 @@ class ProfileStreamState extends State<ProfileStream> {
                 label: 'Password',
                 labelText: widget.users[0].password,
                 readOnly: true,
-                fieldmessage: "password",
+                fieldmessage: FieldMsg.password,
               ),
             ],
           ),

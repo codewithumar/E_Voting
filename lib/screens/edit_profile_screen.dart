@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/create_profile_screen.dart';
 import 'package:e_voting/screens/profile_screen.dart';
+import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/services/user_data.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
@@ -178,14 +179,14 @@ class EditProfileStream extends StatelessWidget {
                   labelText: users[0].doe,
                   controller: doeController,
                   errormessage: "Please Select a corrrect Date",
-                  fieldmessage: "DOE",
+                  fieldmessage: FieldMsg.doe,
                 ),
                 InputField(
                   label: 'Phone Number',
                   labelText: users[0].number,
                   controller: numberController,
                   errormessage: "Please Enter phone number",
-                  fieldmessage: "phone",
+                  fieldmessage: FieldMsg.phone,
                 ),
                 InputField(
                   label: 'Current Address',

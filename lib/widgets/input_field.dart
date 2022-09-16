@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:e_voting/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,7 @@ class InputField extends StatefulWidget {
 
   final bool? readOnly;
   final String? errormessage;
-  final String? fieldmessage;
+  final FieldMsg? fieldmessage;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -46,27 +47,29 @@ class _InputFieldState extends State<InputField> {
           ),
         ),
         Container(
-          height: (widget.fieldmessage == 'Address') ? 80 : 65,
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
-            keyboardType: (widget.fieldmessage == "Cnic" ||
-                    widget.fieldmessage == "DOE" ||
-                    widget.fieldmessage == "phone")
+            keyboardType: (widget.fieldmessage == FieldMsg.cnic ||
+                    widget.fieldmessage == FieldMsg.doe ||
+                    widget.fieldmessage == FieldMsg.phone)
                 ? TextInputType.number
                 : TextInputType.text,
             controller: widget.controller,
-            inputFormatters: (widget.fieldmessage == "Cnic" ||
-                    widget.fieldmessage == "phone")
+            inputFormatters: (widget.fieldmessage == FieldMsg.cnic)
                 ? [
-                    LengthLimitingTextInputFormatter(13),
+                    LengthLimitingTextInputFormatter(15),
                   ]
-                : [],
+                : (widget.fieldmessage == FieldMsg.cnic)
+                    ? [
+                        LengthLimitingTextInputFormatter(13),
+                      ]
+                    : [],
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
-              suffix: (widget.fieldmessage == "DOE")
+              suffixIcon: (widget.fieldmessage == FieldMsg.doe)
                   ? IconButton(
                       icon: const Icon(
-                        Icons.calendar_today,
+                        Icons.calendar_month,
                         color: Constants.lightGreen,
                       ),
                       onPressed: () async {
@@ -84,7 +87,7 @@ class _InputFieldState extends State<InputField> {
                         }
                       })
                   : const Text(''),
-              hintText: (widget.fieldmessage == "password")
+              hintText: (widget.fieldmessage == FieldMsg.password)
                   ? "*********"
                   : widget.labelText,
               labelStyle: const TextStyle(
@@ -125,20 +128,30 @@ class _InputFieldState extends State<InputField> {
                 fontSize: 10,
               ),
             ),
-            maxLength: (widget.fieldmessage == 'Address') ? 250 : null,
-            maxLines: (widget.fieldmessage == 'Address') ? 10 : null,
+            maxLength: (widget.fieldmessage == FieldMsg.address) ? 250 : null,
+            maxLines: (widget.fieldmessage == FieldMsg.address) ? 10 : null,
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
                 log("1");
                 return widget.errormessage;
-              } else if (widget.fieldmessage == "Cnic" &&
-                  value!.length < 13 &&
-                  value.isEmpty) {
+              } else if (widget.fieldmessage == FieldMsg.cnic &&
+                  (value!.length != 15 ||
+                      value.isEmpty ||
+                      value[5] != '-' ||
+                      value[13] != '-')) {
                 log("2");
-                return "Please enter correct 13 digit Cnic";
-              } else if (widget.fieldmessage == "email" &&
-                  !EmailValidator.validate(value!)) {
+                return "Please enter correct 15 digit Cnic";
+              } else if (widget.fieldmessage == FieldMsg.phone &&
+                  (value!.length != 13 || value.isEmpty || value[4] != '-')) {
                 log("3");
+                return "Please enter correct 13 digit Phone Number";
+              } else if (widget.fieldmessage == FieldMsg.doe &&
+                  (value!.isEmpty || value[2] != '/')) {
+                log("3");
+                return "Please enter correct date";
+              } else if (widget.fieldmessage == FieldMsg.email &&
+                  !EmailValidator.validate(value!)) {
+                log("4");
                 return widget.errormessage;
               }
               return null;
