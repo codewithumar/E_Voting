@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/profile_screen.dart';
 
-import 'package:e_voting/services/user_data.dart';
+import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
@@ -161,23 +161,23 @@ class CreateProfileStream extends StatelessWidget {
                   ),
                 ),
                 InputField(
-                  label: 'Phone Number',
-                  labelText: '0900-78601',
+                  labeltext: 'Phone Number',
+                  hintText: '0900-78601',
                   controller: phonecontroller,
                 ),
                 InputField(
-                  label: "Mother's Name",
-                  labelText: "Alexa",
+                  labeltext: "Mother's Name",
+                  hintText: "Alexa",
                   controller: mothernamecontroller,
                 ),
                 InputField(
-                  label: 'Permanent Adress',
-                  labelText: 'Address',
+                  labeltext: 'Permanent Adress',
+                  hintText: 'Address',
                   controller: permanentaddresscontroller,
                 ),
                 InputField(
-                  label: 'Current Address',
-                  labelText: 'Address',
+                  labeltext: 'Current Address',
+                  hintText: 'Address',
                   controller: currentaddresscontroller,
                 ),
                 SignupLoginButton(

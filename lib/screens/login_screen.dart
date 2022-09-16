@@ -69,14 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: height * 0.1,
                   ),
                   const InputField(
-                    label: 'Cnic',
-                    labelText: '33303-1234567-8',
+                    labeltext: 'Cnic',
+                    hintText: '33303-1234567-8',
                     fieldmessage: "Cnic",
                     errormessage: "Please input valid Cnic",
                   ),
                   InputField(
-                    label: 'Email',
-                    labelText: 'example@gmail.com',
+                    labeltext: 'Email',
+                    hintText: 'example@gmail.com',
                     controller: emailcontroller,
                     errormessage: "Please Enter valid email",
                     fieldmessage: "email",

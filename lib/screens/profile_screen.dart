@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/edit_profile_screen.dart';
 import 'package:e_voting/screens/login_screen.dart';
-import 'package:e_voting/services/user_data.dart';
+import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/snackbar.dart';
@@ -217,53 +217,53 @@ class ProfileStreamState extends State<ProfileStream> {
                 ),
               ),
               InputField(
-                label: 'Full Name',
-                labelText: widget.users[0].fullName,
+                labeltext: 'Full Name',
+                hintText: widget.users[0].fullName,
                 readOnly: true,
               ),
               InputField(
-                label: 'Email',
-                labelText: widget.users[0].email,
+                labeltext: 'Email',
+                hintText: widget.users[0].email,
                 readOnly: true,
               ),
               InputField(
-                label: 'CNIC',
-                labelText: widget.users[0].cnic,
+                labeltext: 'CNIC',
+                hintText: widget.users[0].cnic,
                 readOnly: true,
               ),
               InputField(
-                label: 'Date of Expiry',
-                labelText: widget.users[0].doe,
+                labeltext: 'Date of Expiry',
+                hintText: widget.users[0].doe,
                 readOnly: true,
               ),
               InputField(
-                label: 'Phone Number',
-                labelText: widget.users[0].number,
+                labeltext: 'Phone Number',
+                hintText: widget.users[0].number,
                 readOnly: true,
               ),
               InputField(
-                label: 'Full Name',
-                labelText: widget.users[0].fullName,
+                labeltext: 'Full Name',
+                hintText: widget.users[0].fullName,
                 readOnly: true,
               ),
               InputField(
-                label: "Mother's Name",
-                labelText: widget.users[0].mName,
+                labeltext: "Mother's Name",
+                hintText: widget.users[0].mName,
                 readOnly: true,
               ),
               InputField(
-                label: 'Permanent Address',
-                labelText: widget.users[0].perAddress,
+                labeltext: 'Permanent Address',
+                hintText: widget.users[0].perAddress,
                 readOnly: true,
               ),
               InputField(
-                label: 'Current Address',
-                labelText: widget.users[0].currAddress,
+                labeltext: 'Current Address',
+                hintText: widget.users[0].currAddress,
                 readOnly: true,
               ),
               InputField(
-                label: 'Password',
-                labelText: widget.users[0].password,
+                labeltext: 'Password',
+                hintText: widget.users[0].password,
                 readOnly: true,
                 fieldmessage: "password",
               ),

@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_voting/screens/profile_screen.dart';
-import 'package:e_voting/services/user_data.dart';
+import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/services/user_simple_preferences.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
@@ -177,22 +177,22 @@ class EditProfileStream extends StatelessWidget {
                   ),
                 ),
                 InputField(
-                  label: 'Date of Expiry',
-                  labelText: users[0].doe,
+                  labeltext: 'Date of Expiry',
+                  hintText: users[0].doe,
                   controller: doeController,
                   errormessage: "Please Select a corrrect Date",
                   fieldmessage: "DOE",
                 ),
                 InputField(
-                  label: 'Phone Number',
-                  labelText: users[0].number,
+                  labeltext: 'Phone Number',
+                  hintText: users[0].number,
                   controller: numberController,
                   errormessage: "Please Enter phone number",
                   fieldmessage: "phone",
                 ),
                 InputField(
-                  label: 'Current Address',
-                  labelText: users[0].currAddress,
+                  labeltext: 'Current Address',
+                  hintText: users[0].currAddress,
                   controller: curAddressController,
                   errormessage: "Please enter correct address",
                 ),
