@@ -10,17 +10,17 @@ import 'package:email_validator/email_validator.dart';
 import 'package:e_voting/utils/constants.dart';
 
 class InputField extends StatefulWidget {
-  const InputField(
-      {Key? key,
-      required this.label,
-      required this.labelText,
-      this.controller,
-      this.errormessage,
-      this.fieldmessage,
-      this.readOnly})
-      : super(key: key);
-  final String label;
-  final String labelText;
+  const InputField({
+    Key? key,
+    required this.labeltext,
+    required this.hintText,
+    this.controller,
+    this.errormessage,
+    this.fieldmessage,
+    this.readOnly,
+  }) : super(key: key);
+  final String labeltext;
+  final String hintText;
   final TextEditingController? controller;
 
   final bool? readOnly;
@@ -39,7 +39,7 @@ class _InputFieldState extends State<InputField> {
         Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            widget.label,
+            widget.labeltext,
             style: const TextStyle(
               fontSize: 14,
               color: Color(0xff027314),
@@ -89,7 +89,7 @@ class _InputFieldState extends State<InputField> {
                   : const Text(''),
               hintText: (widget.fieldmessage == FieldMsg.password)
                   ? "*********"
-                  : widget.labelText,
+                  : widget.hintText,
               labelStyle: const TextStyle(
                 fontSize: 14,
               ),
