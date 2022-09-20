@@ -16,6 +16,9 @@ class _HomepageState extends State<Homepage> {
   static List<Widget> widgetOptions = <Widget>[
     const Profile(),
   ];
+  //TODO: all global variables should private. Still not Following :(
+
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

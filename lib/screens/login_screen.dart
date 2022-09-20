@@ -25,6 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordcontroller = TextEditingController();
   final loginformkey = GlobalKey<FormState>();
   final toast = FToast();
+
+  //TODO: all global variables should private. Still not Following :(
+
   @override
   void initState() {
     super.initState();
@@ -144,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
+  //TODO: Functions should be private. Still not Following :(
   Future<void> loginUser() async {
     await context.read<FirebaseAuthProvider>().signInwithEmailandPassword(
           emailcontroller.text,

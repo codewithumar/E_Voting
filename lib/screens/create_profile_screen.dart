@@ -1,4 +1,3 @@
-// ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -16,6 +15,8 @@ import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/screens/signup_screen.dart';
+
+//TODO: organize imports as explained
 
 class CreateProfile extends StatefulWidget {
   const CreateProfile({super.key});
@@ -54,6 +55,7 @@ class _CreateProfileState extends State<CreateProfile> {
     );
   }
 }
+  //*Important: No need to pass the build context from the parent
 
 class CreateProfileStream extends StatefulWidget {
   CreateProfileStream(
@@ -63,6 +65,7 @@ class CreateProfileStream extends StatefulWidget {
   }) : super(key: key);
   BuildContext context;
   List<UserData> users;
+  //*Important: Not used final keywords here use it. 
 
   @override
   State<CreateProfileStream> createState() => _CreateProfileStreamState();
@@ -79,12 +82,13 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
 
   late TextEditingController permanentaddresscontroller =
       TextEditingController();
-
+   //! ALERT: Late keyword used badly. No use of late keyword here   
   final createprofileformkey = GlobalKey<FormState>();
 
   FilePickerResult? pickedFile;
 
   bool checkBoxValue = false;
+  //TODO: all global variables should private. Still not Following :(
 
   @override
   Widget build(BuildContext context) {
@@ -247,6 +251,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
       ),
     );
   }
+  //TODO: Functions should be private. Still not Following :(
 
   Future<void> createProfile() async {
     final docUser = FirebaseFirestore.instance
