@@ -56,6 +56,7 @@ class UserData {
         url: json['dpURL'],
       );
 
+  //! ALERT: These functions are not related to Models, Should be moved to FirestoreService :(
   static Stream<List<UserData>> readUsers() => FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser!.email!)
       .snapshots()

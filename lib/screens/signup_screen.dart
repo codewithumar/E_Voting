@@ -34,6 +34,8 @@ enum FieldMsgs {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   late double height = MediaQuery.of(context).size.height;
+  //! ALERT: Move this line to build function and remove the late keyword
+
   TextEditingController namecontroller = TextEditingController();
   TextEditingController cniccontroller = TextEditingController();
   TextEditingController emailcontroller = TextEditingController();
@@ -41,6 +43,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController passwordcontroller = TextEditingController();
   final signupformkey = GlobalKey<FormState>();
   final toast = FToast();
+  //TODO: all global variables should private. Still not Following :(
+
   @override
   void initState() {
     super.initState();

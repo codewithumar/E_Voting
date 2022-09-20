@@ -11,6 +11,8 @@ class FirebaseAuthProvider with ChangeNotifier {
   bool get hasError => _hasError;
   String get errorMsg => _errorMsg;
 
+// TODO: Getters should be with the getters
+
   Future<void> signInwithEmailandPassword(String email, String password) async {
     _isLoading = true;
 
