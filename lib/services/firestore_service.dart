@@ -24,7 +24,6 @@ class FirestoreServices {
         .collection(FirebaseAuth.instance.currentUser!.email!)
         .doc();
     user.id = docUser.id;
-
     final json = user.toJson();
     log('json = $json, userid = ${user.id}');
     await docUser.set(json);

@@ -87,7 +87,7 @@ class _ProfileState extends State<Profile> {
         stream: FirestoreServices.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('${snapshot.data}'));
+            return Center(child: Text('${snapshot.error}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -151,9 +151,10 @@ class ProfileStreamState extends State<ProfileStream> {
                     foregroundDecoration: (widget.users[0].url != 'null')
                         ? BoxDecoration(
                             image: DecorationImage(
-                                image: NetworkImage(widget.users[0].id),
-                                fit: BoxFit.fill,
-                                scale: 0.5),
+                              image: NetworkImage(widget.users[0].url),
+                              fit: BoxFit.fill,
+                              scale: 0.5,
+                            ),
                           )
                         : null,
                     decoration: BoxDecoration(

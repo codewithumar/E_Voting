@@ -151,8 +151,10 @@ class _LoginScreenState extends State<LoginScreen> {
           _emailcontroller.text,
           _passwordcontroller.text,
         );
+
     if (!mounted) return;
     final authProvider = context.read<FirebaseAuthProvider>();
+
     if (authProvider.hasError) {
       _toast.showToast(
         child: buildtoast(authProvider.errorMsg, "error"),
@@ -160,11 +162,14 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
+
     _toast.showToast(
       child: buildtoast("Sign In successful", "success"),
       gravity: ToastGravity.BOTTOM,
     );
+
     if (!mounted) return;
+
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const Profile(),

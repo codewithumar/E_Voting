@@ -1,5 +1,8 @@
 // ignore_for_file: must_be_immutable
 import 'dart:developer';
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +16,6 @@ import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/services/firestore_service.dart';
-import 'package:e_voting/screens/create_profile_screen.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -23,7 +25,7 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
-  late double height = MediaQuery.of(context).size.height;
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,6 +103,7 @@ class EditProfileStream extends StatelessWidget {
       TextEditingController(text: users[0].doe);
   final editprofileformkey = GlobalKey<FormState>();
   //! ALERT: Late keyword used badly. No use of late keyword here
+  File? _file;
 
   @override
   Widget build(BuildContext context) {
@@ -246,5 +249,43 @@ class EditProfileStream extends StatelessWidget {
         ),
       );
     });
+  }
+
+  Future selectFile(String docID) async {
+    String? urlDownload;
+    final id = FirebaseFirestore.instance
+        .collection(
+          FirebaseAuth.instance.currentUser!.email!,
+        )
+        .doc(docID);
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+
+    PlatformFile? pickedFile;
+
+    if (result != null) {
+      pickedFile = result.files.first;
+      _file = File(pickedFile.path!);
+    }
+
+    final path = '/profileimages/$id/${pickedFile?.name}';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(_file!);
+    final upload = ref.putFile(_file!);
+    final snapshot = await upload.whenComplete(() {});
+    urlDownload = await snapshot.ref.getDownloadURL();
+    log('url is = $urlDownload');
+
+    final docUser = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(docID);
+
+    docUser.update(
+      {
+        "dpURL": urlDownload,
+      },
+    );
   }
 }

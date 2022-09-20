@@ -78,6 +78,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
   //! ALERT: Late keyword used badly. No use of late keyword here
   final _createprofileformkey = GlobalKey<FormState>();
   bool _checkBoxValue = false;
+  File? _file;
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +107,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.05,
-                ),
+                SizedBox(height: height * 0.05),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Align(
@@ -116,10 +115,10 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                     child: Container(
                       height: 58,
                       width: 58,
-                      foregroundDecoration: (widget.users[0].url != 'null')
+                      foregroundDecoration: _file != null
                           ? BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(widget.users[0].url),
+                                image: FileImage(_file!),
                                 fit: BoxFit.fill,
                               ),
                             )
@@ -128,6 +127,12 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                         border: Border.all(
                           color: Constants.greyColor,
                         ),
+                        image: _file != null
+                            ? DecorationImage(
+                                image: FileImage(_file!),
+                                fit: BoxFit.fill,
+                              )
+                            : null,
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
@@ -138,9 +143,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                           color: Constants.primarycolor,
                         ),
                         onPressed: () {
-                          setState(() {
-                            selectFile(widget.users[0].id);
-                          });
+                          _selectFile(widget.users[0].id);
                         },
                       ),
                     ),
@@ -280,34 +283,48 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
         ),
         (route) => false);
   }
-}
 
-Future selectFile(String docID) async {
-  File? file;
-  String? urlDownload;
-  final id = FirebaseFirestore.instance
-      .collection(FirebaseAuth.instance.currentUser!.email!)
-      .doc(docID);
-  final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom, allowedExtensions: ['jpg', 'jpeg', 'png']);
-  PlatformFile? pickedFile;
-  if (result != null) {
-    pickedFile = result.files.first;
-    file = File(pickedFile.path!);
+  Future _selectFile(String docID) async {
+    String? urlDownload;
+
+    final id = FirebaseFirestore.instance
+        .collection(
+          FirebaseAuth.instance.currentUser!.email!,
+        )
+        .doc(docID);
+
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png'],
+    );
+
+    PlatformFile? pickedFile;
+
+    if (result != null) {
+      setState(() {
+        pickedFile = result.files.first;
+        log(pickedFile.toString());
+        _file = File(pickedFile!.path!);
+        log(_file.toString());
+      });
+    }
+
+    final path = '/profileimages/$id/${pickedFile?.name}';
+    final ref = FirebaseStorage.instance.ref().child(path);
+    ref.putFile(_file!);
+    final upload = ref.putFile(_file!);
+    final snapshot = await upload.whenComplete(() {});
+    urlDownload = await snapshot.ref.getDownloadURL();
+    log('url is = $urlDownload');
+
+    final docUser = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(docID);
+
+    docUser.update(
+      {
+        "dpURL": urlDownload,
+      },
+    );
   }
-  final path = '/profileimages/$id/${pickedFile?.name}';
-  final ref = FirebaseStorage.instance.ref().child(path);
-  ref.putFile(file!);
-  final upload = ref.putFile(file);
-  final snapshot = await upload.whenComplete(() {});
-  urlDownload = await snapshot.ref.getDownloadURL();
-  log('url is = $urlDownload');
-  final docUser = FirebaseFirestore.instance
-      .collection(FirebaseAuth.instance.currentUser!.email!)
-      .doc(docID);
-  docUser.update(
-    {
-      "dpURL": urlDownload,
-    },
-  );
 }
