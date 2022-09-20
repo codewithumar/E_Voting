@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:e_voting/utils/constants.dart';
 
 Widget buildtoast(String message, String iconname) => Container(

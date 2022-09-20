@@ -1,17 +1,15 @@
-import 'package:e_voting/services/firebase_auth_service.dart';
 import 'package:flutter/foundation.dart';
+import 'package:e_voting/services/firebase_auth_service.dart';
 
 class FirebaseAuthProvider with ChangeNotifier {
   final _authservices = FirebaseAuthService();
   bool _isLoading = false;
-  bool get isLoading => _isLoading;
   bool _hasError = false;
   String _errorMsg = '';
 
+  bool get isLoading => _isLoading;
   bool get hasError => _hasError;
   String get errorMsg => _errorMsg;
-
-// TODO: Getters should be with the getters
 
   Future<void> signInwithEmailandPassword(String email, String password) async {
     _isLoading = true;

@@ -11,14 +11,11 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final editingController = TextEditingController();
-  int _selectedIndex = 0;
   static List<Widget> widgetOptions = <Widget>[
     const Profile(),
   ];
-  //TODO: all global variables should private. Still not Following :(
 
-
+  int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

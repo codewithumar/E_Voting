@@ -1,8 +1,8 @@
 // ignore_for_file: must_be_immutable, depend_on_referenced_packages
-import 'package:flutter/material.dart';
-
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'package:intl/intl.dart';
 import 'package:email_validator/email_validator.dart';
 

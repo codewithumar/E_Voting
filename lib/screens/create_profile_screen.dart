@@ -1,22 +1,23 @@
+// ignore_for_file: must_be_immutable
+
+import 'dart:io';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'dart:developer';
-import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
-import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/screens/signup_screen.dart';
-
-//TODO: organize imports as explained
+import 'package:e_voting/services/firestore_service.dart';
+import 'package:e_voting/widgets/signup_login_button.dart';
 
 class CreateProfile extends StatefulWidget {
   const CreateProfile({super.key});
@@ -30,7 +31,7 @@ class _CreateProfileState extends State<CreateProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<List<UserData>>(
-        stream: UserData.readUsers(),
+        stream: FirestoreServices.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('${snapshot.data}');
@@ -42,7 +43,7 @@ class _CreateProfileState extends State<CreateProfile> {
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final users = snapshot.data!;
-              return CreateProfileStream(context, users);
+              return CreateProfileStream(users);
             }
           } else {
             return const Center(
@@ -55,45 +56,33 @@ class _CreateProfileState extends State<CreateProfile> {
     );
   }
 }
-  //*Important: No need to pass the build context from the parent
 
 class CreateProfileStream extends StatefulWidget {
   CreateProfileStream(
-    this.context,
     this.users, {
     Key? key,
   }) : super(key: key);
-  BuildContext context;
+
   List<UserData> users;
-  //*Important: Not used final keywords here use it. 
 
   @override
   State<CreateProfileStream> createState() => _CreateProfileStreamState();
 }
 
 class _CreateProfileStreamState extends State<CreateProfileStream> {
-  late double height = MediaQuery.of(widget.context).size.height;
-
-  late TextEditingController phonecontroller = TextEditingController();
-
-  late TextEditingController mothernamecontroller = TextEditingController();
-
-  late TextEditingController currentaddresscontroller = TextEditingController();
-
-  late TextEditingController permanentaddresscontroller =
-      TextEditingController();
-   //! ALERT: Late keyword used badly. No use of late keyword here   
-  final createprofileformkey = GlobalKey<FormState>();
-
-  FilePickerResult? pickedFile;
-
-  bool checkBoxValue = false;
-  //TODO: all global variables should private. Still not Following :(
+  late double height = MediaQuery.of(context).size.height;
+  final TextEditingController _phonecontroller = TextEditingController();
+  final TextEditingController _mothernamecontroller = TextEditingController();
+  TextEditingController _currentaddresscontroller = TextEditingController();
+  TextEditingController _permanentaddresscontroller = TextEditingController();
+  //! ALERT: Late keyword used badly. No use of late keyword here
+  final _createprofileformkey = GlobalKey<FormState>();
+  bool _checkBoxValue = false;
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: createprofileformkey,
+      key: _createprofileformkey,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -188,23 +177,23 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                 InputField(
                   labeltext: 'Phone Number',
                   hintText: '0900-78601',
-                  controller: phonecontroller,
+                  controller: _phonecontroller,
                 ),
                 InputField(
                   labeltext: "Mother's Name",
                   hintText: "Alexa",
-                  controller: mothernamecontroller,
+                  controller: _mothernamecontroller,
                 ),
                 InputField(
                   labeltext: 'Permanent Adress',
                   hintText: 'Address',
-                  controller: permanentaddresscontroller,
+                  controller: _permanentaddresscontroller,
                   fieldmessage: FieldMsgs.address,
                 ),
                 InputField(
                   labeltext: 'Current Address',
                   hintText: 'Address',
-                  controller: currentaddresscontroller,
+                  controller: _currentaddresscontroller,
                   fieldmessage: FieldMsgs.address,
                 ),
                 SizedBox(
@@ -220,20 +209,23 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                     checkColor: Colors.white,
                     selectedTileColor: Constants.lightGreen,
                     activeColor: Constants.lightGreen,
-                    value: checkBoxValue,
+                    value: _checkBoxValue,
                     onChanged: (newValue) {
-                      setState(() {
-                        log(checkBoxValue.toString());
-                        checkBoxValue = newValue!;
-                        if (checkBoxValue == true) {
-                          permanentaddresscontroller = currentaddresscontroller;
-                        } else {
-                          currentaddresscontroller = TextEditingController(
-                              text: currentaddresscontroller.text);
-                          permanentaddresscontroller = TextEditingController(
-                              text: permanentaddresscontroller.text);
-                        }
-                      });
+                      setState(
+                        () {
+                          log(_checkBoxValue.toString());
+                          _checkBoxValue = newValue!;
+                          if (_checkBoxValue == true) {
+                            _permanentaddresscontroller =
+                                _currentaddresscontroller;
+                          } else {
+                            _currentaddresscontroller = TextEditingController(
+                                text: _currentaddresscontroller.text);
+                            _permanentaddresscontroller = TextEditingController(
+                                text: _permanentaddresscontroller.text);
+                          }
+                        },
+                      );
                     },
                     controlAffinity: ListTileControlAffinity.leading,
                   ),
@@ -241,8 +233,8 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                 SignupLoginButton(
                   isLoading: false,
                   btnText: 'Create Profile',
-                  function: createProfile,
-                  formkey: createprofileformkey,
+                  function: _createProfile,
+                  formkey: _createprofileformkey,
                 ),
               ],
             ),
@@ -251,37 +243,36 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
       ),
     );
   }
-  //TODO: Functions should be private. Still not Following :(
 
-  Future<void> createProfile() async {
+  Future<void> _createProfile() async {
     final docUser = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
         .doc(widget.users[0].id);
     docUser.update(
       {
-        "motherName": mothernamecontroller.text,
-        "number": phonecontroller.text,
-        "currAddress": currentaddresscontroller.text,
-        "perAddress": permanentaddresscontroller.text,
+        "motherName": _mothernamecontroller.text,
+        "number": _phonecontroller.text,
+        "currAddress": _currentaddresscontroller.text,
+        "perAddress": _permanentaddresscontroller.text,
       },
     ).then((value) {
-      ScaffoldMessenger.of(widget.context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         showsnackbar(
           Constants.greensnackbarColor,
           "Changes Applied Successfully",
-          widget.context,
+          context,
         ),
       );
     }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(widget.context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         showsnackbar(
           Constants.redsnackbarColor,
           "Could Not Apply Changes",
-          widget.context,
+          context,
         ),
       );
     });
-    Navigator.of(widget.context).pushAndRemoveUntil(
+    Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const Profile(),
         ),

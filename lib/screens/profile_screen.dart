@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:e_voting/utils/constants.dart';
+import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/models/user_data.dart';
-import 'package:e_voting/screens/edit_profile_screen.dart';
+import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/screens/signup_screen.dart';
-import 'package:e_voting/widgets/input_field.dart';
-import 'package:e_voting/widgets/snackbar.dart';
-import 'package:e_voting/utils/constants.dart';
+import 'package:e_voting/services/firestore_service.dart';
+import 'package:e_voting/screens/edit_profile_screen.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -22,7 +23,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   late double height = MediaQuery.of(context).size.height;
-   //! ALERT: Late keyword used badly. No use of late keyword here   
+  //! ALERT: Late keyword used badly. No use of late keyword here
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +85,7 @@ class _ProfileState extends State<Profile> {
         ),
       ),
       body: StreamBuilder<List<UserData>>(
-        stream: UserData.readUsers(),
+        stream: FirestoreServices.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('${snapshot.data}'));

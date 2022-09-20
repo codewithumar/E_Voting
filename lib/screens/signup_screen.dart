@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:e_voting/models/user_data.dart';
+import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/screens/create_profile_screen.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/providers/firebase_auth_provider.dart';
@@ -36,28 +37,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late double height = MediaQuery.of(context).size.height;
   //! ALERT: Move this line to build function and remove the late keyword
 
-  TextEditingController namecontroller = TextEditingController();
-  TextEditingController cniccontroller = TextEditingController();
-  TextEditingController emailcontroller = TextEditingController();
-  TextEditingController doecontroller = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
-  final signupformkey = GlobalKey<FormState>();
-  final toast = FToast();
-  //TODO: all global variables should private. Still not Following :(
+  final TextEditingController _namecontroller = TextEditingController();
+  final TextEditingController _cniccontroller = TextEditingController();
+  final TextEditingController _emailcontroller = TextEditingController();
+  final TextEditingController _doecontroller = TextEditingController();
+  final TextEditingController _passwordcontroller = TextEditingController();
+  final _signupformkey = GlobalKey<FormState>();
+  final _toast = FToast();
 
   @override
   void initState() {
     super.initState();
-    toast.init(context);
+    _toast.init(context);
   }
 
   @override
   void dispose() {
-    namecontroller.dispose();
-    cniccontroller.dispose();
-    emailcontroller.dispose();
-    doecontroller.dispose();
-    passwordcontroller.dispose();
+    _namecontroller.dispose();
+    _cniccontroller.dispose();
+    _emailcontroller.dispose();
+    _doecontroller.dispose();
+    _passwordcontroller.dispose();
     super.dispose();
   }
 
@@ -66,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
-          key: signupformkey,
+          key: _signupformkey,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: SizedBox(
@@ -91,34 +91,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   InputField(
                     labeltext: 'Name',
                     hintText: 'Enter Your Name',
-                    controller: namecontroller,
+                    controller: _namecontroller,
                     errormessage: "Please enter valid name",
                   ),
                   InputField(
                     labeltext: 'CNIC',
                     hintText: '37406-3675252-1',
-                    controller: cniccontroller,
+                    controller: _cniccontroller,
                     errormessage: "Please Enter valid Cnic",
                     fieldmessage: FieldMsgs.cnic,
                   ),
                   InputField(
                     labeltext: 'Date of Expiry',
                     hintText: '- - / - - - -',
-                    controller: doecontroller,
+                    controller: _doecontroller,
                     errormessage: "Enter valid date",
                     fieldmessage: FieldMsgs.doe,
                   ),
                   InputField(
                     labeltext: 'Email',
                     hintText: 'example@gmail.com',
-                    controller: emailcontroller,
+                    controller: _emailcontroller,
                     errormessage: "Enter valid email",
                     fieldmessage: FieldMsgs.email,
                   ),
                   PasswordField(
                     label: 'Password',
                     labelText: '*********',
-                    controller: passwordcontroller,
+                    controller: _passwordcontroller,
                     obscure: true,
                     errormessage: "Enter valid password 8-50",
                   ),
@@ -126,9 +126,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     isLoading: context.watch<FirebaseAuthProvider>().isLoading,
                     btnText: 'Continue',
                     function: () async {
-                      await registeruser();
+                      await _registeruser();
                     },
-                    formkey: signupformkey,
+                    formkey: _signupformkey,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
@@ -170,34 +170,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> registeruser() async {
+  Future<void> _registeruser() async {
     try {
       await context.read<FirebaseAuthProvider>().signupwithEmailandPassword(
-            emailcontroller.text,
-            passwordcontroller.text,
+            _emailcontroller.text,
+            _passwordcontroller.text,
           );
       if (!mounted) return;
       final signupauthProvider = context.read<FirebaseAuthProvider>();
       if (signupauthProvider.hasError) {
-        toast.showToast(
+        _toast.showToast(
           child: buildtoast(signupauthProvider.errorMsg, "error"),
           gravity: ToastGravity.BOTTOM,
         );
         return;
       }
       final docUser = UserData(
-        fullName: namecontroller.text,
-        cnic: cniccontroller.text,
-        doe: doecontroller.text,
-        email: emailcontroller.text,
-        password: passwordcontroller.text,
+        fullName: _namecontroller.text,
+        cnic: _cniccontroller.text,
+        doe: _doecontroller.text,
+        email: _emailcontroller.text,
+        password: _passwordcontroller.text,
         number: 'null',
         mName: 'null',
         perAddress: 'null',
         currAddress: 'null',
         url: 'null',
       );
-      UserData.savePassToFirestore(docUser);
+      FirestoreServices.savePassToFirestore(docUser);
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) => const CreateProfile(),
@@ -205,7 +205,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         (route) => false,
       );
     } catch (e) {
-      toast.showToast(
+      _toast.showToast(
         child: buildtoast(
           "User already exsist",
           "success",

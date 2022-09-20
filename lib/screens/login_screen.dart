@@ -21,24 +21,22 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late double height = MediaQuery.of(context).size.height;
-  TextEditingController emailcontroller = TextEditingController();
-  TextEditingController passwordcontroller = TextEditingController();
-  final loginformkey = GlobalKey<FormState>();
-  final toast = FToast();
-
-  //TODO: all global variables should private. Still not Following :(
+  final TextEditingController _emailcontroller = TextEditingController();
+  final TextEditingController _passwordcontroller = TextEditingController();
+  final _loginformkey = GlobalKey<FormState>();
+  final _toast = FToast();
 
   @override
   void initState() {
     super.initState();
-    toast.init(context);
+    _toast.init(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
-        key: loginformkey,
+        key: _loginformkey,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -79,14 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   InputField(
                     labeltext: 'Email',
                     hintText: 'example@gmail.com',
-                    controller: emailcontroller,
+                    controller: _emailcontroller,
                     errormessage: "Please Enter valid email",
                     fieldmessage: FieldMsgs.email,
                   ),
                   PasswordField(
                     label: 'Password',
                     labelText: '***************',
-                    controller: passwordcontroller,
+                    controller: _passwordcontroller,
                     obscure: true,
                     errormessage: "please enter 8-50 length password",
                   ),
@@ -104,9 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     isLoading: true,
                     btnText: 'Sign in',
                     function: () async {
-                      await loginUser();
+                      await _loginUser();
                     },
-                    formkey: loginformkey,
+                    formkey: _loginformkey,
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
@@ -147,22 +145,22 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  //TODO: Functions should be private. Still not Following :(
-  Future<void> loginUser() async {
+
+  Future<void> _loginUser() async {
     await context.read<FirebaseAuthProvider>().signInwithEmailandPassword(
-          emailcontroller.text,
-          passwordcontroller.text,
+          _emailcontroller.text,
+          _passwordcontroller.text,
         );
     if (!mounted) return;
     final authProvider = context.read<FirebaseAuthProvider>();
     if (authProvider.hasError) {
-      toast.showToast(
+      _toast.showToast(
         child: buildtoast(authProvider.errorMsg, "error"),
         gravity: ToastGravity.BOTTOM,
       );
       return;
     }
-    toast.showToast(
+    _toast.showToast(
       child: buildtoast("Sign In successful", "success"),
       gravity: ToastGravity.BOTTOM,
     );

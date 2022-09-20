@@ -1,18 +1,19 @@
 // ignore_for_file: must_be_immutable
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
-import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:e_voting/models/user_data.dart';
-import 'package:e_voting/screens/create_profile_screen.dart';
-import 'package:e_voting/screens/profile_screen.dart';
-import 'package:e_voting/screens/signup_screen.dart';
-import 'package:e_voting/widgets/input_field.dart';
-import 'package:e_voting/widgets/signup_login_button.dart';
-import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/utils/constants.dart';
+import 'package:e_voting/models/user_data.dart';
+import 'package:e_voting/widgets/snackbar.dart';
+import 'package:e_voting/widgets/input_field.dart';
+import 'package:e_voting/screens/signup_screen.dart';
+import 'package:e_voting/screens/profile_screen.dart';
+import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:e_voting/services/firestore_service.dart';
+import 'package:e_voting/screens/create_profile_screen.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -55,7 +56,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       body: StreamBuilder<List<UserData>>(
-        stream: UserData.readUsers(),
+        stream: FirestoreServices.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('${snapshot.data}');
@@ -99,7 +100,7 @@ class EditProfileStream extends StatelessWidget {
   late TextEditingController doeController =
       TextEditingController(text: users[0].doe);
   final editprofileformkey = GlobalKey<FormState>();
-   //! ALERT: Late keyword used badly. No use of late keyword here   
+  //! ALERT: Late keyword used badly. No use of late keyword here
 
   @override
   Widget build(BuildContext context) {
