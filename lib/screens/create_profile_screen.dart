@@ -178,11 +178,13 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                   labeltext: 'Phone Number',
                   hintText: '0900-78601',
                   controller: _phonecontroller,
+                  fieldmessage: FieldMsgs.phone,
                 ),
                 InputField(
                   labeltext: "Mother's Name",
                   hintText: "Alexa",
                   controller: _mothernamecontroller,
+                  fieldmessage: FieldMsgs.name,
                 ),
                 InputField(
                   labeltext: 'Permanent Adress',

@@ -10,7 +10,6 @@ import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/screens/login_screen.dart';
-import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/screens/edit_profile_screen.dart';
 
@@ -250,12 +249,6 @@ class ProfileStreamState extends State<ProfileStream> {
                 labeltext: 'Current Address',
                 hintText: widget.users[0].currAddress,
                 readOnly: true,
-              ),
-              InputField(
-                labeltext: 'Password',
-                hintText: widget.users[0].password,
-                readOnly: true,
-                fieldmessage: FieldMsgs.password,
               ),
             ],
           ),

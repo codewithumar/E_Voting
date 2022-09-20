@@ -109,6 +109,7 @@ class _PasswordFieldState extends State<PasswordField> {
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
                 log("1");
+              } else if (value!.length < 8) {
                 return widget.errormessage;
               }
 

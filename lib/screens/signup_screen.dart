@@ -171,47 +171,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _registeruser() async {
-    try {
-      await context.read<FirebaseAuthProvider>().signupwithEmailandPassword(
-            _emailcontroller.text,
-            _passwordcontroller.text,
-          );
-      if (!mounted) return;
-      final signupauthProvider = context.read<FirebaseAuthProvider>();
-      if (signupauthProvider.hasError) {
-        _toast.showToast(
-          child: buildtoast(signupauthProvider.errorMsg, "error"),
-          gravity: ToastGravity.BOTTOM,
+    await context.read<FirebaseAuthProvider>().signupwithEmailandPassword(
+          _emailcontroller.text,
+          _passwordcontroller.text,
         );
-        return;
-      }
-      final docUser = UserData(
-        fullName: _namecontroller.text,
-        cnic: _cniccontroller.text,
-        doe: _doecontroller.text,
-        email: _emailcontroller.text,
-        password: _passwordcontroller.text,
-        number: 'null',
-        mName: 'null',
-        perAddress: 'null',
-        currAddress: 'null',
-        url: 'null',
-      );
-      FirestoreServices.savePassToFirestore(docUser);
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (context) => const CreateProfile(),
-        ),
-        (route) => false,
-      );
-    } catch (e) {
+    if (!mounted) return;
+    final signupauthProvider = context.read<FirebaseAuthProvider>();
+    if (signupauthProvider.hasError) {
       _toast.showToast(
-        child: buildtoast(
-          "User already exsist",
-          "success",
-        ),
+        child: buildtoast(signupauthProvider.errorMsg, "error"),
         gravity: ToastGravity.BOTTOM,
       );
+      return;
     }
+    final docUser = UserData(
+      fullName: _namecontroller.text,
+      cnic: _cniccontroller.text,
+      doe: _doecontroller.text,
+      email: _emailcontroller.text,
+      password: _passwordcontroller.text,
+      number: 'null',
+      mName: 'null',
+      perAddress: 'null',
+      currAddress: 'null',
+      url: 'null',
+    );
+    FirestoreServices.savePassToFirestore(docUser);
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const CreateProfile(),
+      ),
+      (route) => false,
+    );
   }
 }

@@ -35,14 +35,11 @@ class FirebaseAuthProvider with ChangeNotifier {
 
     try {
       await _authservices.signupWithEmailAndPassword(email, password);
-    } on WrongPasswordException catch (e) {
+    } on EmailAlreadyInUse catch (e) {
       _errorMsg = e.message;
       _hasError = true;
-    } on UserNotFoundException catch (e) {
+    } on PasswordLengthException catch (e) {
       _errorMsg = e.message;
-      _hasError = true;
-    } on UnkownException {
-      _errorMsg = 'Something went wrong';
       _hasError = true;
     }
     _isLoading = false;

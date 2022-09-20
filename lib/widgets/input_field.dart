@@ -59,7 +59,7 @@ class _InputFieldState extends State<InputField> {
                 ? [
                     LengthLimitingTextInputFormatter(15),
                   ]
-                : (widget.fieldmessage == FieldMsgs.cnic)
+                : (widget.fieldmessage == FieldMsgs.phone)
                     ? [
                         LengthLimitingTextInputFormatter(13),
                       ]
@@ -77,7 +77,7 @@ class _InputFieldState extends State<InputField> {
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime(2000),
-                          lastDate: DateTime(2050),
+                          lastDate: DateTime(2032),
                         );
                         if (pickedDate != null) {
                           setState(
@@ -142,9 +142,9 @@ class _InputFieldState extends State<InputField> {
                 log("2");
                 return "Please enter correct formate 33333-1234567-8";
               } else if (widget.fieldmessage == FieldMsgs.phone &&
-                  (value!.length != 13 || value.isEmpty || value[4] != '-')) {
+                  (value!.length != 13 || value.isEmpty || value[5] != '-')) {
                 log("3");
-                return "Please enter correct 13 digit Phone Number";
+                return "Please enter correct Number e.g 92333-1234567";
               } else if (widget.fieldmessage == FieldMsgs.doe &&
                   (value!.isEmpty || value[2] != '/')) {
                 log("3");
