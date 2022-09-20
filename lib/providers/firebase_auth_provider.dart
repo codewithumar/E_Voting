@@ -31,14 +31,19 @@ class FirebaseAuthProvider with ChangeNotifier {
   }
 
   Future<void> signupwithEmailandPassword(String email, String password) async {
-    _isLoading = true;
+    // _isLoading = true;
 
     try {
       await _authservices.signupWithEmailAndPassword(email, password);
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
-      }
+    } on WrongPasswordException catch (e) {
+      _errorMsg = e.message;
+      _hasError = true;
+    } on UserNotFoundException catch (e) {
+      _errorMsg = e.message;
+      _hasError = true;
+    } on UnkownException {
+      _errorMsg = 'Something went wrong';
+      _hasError = true;
     }
     _isLoading = false;
     notifyListeners();

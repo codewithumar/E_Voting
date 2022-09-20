@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 
 class WrongPasswordException implements Exception {
   final String message;
@@ -17,6 +16,18 @@ class UnkownException implements Exception {
   final String message;
 
   UnkownException(this.message);
+}
+
+class EmailAlreadyInUse implements Exception {
+  final String message;
+
+  EmailAlreadyInUse(this.message);
+}
+
+class PasswordLengthException implements Exception {
+  final String message;
+
+  PasswordLengthException(this.message);
 }
 
 class FirebaseAuthService {
@@ -46,9 +57,11 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
-    } catch (e) {
-      if (kDebugMode) {
-        print(e.toString());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        throw EmailAlreadyInUse('Email already in use');
+      } else if (e.code == 'weak-password') {
+        throw PasswordLengthException('Password length should be 8 - 50');
       }
     }
   }

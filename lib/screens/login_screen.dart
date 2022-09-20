@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const InputField(
                     labeltext: 'Cnic',
                     hintText: '33303-1234567-8',
-                    fieldmessage: FieldMsg.cnic,
+                    fieldmessage: FieldMsgs.cnic,
                     errormessage: "Please input valid Cnic",
                   ),
                   InputField(
@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: 'example@gmail.com',
                     controller: emailcontroller,
                     errormessage: "Please Enter valid email",
-                    fieldmessage: FieldMsg.email,
+                    fieldmessage: FieldMsgs.email,
                   ),
                   PasswordField(
                     label: 'Password',
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final authProvider = context.read<FirebaseAuthProvider>();
     if (authProvider.hasError) {
       toast.showToast(
-        child: buildtoast(authProvider.errorMsg, "success"),
+        child: buildtoast(authProvider.errorMsg, "error"),
         gravity: ToastGravity.BOTTOM,
       );
       return;

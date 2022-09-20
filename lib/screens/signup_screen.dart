@@ -20,7 +20,17 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-enum FieldMsg { name, cnic, phone, doe, email, password, address }
+enum FieldMsgs {
+  name,
+  cnic,
+  phone,
+  doe,
+  email,
+  password,
+  address,
+  errormsgicon,
+  successmsgicon
+}
 
 class _SignUpScreenState extends State<SignUpScreen> {
   late double height = MediaQuery.of(context).size.height;
@@ -85,21 +95,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: '37406-3675252-1',
                     controller: cniccontroller,
                     errormessage: "Please Enter valid Cnic",
-                    fieldmessage: FieldMsg.cnic,
+                    fieldmessage: FieldMsgs.cnic,
                   ),
                   InputField(
                     labeltext: 'Date of Expiry',
                     hintText: '- - / - - - -',
                     controller: doecontroller,
                     errormessage: "Enter valid date",
-                    fieldmessage: FieldMsg.doe,
+                    fieldmessage: FieldMsgs.doe,
                   ),
                   InputField(
                     labeltext: 'Email',
                     hintText: 'example@gmail.com',
                     controller: emailcontroller,
                     errormessage: "Enter valid email",
-                    fieldmessage: FieldMsg.email,
+                    fieldmessage: FieldMsgs.email,
                   ),
                   PasswordField(
                     label: 'Password',
@@ -163,6 +173,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             passwordcontroller.text,
           );
       if (!mounted) return;
+      final signupauthProvider = context.read<FirebaseAuthProvider>();
+      if (signupauthProvider.hasError) {
+        toast.showToast(
+          child: buildtoast(signupauthProvider.errorMsg, "error"),
+          gravity: ToastGravity.BOTTOM,
+        );
+        return;
+      }
       final docUser = UserData(
         fullName: namecontroller.text,
         cnic: cniccontroller.text,
@@ -184,7 +202,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       );
     } catch (e) {
       toast.showToast(
-        child: buildtoast("User already exsist", "success"),
+        child: buildtoast(
+          "User already exsist",
+          "success",
+        ),
         gravity: ToastGravity.BOTTOM,
       );
     }

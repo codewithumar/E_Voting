@@ -178,14 +178,14 @@ class EditProfileStream extends StatelessWidget {
                   hintText: users[0].doe,
                   controller: doeController,
                   errormessage: "Please Select a corrrect Date",
-                  fieldmessage: FieldMsg.doe,
+                  fieldmessage: FieldMsgs.doe,
                 ),
                 InputField(
                   labeltext: 'Phone Number',
                   hintText: users[0].number,
                   controller: numberController,
                   errormessage: "Please Enter phone number",
-                  fieldmessage: FieldMsg.phone,
+                  fieldmessage: FieldMsgs.phone,
                 ),
                 InputField(
                   labeltext: 'Current Address',

@@ -25,7 +25,7 @@ class InputField extends StatefulWidget {
 
   final bool? readOnly;
   final String? errormessage;
-  final FieldMsg? fieldmessage;
+  final FieldMsgs? fieldmessage;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -49,24 +49,24 @@ class _InputFieldState extends State<InputField> {
         Container(
           margin: const EdgeInsets.symmetric(vertical: 2.0),
           child: TextFormField(
-            keyboardType: (widget.fieldmessage == FieldMsg.cnic ||
-                    widget.fieldmessage == FieldMsg.doe ||
-                    widget.fieldmessage == FieldMsg.phone)
+            keyboardType: (widget.fieldmessage == FieldMsgs.cnic ||
+                    widget.fieldmessage == FieldMsgs.doe ||
+                    widget.fieldmessage == FieldMsgs.phone)
                 ? TextInputType.number
                 : TextInputType.text,
             controller: widget.controller,
-            inputFormatters: (widget.fieldmessage == FieldMsg.cnic)
+            inputFormatters: (widget.fieldmessage == FieldMsgs.cnic)
                 ? [
                     LengthLimitingTextInputFormatter(15),
                   ]
-                : (widget.fieldmessage == FieldMsg.cnic)
+                : (widget.fieldmessage == FieldMsgs.cnic)
                     ? [
                         LengthLimitingTextInputFormatter(13),
                       ]
                     : [],
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
-              suffixIcon: (widget.fieldmessage == FieldMsg.doe)
+              suffixIcon: (widget.fieldmessage == FieldMsgs.doe)
                   ? IconButton(
                       icon: const Icon(
                         Icons.calendar_month,
@@ -80,16 +80,17 @@ class _InputFieldState extends State<InputField> {
                           lastDate: DateTime(2050),
                         );
                         if (pickedDate != null) {
-                          setState(() {
-                            widget.controller!.text =
-                                DateFormat('MM/yyyy').format(pickedDate);
-                          });
+                          setState(
+                            () {
+                              widget.controller!.text =
+                                  DateFormat('MM/yyyy').format(pickedDate);
+                            },
+                          );
                         }
-                      })
+                      },
+                    )
                   : const Text(''),
-              hintText: (widget.fieldmessage == FieldMsg.password)
-                  ? "*********"
-                  : widget.hintText,
+              hintText: widget.hintText,
               labelStyle: const TextStyle(
                 fontSize: 14,
               ),
@@ -128,27 +129,27 @@ class _InputFieldState extends State<InputField> {
                 fontSize: 10,
               ),
             ),
-            maxLength: (widget.fieldmessage == FieldMsg.address) ? 250 : null,
+            maxLength: (widget.fieldmessage == FieldMsgs.address) ? 250 : null,
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
                 log("1");
                 return widget.errormessage;
-              } else if (widget.fieldmessage == FieldMsg.cnic &&
+              } else if (widget.fieldmessage == FieldMsgs.cnic &&
                   (value!.length != 15 ||
                       value.isEmpty ||
                       value[5] != '-' ||
                       value[13] != '-')) {
                 log("2");
-                return "Please enter correct 15 digit Cnic";
-              } else if (widget.fieldmessage == FieldMsg.phone &&
+                return "Please enter correct formate 33333-1234567-8";
+              } else if (widget.fieldmessage == FieldMsgs.phone &&
                   (value!.length != 13 || value.isEmpty || value[4] != '-')) {
                 log("3");
                 return "Please enter correct 13 digit Phone Number";
-              } else if (widget.fieldmessage == FieldMsg.doe &&
+              } else if (widget.fieldmessage == FieldMsgs.doe &&
                   (value!.isEmpty || value[2] != '/')) {
                 log("3");
                 return "Please enter correct date";
-              } else if (widget.fieldmessage == FieldMsg.email &&
+              } else if (widget.fieldmessage == FieldMsgs.email &&
                   !EmailValidator.validate(value!)) {
                 log("4");
                 return widget.errormessage;

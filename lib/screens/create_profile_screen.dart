@@ -195,13 +195,13 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                   labeltext: 'Permanent Adress',
                   hintText: 'Address',
                   controller: permanentaddresscontroller,
-                  fieldmessage: FieldMsg.address,
+                  fieldmessage: FieldMsgs.address,
                 ),
                 InputField(
                   labeltext: 'Current Address',
                   hintText: 'Address',
                   controller: currentaddresscontroller,
-                  fieldmessage: FieldMsg.address,
+                  fieldmessage: FieldMsgs.address,
                 ),
                 SizedBox(
                   child: CheckboxListTile(

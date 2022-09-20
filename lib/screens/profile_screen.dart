@@ -252,7 +252,7 @@ class ProfileStreamState extends State<ProfileStream> {
                 labeltext: 'Password',
                 hintText: widget.users[0].password,
                 readOnly: true,
-                fieldmessage: FieldMsg.password,
+                fieldmessage: FieldMsgs.password,
               ),
             ],
           ),
