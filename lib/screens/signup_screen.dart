@@ -30,7 +30,8 @@ enum FieldMsgs {
   password,
   address,
   errormsgicon,
-  successmsgicon
+  successmsgicon,
+  mothername
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
@@ -93,6 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hintText: 'Enter Your Name',
                     controller: _namecontroller,
                     errormessage: "Please enter valid name",
+                    fieldmessage: FieldMsgs.name,
                   ),
                   InputField(
                     labeltext: 'CNIC',
@@ -103,10 +105,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   InputField(
                     labeltext: 'Date of Expiry',
-                    hintText: '- - / - - - -',
+                    hintText: '- - /- - / - - - -',
                     controller: _doecontroller,
                     errormessage: "Enter valid date",
                     fieldmessage: FieldMsgs.doe,
+                    readOnly: true,
                   ),
                   InputField(
                     labeltext: 'Email',
@@ -199,7 +202,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     FirestoreServices.savePassToFirestore(docUser);
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const CreateProfile(),
+        builder: (context) => CreateProfile(
+          _namecontroller.text,
+        ),
       ),
       (route) => false,
     );

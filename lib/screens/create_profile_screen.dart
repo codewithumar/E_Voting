@@ -20,7 +20,8 @@ import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 
 class CreateProfile extends StatefulWidget {
-  const CreateProfile({super.key});
+  const CreateProfile(this._name, {super.key});
+  final String _name;
 
   @override
   State<CreateProfile> createState() => _CreateProfileState();
@@ -43,7 +44,10 @@ class _CreateProfileState extends State<CreateProfile> {
               snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final users = snapshot.data!;
-              return CreateProfileStream(users);
+              return CreateProfileStream(
+                users,
+                widget._name,
+              );
             }
           } else {
             return const Center(
@@ -59,9 +63,11 @@ class _CreateProfileState extends State<CreateProfile> {
 
 class CreateProfileStream extends StatefulWidget {
   CreateProfileStream(
-    this.users, {
+    this.users,
+    this._name, {
     Key? key,
   }) : super(key: key);
+  final String _name;
 
   List<UserData> users;
 
@@ -70,18 +76,18 @@ class CreateProfileStream extends StatefulWidget {
 }
 
 class _CreateProfileStreamState extends State<CreateProfileStream> {
-  late double height = MediaQuery.of(context).size.height;
-  final TextEditingController _phonecontroller = TextEditingController();
-  final TextEditingController _mothernamecontroller = TextEditingController();
-  TextEditingController _currentaddresscontroller = TextEditingController();
-  TextEditingController _permanentaddresscontroller = TextEditingController();
-  //! ALERT: Late keyword used badly. No use of late keyword here
-  final _createprofileformkey = GlobalKey<FormState>();
-  bool _checkBoxValue = false;
   File? _file;
+  bool _checkBoxValue = false;
+  final _createprofileformkey = GlobalKey<FormState>();
+
+  final TextEditingController _phonecontroller = TextEditingController();
+  TextEditingController _currentaddresscontroller = TextEditingController();
+  final TextEditingController _mothernamecontroller = TextEditingController();
+  TextEditingController _permanentaddresscontroller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Form(
       key: _createprofileformkey,
       child: SingleChildScrollView(
@@ -149,13 +155,13 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(3.0),
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Your Name Here",
-                      style: TextStyle(
+                      widget._name,
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Color(0xff027314),
@@ -163,13 +169,13 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 5, 0, 30),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5, 5, 3, 30),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "youremail@gmail.com",
-                      style: TextStyle(
+                      FirebaseAuth.instance.currentUser!.email.toString(),
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: Constants.greyColor,
@@ -179,61 +185,58 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                 ),
                 InputField(
                   labeltext: 'Phone Number',
-                  hintText: '0900-78601',
+                  hintText: '92333-1234567',
                   controller: _phonecontroller,
                   fieldmessage: FieldMsgs.phone,
+                  errormessage: "Please Enter phone number",
                 ),
                 InputField(
                   labeltext: "Mother's Name",
                   hintText: "Alexa",
                   controller: _mothernamecontroller,
                   fieldmessage: FieldMsgs.name,
-                ),
-                InputField(
-                  labeltext: 'Permanent Adress',
-                  hintText: 'Address',
-                  controller: _permanentaddresscontroller,
-                  fieldmessage: FieldMsgs.address,
+                  errormessage: "Please enter correct Mother name min 4 words",
                 ),
                 InputField(
                   labeltext: 'Current Address',
                   hintText: 'Address',
                   controller: _currentaddresscontroller,
                   fieldmessage: FieldMsgs.address,
+                  errormessage: "Please enter correct address 10 alphabets min",
                 ),
-                SizedBox(
-                  child: CheckboxListTile(
-                    title: const Text(
-                      'Same as Permanent Address',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Constants.greyColor,
-                      ),
+                InputField(
+                  labeltext: 'Permanent Adress',
+                  hintText: 'Address',
+                  controller: _permanentaddresscontroller,
+                  fieldmessage: FieldMsgs.address,
+                  errormessage: "Please enter correct address 10 alphabets min",
+                ),
+                Row(
+                  children: [
+                    Checkbox(
+                      value: _checkBoxValue,
+                      checkColor: Constants.textcolor,
+                      onChanged: (newValue) {
+                        _checkBoxValue = newValue!;
+                        setState(
+                          () {
+                            log(" in setstate ${_checkBoxValue.toString()}");
+                            if (_checkBoxValue == true) {
+                              _permanentaddresscontroller =
+                                  _currentaddresscontroller;
+                            } else {
+                              _currentaddresscontroller = TextEditingController(
+                                  text: _currentaddresscontroller.text);
+                              _permanentaddresscontroller =
+                                  TextEditingController(
+                                      text: _permanentaddresscontroller.text);
+                            }
+                          },
+                        );
+                      },
                     ),
-                    checkColor: Colors.white,
-                    selectedTileColor: Constants.lightGreen,
-                    activeColor: Constants.lightGreen,
-                    value: _checkBoxValue,
-                    onChanged: (newValue) {
-                      setState(
-                        () {
-                          log(_checkBoxValue.toString());
-                          _checkBoxValue = newValue!;
-                          if (_checkBoxValue == true) {
-                            _permanentaddresscontroller =
-                                _currentaddresscontroller;
-                          } else {
-                            _currentaddresscontroller = TextEditingController(
-                                text: _currentaddresscontroller.text);
-                            _permanentaddresscontroller = TextEditingController(
-                                text: _permanentaddresscontroller.text);
-                          }
-                        },
-                      );
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
+                    const Text("Same as Permanent Address")
+                  ],
                 ),
                 SignupLoginButton(
                   isLoading: false,

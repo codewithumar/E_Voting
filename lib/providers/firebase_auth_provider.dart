@@ -31,7 +31,7 @@ class FirebaseAuthProvider with ChangeNotifier {
   }
 
   Future<void> signupwithEmailandPassword(String email, String password) async {
-    // _isLoading = true;
+    _isLoading = true;
 
     try {
       await _authservices.signupWithEmailAndPassword(email, password);

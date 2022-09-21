@@ -53,8 +53,30 @@ class _InputFieldState extends State<InputField> {
                     widget.fieldmessage == FieldMsgs.doe ||
                     widget.fieldmessage == FieldMsgs.phone)
                 ? TextInputType.number
-                : TextInputType.text,
+                : (widget.fieldmessage == FieldMsgs.email)
+                    ? TextInputType.emailAddress
+                    : (widget.fieldmessage == FieldMsgs.name)
+                        ? TextInputType.name
+                        : TextInputType.text,
             controller: widget.controller,
+            onTap: (widget.fieldmessage == FieldMsgs.doe)
+                ? () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime(2032, 12, 31),
+                    );
+                    if (pickedDate != null) {
+                      setState(
+                        () {
+                          widget.controller!.text =
+                              DateFormat('dd/MM/yyyy').format(pickedDate);
+                        },
+                      );
+                    }
+                  }
+                : () {},
             inputFormatters: (widget.fieldmessage == FieldMsgs.cnic)
                 ? [
                     LengthLimitingTextInputFormatter(15),
@@ -66,30 +88,6 @@ class _InputFieldState extends State<InputField> {
                     : [],
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
-              suffixIcon: (widget.fieldmessage == FieldMsgs.doe)
-                  ? IconButton(
-                      icon: const Icon(
-                        Icons.calendar_month,
-                        color: Constants.lightGreen,
-                      ),
-                      onPressed: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2032),
-                        );
-                        if (pickedDate != null) {
-                          setState(
-                            () {
-                              widget.controller!.text =
-                                  DateFormat('MM/yyyy').format(pickedDate);
-                            },
-                          );
-                        }
-                      },
-                    )
-                  : const Text(''),
               hintText: widget.hintText,
               labelStyle: const TextStyle(
                 fontSize: 14,
@@ -131,27 +129,35 @@ class _InputFieldState extends State<InputField> {
             ),
             maxLength: (widget.fieldmessage == FieldMsgs.address) ? 250 : null,
             validator: (value) {
-              if (widget.fieldmessage == null && value!.isEmpty) {
-                log("1");
+              if (value!.isEmpty) {
+                log("All xEmpty field validation error");
                 return widget.errormessage;
               } else if (widget.fieldmessage == FieldMsgs.cnic &&
-                  (value!.length != 15 ||
+                  (value.length != 15 ||
                       value.isEmpty ||
                       value[5] != '-' ||
                       value[13] != '-')) {
-                log("2");
+                log("Cnic validation error");
                 return "Please enter correct formate 33333-1234567-8";
               } else if (widget.fieldmessage == FieldMsgs.phone &&
-                  (value!.length != 13 || value.isEmpty || value[5] != '-')) {
-                log("3");
+                  (value.length != 13 || value.isEmpty || value[5] != '-')) {
+                log("phone validation error");
                 return "Please enter correct Number e.g 92333-1234567";
               } else if (widget.fieldmessage == FieldMsgs.doe &&
-                  (value!.isEmpty || value[2] != '/')) {
-                log("3");
+                  (value.isEmpty || value[2] != '/')) {
+                log("DOE validation error");
                 return "Please enter correct date";
               } else if (widget.fieldmessage == FieldMsgs.email &&
-                  !EmailValidator.validate(value!)) {
-                log("4");
+                  !EmailValidator.validate(value)) {
+                log("Email validation error");
+                return widget.errormessage;
+              } else if (widget.fieldmessage == FieldMsgs.address &&
+                  value.length < 10) {
+                log("address validation error");
+                return widget.errormessage;
+              } else if (widget.fieldmessage == FieldMsgs.mothername &&
+                  value.length < 4) {
+                log("Mothername validation error");
                 return widget.errormessage;
               }
               return null;
@@ -159,7 +165,7 @@ class _InputFieldState extends State<InputField> {
           ),
         ),
         const SizedBox(
-          height: 10,
+          height: 5,
         )
       ],
     );

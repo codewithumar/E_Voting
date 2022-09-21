@@ -51,7 +51,4 @@ class UserData {
         currAddress: json['currAddress'],
         url: json['dpURL'],
       );
-
-  //! ALERT: These functions are not related to Models, Should be moved to FirestoreService
-
 }

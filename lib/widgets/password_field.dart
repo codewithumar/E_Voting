@@ -1,8 +1,5 @@
 // ignore_for_file: must_be_immutable
 import 'package:flutter/material.dart';
-
-import 'dart:developer';
-
 import 'package:e_voting/utils/constants.dart';
 
 class PasswordField extends StatefulWidget {
@@ -108,7 +105,7 @@ class _PasswordFieldState extends State<PasswordField> {
             ),
             validator: (value) {
               if (widget.fieldmessage == null && value!.isEmpty) {
-                log("1");
+                return widget.errormessage;
               } else if (value!.length < 8) {
                 return widget.errormessage;
               }
