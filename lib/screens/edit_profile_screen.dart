@@ -60,8 +60,7 @@ class _EditProfileState extends State<EditProfile> {
         stream: FirestoreServices.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('${snapshot.data}');
-            //*Important: take a look on the above line
+            return Text('${snapshot.error}');
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: Text('Waiting....'));
@@ -72,13 +71,10 @@ class _EditProfileState extends State<EditProfile> {
               final users = snapshot.data!;
               return EditProfileStream(users, context);
             }
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
           }
-          //*Important: Take a look on this logic and where ever you are using it
-          return const Text("Working to get data");
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         },
       ),
     );
@@ -94,18 +90,18 @@ class EditProfileStream extends StatelessWidget {
   final List<UserData> users;
   BuildContext context;
 
+  File? _file;
   late TextEditingController numberController =
       TextEditingController(text: users[0].number);
   late TextEditingController curAddressController =
       TextEditingController(text: users[0].currAddress);
   late TextEditingController doeController =
       TextEditingController(text: users[0].doe);
-  final editprofileformkey = GlobalKey<FormState>();
-  //! ALERT: Late keyword used badly. No use of late keyword here
-  File? _file;
-
   @override
   Widget build(BuildContext context) {
+    final editprofileformkey = GlobalKey<FormState>();
+    //! ALERT: Late keyword used badly. No use of late keyword here
+
     return Form(
       key: editprofileformkey,
       child: SingleChildScrollView(

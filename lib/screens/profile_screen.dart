@@ -21,9 +21,6 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  late double height = MediaQuery.of(context).size.height;
-  //! ALERT: Late keyword used badly. No use of late keyword here
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

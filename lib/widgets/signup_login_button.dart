@@ -36,7 +36,7 @@ class SignupLoginButton extends StatelessWidget {
           textColor: Constants.buttontextcolor,
           onPressed: context.watch<FirebaseAuthProvider>().isLoading
               ? null
-              : () {
+              : () async {
                   if (formkey!.currentState!.validate()) {
                     function();
                   }
