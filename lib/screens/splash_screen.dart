@@ -1,8 +1,9 @@
+import 'package:e_voting/screens/Dashboard.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/screens/login_screen.dart';
-import 'package:e_voting/screens/profile_screen.dart';
+
 import 'package:e_voting/services/firebase_auth_service.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              (auth.user == null) ? const LoginScreen() : const Profile(),
+              (auth.user == null) ? const LoginScreen() : const Dashboard(),
         ),
       );
     });

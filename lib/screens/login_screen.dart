@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:e_voting/providers/firebase_auth_provider.dart';
-import 'package:e_voting/widgets/password_field.dart';
 import 'package:e_voting/widgets/toast.dart';
-import 'package:e_voting/screens/profile_screen.dart';
-import 'package:e_voting/widgets/signup_login_button.dart';
-import 'package:e_voting/screens/signup_screen.dart';
+import 'package:e_voting/screens/dashboard.dart';
+import 'package:e_voting/widgets/password_field.dart';
+
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
+import 'package:e_voting/screens/signup_screen.dart';
+import 'package:e_voting/widgets/signup_login_button.dart';
+import 'package:e_voting/providers/firebase_auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -172,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const Profile(),
+        builder: (context) => const Dashboard(),
       ),
     );
   }

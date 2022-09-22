@@ -1,3 +1,4 @@
+import 'package:e_voting/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'firebase_options.dart';
@@ -5,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:e_voting/utils/constants.dart';
-import 'package:e_voting/screens/splash_screen.dart';
+
 import 'package:e_voting/providers/firebase_auth_provider.dart';
 
 Future<void> main() async {
