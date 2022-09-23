@@ -34,6 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    _emailcontroller.dispose();
+    _passwordcontroller.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Form(
@@ -160,6 +167,18 @@ class _LoginScreenState extends State<LoginScreen> {
       _toast.showToast(
         child: buildtoast(authProvider.errorMsg, "error"),
         gravity: ToastGravity.BOTTOM,
+      );
+      Future.delayed(
+        const Duration(seconds: 5),
+      );
+      _toast.showToast(
+        child: buildtoast("Please Signup", "error"),
+        gravity: ToastGravity.BOTTOM,
+      );
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const SignUpScreen(),
+        ),
       );
       return;
     }

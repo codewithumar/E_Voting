@@ -14,12 +14,17 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => FirebaseAuthProvider()),
       ],
       child: const MyApp(),
+      // child: DevicePreview(
+      //   enabled: true,
+      //   builder: (context) => const MyApp(),
+      // ),
     ),
   );
 }

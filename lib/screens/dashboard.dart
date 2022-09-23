@@ -1,10 +1,11 @@
 // ignore_for_file: file_names
 
-import 'package:e_voting/screens/admin_home_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
+
 import 'package:e_voting/screens/profile_screen.dart';
+import 'package:e_voting/screens/admin_home_screen.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -29,46 +30,53 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: Container(
-        margin: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30),
-            topLeft: Radius.circular(30),
-            bottomLeft: Radius.circular(30.0),
-            bottomRight: Radius.circular(30.0),
-          ),
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-            bottomLeft: Radius.circular(30.0),
-            bottomRight: Radius.circular(30.0),
-          ),
-          child: BottomNavigationBar(
-            items: const [
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage("assets/images/icons/home.png"),
-                ),
-                label: 'Home',
+      body: Stack(
+        children: [
+          widgetOptions.elementAt(_selectedIndex),
+          Positioned(
+            left: MediaQuery.of(context).size.width * .045,
+            right: MediaQuery.of(context).size.width * .03,
+            bottom: 19,
+            child: Container(
+              height: 77,
+              width: 197,
+              margin: const EdgeInsets.fromLTRB(100, 0, 100, 5),
+              foregroundDecoration: const BoxDecoration(
+                color: Colors.transparent,
               ),
-              BottomNavigationBarItem(
-                icon: ImageIcon(
-                  AssetImage("assets/images/icons/profileicon.png"),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(100.0),
+                  topRight: Radius.circular(100.0),
+                  bottomLeft: Radius.circular(100.0),
+                  bottomRight: Radius.circular(100.0),
                 ),
-                label: 'Profile',
+                child: BottomNavigationBar(
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: ImageIcon(
+                        AssetImage("assets/images/icons/home.png"),
+                      ),
+                      label: 'Home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: ImageIcon(
+                        AssetImage("assets/images/icons/profileicon.png"),
+                      ),
+                      label: 'Profile',
+                    ),
+                  ],
+                  currentIndex: _selectedIndex,
+                  enableFeedback: true,
+                  backgroundColor: Constants.primarycolor,
+                  selectedItemColor: Constants.textcolor,
+                  unselectedItemColor: Constants.greyColor,
+                  onTap: _onItemTapped,
+                ),
               ),
-            ],
-            currentIndex: _selectedIndex,
-            backgroundColor: Constants.primarycolor,
-            selectedItemColor: Constants.textcolor,
-            unselectedItemColor: Constants.greyColor,
-            onTap: _onItemTapped,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

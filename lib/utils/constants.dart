@@ -14,4 +14,13 @@ class Constants {
   static const textcolor = Color(0xffffffff);
   static const errorcolor = Color(0xffff0000);
   static const adminiconcolor = Color(0xff68A368);
+
+  static List<Color> colors = [
+    const Color.fromARGB(255, 150, 220, 150),
+    const Color.fromARGB(255, 132, 200, 132),
+    const Color.fromARGB(255, 129, 208, 129),
+    const Color.fromARGB(255, 104, 195, 104),
+    const Color.fromARGB(255, 91, 194, 91),
+    const Color.fromARGB(255, 11, 135, 11),
+  ];
 }

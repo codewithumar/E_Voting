@@ -24,62 +24,60 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () async => {
-            await FirebaseAuth.instance.signOut(),
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginScreen(),
+      appBar: (MediaQuery.of(context).orientation == Orientation.portrait)
+          ? AppBar(
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: Constants.colors,
+                  ),
                 ),
-                (route) => false),
-            ScaffoldMessenger.of(context).showSnackBar(
-              showsnackbar(
-                Colors.black,
-                "Sign out Successful",
-                context,
               ),
-            )
-          },
-          icon: const Icon(
-            Icons.logout_outlined,
-            color: Colors.black,
-          ),
-        ),
-        title: const Text(
-          'Profile',
-          style: TextStyle(color: Constants.primarycolor),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        actions: <Widget>[
-          MaterialButton(
-            textColor: Colors.white,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const EditProfile(),
+              leading: IconButton(
+                onPressed: () async => {
+                  await FirebaseAuth.instance.signOut(),
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                      (route) => false),
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    showsnackbar(
+                      Colors.black,
+                      "Sign out Successful",
+                      context,
+                    ),
+                  )
+                },
+                icon: const Icon(
+                  Icons.logout_outlined,
                 ),
-              );
-            },
-            shape:
-                const CircleBorder(side: BorderSide(color: Colors.transparent)),
-            child: const Text(
-              "Edit",
-              style: TextStyle(color: Colors.black, fontSize: 14),
-            ),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4.0),
-          child: Container(
-            color: Constants.primarycolor,
-            height: 1.0,
-          ),
-        ),
-      ),
+              ),
+              title: const Text(
+                'Profile',
+              ),
+              centerTitle: true,
+              actions: <Widget>[
+                MaterialButton(
+                  textColor: Colors.white,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const EditProfile(),
+                      ),
+                    );
+                  },
+                  shape: const CircleBorder(
+                    side: BorderSide(color: Colors.transparent),
+                  ),
+                  child: const Text(
+                    "Edit",
+                  ),
+                ),
+              ],
+            )
+          : null,
       body: StreamBuilder<List<UserData>>(
         stream: FirestoreServices.readUsers(),
         builder: (context, snapshot) {
@@ -230,11 +228,6 @@ class ProfileStreamState extends State<ProfileStream> {
                 readOnly: true,
               ),
               InputField(
-                labeltext: 'Full Name',
-                hintText: widget.users[0].fullName,
-                readOnly: true,
-              ),
-              InputField(
                 labeltext: "Mother's Name",
                 hintText: widget.users[0].mName,
                 readOnly: true,
@@ -248,6 +241,9 @@ class ProfileStreamState extends State<ProfileStream> {
                 labeltext: 'Current Address',
                 hintText: widget.users[0].currAddress,
                 readOnly: true,
+              ),
+              const SizedBox(
+                height: 100,
               ),
             ],
           ),

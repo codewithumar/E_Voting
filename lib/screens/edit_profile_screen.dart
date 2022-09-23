@@ -29,31 +29,22 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Edit Profile",
-          style: TextStyle(
-            color: Constants.primarycolor,
-            fontSize: 20,
+        title: const Text("Edit Profile"),
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: Constants.colors,
+            ),
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.black,
           ),
           onPressed: () {
             Navigator.of(context).pop();
           },
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(4.0),
-          child: Container(
-            color: Constants.primarycolor,
-            height: 1.0,
-          ),
         ),
       ),
       body: StreamBuilder<List<UserData>>(
@@ -100,109 +91,106 @@ class EditProfileStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final editprofileformkey = GlobalKey<FormState>();
-    //! ALERT: Late keyword used badly. No use of late keyword here
 
     return Form(
       key: editprofileformkey,
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: SizedBox(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      height: 70,
-                      width: 70,
-                      foregroundDecoration: (users[0].url != 'null')
-                          ? BoxDecoration(
-                              image: DecorationImage(
-                                image: NetworkImage(users[0].url),
-                                fit: BoxFit.fill,
-                              ),
-                            )
-                          : null,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Constants.greyColor,
-                        ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.add_photo_alternate_rounded,
-                          color: Constants.primarycolor,
-                        ),
-                        onPressed: () {
-                          selectFile(users[0].id);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      users[0].fullName,
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff027314),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 5, 0, 30),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      users[0].email,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    height: 70,
+                    width: 70,
+                    foregroundDecoration: (users[0].url != 'null')
+                        ? BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(users[0].url),
+                              fit: BoxFit.fill,
+                            ),
+                          )
+                        : null,
+                    decoration: BoxDecoration(
+                      border: Border.all(
                         color: Constants.greyColor,
                       ),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.add_photo_alternate_rounded,
+                        color: Constants.primarycolor,
+                      ),
+                      onPressed: () {
+                        selectFile(users[0].id);
+                      },
                     ),
                   ),
                 ),
-                InputField(
-                  labeltext: 'Date of Expiry',
-                  hintText: users[0].doe,
-                  controller: doeController,
-                  errormessage: "Please Select a corrrect Date",
-                  fieldmessage: FieldMsgs.doe,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    users[0].fullName,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff027314),
+                    ),
+                  ),
                 ),
-                InputField(
-                  labeltext: 'Phone Number',
-                  hintText: users[0].number,
-                  controller: numberController,
-                  errormessage: "Please Enter phone number",
-                  fieldmessage: FieldMsgs.phone,
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 30),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    users[0].email,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Constants.greyColor,
+                    ),
+                  ),
                 ),
-                InputField(
-                  labeltext: 'Current Address',
-                  hintText: users[0].currAddress,
-                  controller: curAddressController,
-                  errormessage: "Please enter correct address",
-                ),
-                SignupLoginButton(
-                  isLoading: false,
-                  btnText: 'Update',
-                  function: updateProfile,
-                  formkey: editprofileformkey,
-                ),
-              ],
-            ),
+              ),
+              InputField(
+                labeltext: 'Date of Expiry',
+                hintText: users[0].doe,
+                controller: doeController,
+                errormessage: "Please Select a corrrect Date",
+                fieldmessage: FieldMsgs.doe,
+              ),
+              InputField(
+                labeltext: 'Phone Number',
+                hintText: users[0].number,
+                controller: numberController,
+                errormessage: "Please Enter phone number",
+                fieldmessage: FieldMsgs.phone,
+              ),
+              InputField(
+                labeltext: 'Current Address',
+                hintText: users[0].currAddress,
+                controller: curAddressController,
+                errormessage: "Please enter correct address",
+              ),
+              SignupLoginButton(
+                isLoading: false,
+                btnText: 'Update',
+                function: updateProfile,
+                formkey: editprofileformkey,
+              ),
+            ],
           ),
         ),
       ),
