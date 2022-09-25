@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:email_validator/email_validator.dart';
 
-import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/utils/constants.dart';
 
 class InputField extends StatefulWidget {
@@ -88,6 +87,19 @@ class _InputFieldState extends State<InputField> {
                     : [],
             readOnly: (widget.readOnly == true) ? true : false,
             decoration: InputDecoration(
+              suffixIcon: (widget.fieldmessage == FieldMsgs.doe)
+                  ? const Image(
+                      image: AssetImage(
+                        "assets/images/icons/calendar.png",
+                      ),
+                    )
+                  : (widget.fieldmessage == FieldMsgs.time)
+                      ? const Image(
+                          image: AssetImage(
+                            "assets/images/icons/clock.png",
+                          ),
+                        )
+                      : null,
               hintText: widget.hintText,
               labelStyle: const TextStyle(
                 fontSize: 14,

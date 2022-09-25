@@ -1,19 +1,19 @@
 // ignore_for_file: must_be_immutable
 import 'dart:developer';
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:file_picker/file_picker.dart';
+
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/widgets/snackbar.dart';
+import 'package:e_voting/screens/dashboard.dart';
 import 'package:e_voting/widgets/input_field.dart';
-import 'package:e_voting/screens/signup_screen.dart';
-import 'package:e_voting/screens/profile_screen.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/services/firestore_service.dart';
 
@@ -168,6 +168,7 @@ class EditProfileStream extends StatelessWidget {
                 labeltext: 'Date of Expiry',
                 hintText: users[0].doe,
                 controller: doeController,
+                readOnly: true,
                 errormessage: "Please Select a corrrect Date",
                 fieldmessage: FieldMsgs.doe,
               ),
@@ -210,28 +211,32 @@ class EditProfileStream extends StatelessWidget {
         "number": numberController.text,
         "currAddress": curAddressController.text,
       },
-    ).then((value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        showsnackbar(
-          Constants.greensnackbarColor,
-          "Changes Applied Successfully",
-          context,
-        ),
-      );
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (context) => const Profile(),
+    ).then(
+      (value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          showsnackbar(
+            Constants.greensnackbarColor,
+            "Changes Applied Successfully",
+            context,
           ),
-          (route) => false);
-    }).onError((error, stackTrace) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        showsnackbar(
-          Constants.redsnackbarColor,
-          "Entry Unsuccessful",
-          context,
-        ),
-      );
-    });
+        );
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) => const Dashboard(),
+            ),
+            (route) => false);
+      },
+    ).onError(
+      (error, stackTrace) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          showsnackbar(
+            Constants.redsnackbarColor,
+            "Entry Unsuccessful",
+            context,
+          ),
+        );
+      },
+    );
   }
 
   Future selectFile(String docID) async {

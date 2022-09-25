@@ -8,7 +8,7 @@ class PartiesTiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(6),
+      padding: const EdgeInsets.all(10),
       child: Container(
         decoration: const BoxDecoration(
           boxShadow: [
@@ -40,8 +40,8 @@ class PartiesTiles extends StatelessWidget {
           children: [
             const Image(
               image: AssetImage("assets/images/partiesimage/pmln.png"),
-              height: 80,
-              width: 80,
+              height: 40,
+              width: 40,
             ),
             const Text(
               "Pakistan Muslim League N",
@@ -52,22 +52,55 @@ class PartiesTiles extends StatelessWidget {
             const Expanded(
               child: SizedBox(),
             ),
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const EditPartyScren(),
-                  ),
-                );
-              },
-              child: const Icon(
-                Icons.more_vert,
-                size: 24,
+            PopupMenuButton(
+              elevation: 4,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
               ),
+              itemBuilder: (BuildContext context) => [
+                PopupMenuItem(
+                  height: 26.5,
+                  child: const Center(
+                    child: Text(
+                      "Edit",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const EditPartyScren(),
+                      ),
+                    );
+                  },
+                ),
+                PopupMenuItem(
+                  height: 26.5,
+                  child: const Center(
+                    child: Text(
+                      "Delete",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const EditPartyScren(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-            const SizedBox(
-              width: 10,
-            ),
+            // const SizedBox(width: 10),
           ],
         ),
       ),

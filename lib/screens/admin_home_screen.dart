@@ -49,6 +49,9 @@ class AdminHomeScreen extends StatelessWidget {
               const SizedBox(height: 15),
               const ElectionTiles(),
               const ElectionTiles(),
+              const ElectionTiles(),
+              const ElectionTiles(),
+              const ElectionTiles(),
               const SizedBox(
                 height: 100,
               ),

@@ -53,6 +53,12 @@ class PartiesScreen extends StatelessWidget {
               PartiesTiles(),
               PartiesTiles(),
               PartiesTiles(),
+              PartiesTiles(),
+              PartiesTiles(),
+              PartiesTiles(),
+              PartiesTiles(),
+              PartiesTiles(),
+              PartiesTiles(),
               SizedBox(
                 height: 100,
               ),

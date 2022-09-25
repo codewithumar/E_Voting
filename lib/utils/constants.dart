@@ -1,5 +1,19 @@
 import 'dart:ui';
 
+enum FieldMsgs {
+  name,
+  cnic,
+  phone,
+  doe,
+  email,
+  password,
+  address,
+  errormsgicon,
+  successmsgicon,
+  mothername,
+  time
+}
+
 class Constants {
   static const appname = 'E-Voting';
 

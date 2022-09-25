@@ -26,9 +26,9 @@ class ElectionTiles extends StatelessWidget {
           ),
         ),
         height: (MediaQuery.of(context).orientation == Orientation.portrait)
-            ? MediaQuery.of(context).size.height * .12
+            ? MediaQuery.of(context).size.height * .15
             : (MediaQuery.of(context).orientation == Orientation.portrait)
-                ? MediaQuery.of(context).size.height * .12
+                ? MediaQuery.of(context).size.height * .15
                 : null,
         width: (MediaQuery.of(context).orientation == Orientation.portrait)
             ? MediaQuery.of(context).size.width * .9
@@ -42,17 +42,45 @@ class ElectionTiles extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "Presidential Elections",
                     style: TextStyle(
                       fontSize: 18,
                     ),
                   ),
-                  Icon(
-                    Icons.more_vert,
-                    size: 24,
-                  )
+                  PopupMenuButton(
+                    elevation: 4,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                    ),
+                    itemBuilder: (BuildContext context) => const [
+                      PopupMenuItem(
+                        height: 26.5,
+                        child: Center(
+                          child: Text("Edit",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                              )),
+                        ),
+                      ),
+                      PopupMenuItem(
+                        height: 26.5,
+                        child: Center(
+                          child: Text(
+                            "Delete",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

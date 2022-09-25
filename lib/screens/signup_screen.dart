@@ -21,23 +21,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-enum FieldMsgs {
-  name,
-  cnic,
-  phone,
-  doe,
-  email,
-  password,
-  address,
-  errormsgicon,
-  successmsgicon,
-  mothername
-}
-
 class _SignUpScreenState extends State<SignUpScreen> {
-  late double height = MediaQuery.of(context).size.height;
-  //! ALERT: Move this line to build function and remove the late keyword
-
   final TextEditingController _namecontroller = TextEditingController();
   final TextEditingController _cniccontroller = TextEditingController();
   final TextEditingController _emailcontroller = TextEditingController();
@@ -64,6 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(

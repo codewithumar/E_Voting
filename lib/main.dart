@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: ThemeData(
         fontFamily: "Mulish",
-        primarySwatch: Colors.teal,
+        primarySwatch: Colors.green,
       ),
       home: const SplashScreen(),
     );

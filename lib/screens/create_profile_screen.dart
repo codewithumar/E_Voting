@@ -17,7 +17,6 @@ import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/models/user_data.dart';
 
-import 'package:e_voting/screens/signup_screen.dart';
 import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 
