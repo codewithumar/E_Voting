@@ -21,10 +21,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => FirebaseAuthProvider()),
       ],
       child: const MyApp(),
-      // child: DevicePreview(
-      //   enabled: true,
-      //   builder: (context) => const MyApp(),
-      // ),
+      
     ),
   );
 }
