@@ -1,4 +1,6 @@
-import 'package:e_voting/screens/Dashboard.dart';
+import 'package:e_voting/providers/firebase_auth_provider.dart';
+import 'package:e_voting/screens/dashboard.dart';
+import 'package:e_voting/screens/voter_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
@@ -61,8 +63,11 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              (auth.user == null) ? const LoginScreen() : const Dashboard(),
+          builder: (context) => (auth.user == null)
+              ? const LoginScreen()
+              : (userRole == "admin")
+                  ? const Dashboard()
+                  : const VoterScreen(),
         ),
       );
     });

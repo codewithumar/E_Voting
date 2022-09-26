@@ -1,3 +1,4 @@
+import 'package:e_voting/screens/voter_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
@@ -190,10 +191,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!mounted) return;
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const Dashboard(),
-      ),
-    );
+    if (userRole == 'admin') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const Dashboard(),
+        ),
+      );
+    } else if (userRole == 'voter') {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const VoterScreen(),
+        ),
+      );
+    }
   }
 }

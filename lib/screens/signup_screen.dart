@@ -183,6 +183,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       perAddress: 'null',
       currAddress: 'null',
       url: 'null',
+      role: 'voter',
     );
     FirestoreServices.savePassToFirestore(docUser);
     Navigator.of(context).pushAndRemoveUntil(

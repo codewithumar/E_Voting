@@ -20,12 +20,32 @@ class FirestoreServices {
       );
 
   static Future savePassToFirestore(UserData user) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final docUser = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(uid);
+    user.id = uid;
+    log(docUser.id.toString());
+    await docUser.set(user.toJson());
+  }
+
+  static Future<String> checkUserRole() async {
+    final auth = FirebaseAuth.instance;
+    String role = "";
     final docUser = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
         .doc();
-    user.id = docUser.id;
-    final json = user.toJson();
-    log('json = $json, userid = ${user.id}');
-    await docUser.set(json);
+    log(docUser.id.toString());
+    await FirebaseFirestore.instance
+        .collection(auth.currentUser!.email!)
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then(
+      (value) {
+        role = value.data()!['role'];
+      },
+    );
+
+    return role;
   }
 }

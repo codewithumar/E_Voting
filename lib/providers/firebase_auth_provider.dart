@@ -1,8 +1,13 @@
+import 'package:e_voting/services/firestore_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:e_voting/services/firebase_auth_service.dart';
 
+String _userRole = '';
+String get userRole => _userRole;
+
 class FirebaseAuthProvider with ChangeNotifier {
   final _authservices = FirebaseAuthService();
+
   bool _isLoading = false;
   bool _hasError = false;
   String _errorMsg = '';
@@ -16,6 +21,7 @@ class FirebaseAuthProvider with ChangeNotifier {
 
     try {
       await _authservices.signIn(email, password);
+      _userRole = await FirestoreServices.checkUserRole();
     } on WrongPasswordException catch (e) {
       _errorMsg = e.message;
       _hasError = true;

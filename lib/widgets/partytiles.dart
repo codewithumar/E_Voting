@@ -1,4 +1,5 @@
-import 'package:e_voting/screens/Edit_party-screen.dart';
+
+import 'package:e_voting/screens/edit_party-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/utils/constants.dart';
 

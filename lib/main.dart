@@ -1,5 +1,5 @@
-import 'package:e_voting/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:e_voting/screens/splash_screen.dart';
 
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +21,6 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => FirebaseAuthProvider()),
       ],
       child: const MyApp(),
-      
     ),
   );
 }

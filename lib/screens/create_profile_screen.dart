@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:developer';
 
 import 'package:e_voting/screens/dashboard.dart';
+import 'package:e_voting/screens/voter_Screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -283,7 +284,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
     });
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => const Dashboard(),
+          builder: (context) => const VoterScreen(),
         ),
         (route) => false);
   }

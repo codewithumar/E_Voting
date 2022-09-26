@@ -10,6 +10,7 @@ class UserData {
   final String perAddress;
   final String currAddress;
   final String url;
+  final String role;
   UserData({
     this.id = '',
     required this.fullName,
@@ -22,6 +23,7 @@ class UserData {
     required this.perAddress,
     required this.currAddress,
     required this.url,
+    required this.role,
   });
 
   Map<String, dynamic> toJson() => {
@@ -36,6 +38,7 @@ class UserData {
         'perAddress': perAddress,
         'currAddress': currAddress,
         'dpURL': url,
+        'role': role,
       };
 
   static UserData fromJson(Map<String, dynamic> json) => UserData(
@@ -50,5 +53,6 @@ class UserData {
         perAddress: json['perAddress'],
         currAddress: json['currAddress'],
         url: json['dpURL'],
+        role: json['role'],
       );
 }
