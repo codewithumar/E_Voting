@@ -47,11 +47,11 @@ class _EditProfileState extends State<EditProfile> {
           },
         ),
       ),
-      body: StreamBuilder<List<UserData>>(
-        stream: FirestoreServices.readUsers(),
+      body: StreamBuilder<UserData>(
+        stream: FirestoreService.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('${snapshot.error}');
+            return Center(child: Text('${snapshot.error}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: Text('Waiting....'));
@@ -78,16 +78,16 @@ class EditProfileStream extends StatelessWidget {
     this.context, {
     Key? key,
   }) : super(key: key);
-  final List<UserData> users;
+  final UserData users;
   BuildContext context;
 
   File? _file;
   late TextEditingController numberController =
-      TextEditingController(text: users[0].number);
+      TextEditingController(text: users.number);
   late TextEditingController curAddressController =
-      TextEditingController(text: users[0].currAddress);
+      TextEditingController(text: users.currAddress);
   late TextEditingController doeController =
-      TextEditingController(text: users[0].doe);
+      TextEditingController(text: users.doe);
   @override
   Widget build(BuildContext context) {
     final editprofileformkey = GlobalKey<FormState>();
@@ -108,10 +108,10 @@ class EditProfileStream extends StatelessWidget {
                   child: Container(
                     height: 70,
                     width: 70,
-                    foregroundDecoration: (users[0].url != 'null')
+                    foregroundDecoration: (users.url != 'null')
                         ? BoxDecoration(
                             image: DecorationImage(
-                              image: NetworkImage(users[0].url),
+                              image: NetworkImage(users.url),
                               fit: BoxFit.fill,
                             ),
                           )
@@ -130,7 +130,7 @@ class EditProfileStream extends StatelessWidget {
                         color: Constants.primarycolor,
                       ),
                       onPressed: () {
-                        selectFile(users[0].id);
+                        selectFile(users.id);
                       },
                     ),
                   ),
@@ -141,7 +141,7 @@ class EditProfileStream extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    users[0].fullName,
+                    users.fullName,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -155,7 +155,7 @@ class EditProfileStream extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    users[0].email,
+                    users.email,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -166,7 +166,7 @@ class EditProfileStream extends StatelessWidget {
               ),
               InputField(
                 labeltext: 'Date of Expiry',
-                hintText: users[0].doe,
+                hintText: users.doe,
                 controller: doeController,
                 readOnly: true,
                 errormessage: "Please Select a corrrect Date",
@@ -174,14 +174,14 @@ class EditProfileStream extends StatelessWidget {
               ),
               InputField(
                 labeltext: 'Phone Number',
-                hintText: users[0].number,
+                hintText: users.number,
                 controller: numberController,
                 errormessage: "Please Enter phone number",
                 fieldmessage: FieldMsgs.phone,
               ),
               InputField(
                 labeltext: 'Current Address',
-                hintText: users[0].currAddress,
+                hintText: users.currAddress,
                 controller: curAddressController,
                 errormessage: "Please enter correct address",
               ),
@@ -201,7 +201,7 @@ class EditProfileStream extends StatelessWidget {
   Future<void> updateProfile() async {
     final docUser = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(users[0].id);
+        .doc(users.id);
     log(FirebaseAuth.instance.currentUser!.email!);
     log('${doeController.text}, ${numberController.text}');
 

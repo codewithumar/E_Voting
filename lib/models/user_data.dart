@@ -1,3 +1,7 @@
+import 'package:e_voting/utils/constants.dart';
+
+enum Role { voter, admin }
+
 class UserData {
   String id;
   final String fullName;
@@ -10,7 +14,7 @@ class UserData {
   final String perAddress;
   final String currAddress;
   final String url;
-  final String role;
+  final Role role;
   UserData({
     this.id = '',
     required this.fullName,
@@ -53,6 +57,6 @@ class UserData {
         perAddress: json['perAddress'],
         currAddress: json['currAddress'],
         url: json['dpURL'],
-        role: json['role'],
+        role: Constants.convertStringToRole(json['role']),
       );
 }

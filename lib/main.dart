@@ -1,3 +1,4 @@
+import 'package:e_voting/providers/firestore_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/screens/splash_screen.dart';
 
@@ -18,7 +19,8 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => FirebaseAuthProvider()),
+        ChangeNotifierProvider(create: (context) => FirestoreProvider()),
+        ChangeNotifierProvider(create: (context) => FirebaseAuthProvider()),
       ],
       child: const MyApp(),
     ),

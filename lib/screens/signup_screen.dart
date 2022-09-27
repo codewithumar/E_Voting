@@ -183,9 +183,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       perAddress: 'null',
       currAddress: 'null',
       url: 'null',
-      role: 'voter',
+      role: Role.voter,
     );
-    FirestoreServices.savePassToFirestore(docUser);
+    FirestoreService.savePassToFirestore(docUser);
+    if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => CreateProfile(

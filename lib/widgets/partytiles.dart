@@ -1,11 +1,11 @@
-
 import 'package:e_voting/screens/edit_party-screen.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/utils/constants.dart';
 
 class PartiesTiles extends StatelessWidget {
-  const PartiesTiles({super.key});
-
+  const PartiesTiles({required this.patryname, required this.index, super.key});
+  final String patryname;
+  final int index;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -44,9 +44,9 @@ class PartiesTiles extends StatelessWidget {
               height: 40,
               width: 40,
             ),
-            const Text(
-              "Pakistan Muslim League N",
-              style: TextStyle(
+            Text(
+              patryname,
+              style: const TextStyle(
                 fontSize: 18,
               ),
             ),
@@ -63,41 +63,45 @@ class PartiesTiles extends StatelessWidget {
               itemBuilder: (BuildContext context) => [
                 PopupMenuItem(
                   height: 26.5,
-                  child: const Center(
-                    child: Text(
-                      "Edit",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const EditPartyScren(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Edit",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const EditPartyScren(),
-                      ),
-                    );
-                  },
                 ),
                 PopupMenuItem(
                   height: 26.5,
-                  child: const Center(
-                    child: Text(
-                      "Delete",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => const EditPartyScren(),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Delete",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const EditPartyScren(),
-                      ),
-                    );
-                  },
                 ),
               ],
             ),

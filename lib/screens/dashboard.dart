@@ -1,7 +1,14 @@
 // ignore_for_file: file_names
 
+import 'package:e_voting/models/user_data.dart';
+
+import 'package:e_voting/providers/firestore_provider.dart';
+
+import 'package:e_voting/screens/voter_screen.dart';
+
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import 'package:e_voting/utils/constants.dart';
 
 import 'package:e_voting/screens/profile_screen.dart';
@@ -15,11 +22,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  static List<Widget> widgetOptions = <Widget>[
-    const AdminHomeScreen(),
-    const Profile(),
-  ];
-
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
@@ -32,7 +34,27 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       body: Stack(
         children: [
-          widgetOptions.elementAt(_selectedIndex),
+          FutureBuilder<UserData>(
+            future: context.read<FirestoreProvider>().getUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text("Error"),
+                );
+              }
+              return [
+                (context.watch<FirestoreProvider>().role == Role.admin)
+                    ? const AdminHomeScreen()
+                    : const VoterScreen(),
+                const ProfileScreen(),
+              ].elementAt(_selectedIndex);
+            },
+          ),
           Positioned(
             left: MediaQuery.of(context).size.width * .045,
             right: MediaQuery.of(context).size.width * .03,

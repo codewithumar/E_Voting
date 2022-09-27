@@ -1,6 +1,6 @@
-import 'package:e_voting/screens/login_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../utils/constants.dart';
 
 class VoterScreen extends StatelessWidget {
   const VoterScreen({super.key});
@@ -8,23 +8,25 @@ class VoterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: (MediaQuery.of(context).orientation == Orientation.portrait)
+          ? AppBar(
+              centerTitle: true,
+              title: const Text("Elections"),
+              flexibleSpace: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: Constants.colors,
+                  ),
+                ),
+              ),
+            )
+          : null,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text("Voter Screen"),
-            TextButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                  (route) => false,
-                );
-              },
-              child: const Text("sign out"),
-            ),
+          children: const [
+            Text("Voter Screen"),
           ],
         ),
       ),

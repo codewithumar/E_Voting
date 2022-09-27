@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:e_voting/models/user_data.dart';
+
 enum FieldMsgs {
   name,
   cnic,
@@ -11,10 +13,22 @@ enum FieldMsgs {
   errormsgicon,
   successmsgicon,
   mothername,
-  time
+  time,
 }
 
 class Constants {
+  static Role convertStringToRole(
+    String value,
+  ) {
+    late Role role;
+    if (Role.admin.name == value) {
+      role = Role.admin;
+    } else {
+      role = Role.voter;
+    }
+    return role;
+  }
+
   static const appname = 'E-Voting';
 
   static const primarycolor = Color(0xFF027314);
@@ -35,6 +49,6 @@ class Constants {
     const Color.fromARGB(255, 129, 208, 129),
     const Color.fromARGB(255, 104, 195, 104),
     const Color.fromARGB(255, 91, 194, 91),
-    const Color.fromARGB(255, 11, 135, 11),
+    const Color.fromARGB(255, 27, 141, 27),
   ];
 }

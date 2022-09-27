@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_voting/providers/firebase_auth_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,15 +14,16 @@ import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/screens/login_screen.dart';
 import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/screens/edit_profile_screen.dart';
+import 'package:provider/provider.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<Profile> createState() => _ProfileState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,21 +37,22 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               leading: IconButton(
-                onPressed: () async => {
-                  await FirebaseAuth.instance.signOut(),
+                onPressed: () async {
+                  await context.read<FirebaseAuthProvider>().signOut();
+                  if (!mounted) return;
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const LoginScreen(),
                       ),
-                      (route) => false),
+                      (route) => false);
                   ScaffoldMessenger.of(context).showSnackBar(
                     showsnackbar(
                       Colors.black,
                       "Sign out Successful",
                       context,
                     ),
-                  )
+                  );
                 },
                 icon: const Icon(
                   Icons.logout_outlined,
@@ -78,29 +82,18 @@ class _ProfileState extends State<Profile> {
               ],
             )
           : null,
-      body: StreamBuilder<List<UserData>>(
-        stream: FirestoreServices.readUsers(),
+      body: StreamBuilder<UserData>(
+        stream: FirestoreService.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: Text('${snapshot.error}'));
+            return Center(child: Text(' ${snapshot.error}'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (snapshot.connectionState == ConnectionState.active ||
-              snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              final users = snapshot.data!;
-              return ProfileStream(users);
-            }
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return const Text("Working to get data");
+          return ProfileStream(snapshot.requireData);
         },
       ),
     );
@@ -112,7 +105,7 @@ class ProfileStream extends StatefulWidget {
     this.users, {
     Key? key,
   }) : super(key: key);
-  final List<UserData> users;
+  final UserData users;
 
   @override
   State<ProfileStream> createState() => ProfileStreamState();
@@ -121,7 +114,7 @@ class ProfileStream extends StatefulWidget {
 class ProfileStreamState extends State<ProfileStream> {
   late final idURL = FirebaseFirestore.instance
       .collection(FirebaseAuth.instance.currentUser!.email!)
-      .doc(widget.users[0].id)
+      .doc(widget.users.id)
       .toString();
   PlatformFile? pickedFile;
   UploadTask? upload;
@@ -137,49 +130,51 @@ class ProfileStreamState extends State<ProfileStream> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    height: 70,
-                    width: 70,
-                    foregroundDecoration: (widget.users[0].url != 'null')
-                        ? BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(widget.users[0].url),
-                              fit: BoxFit.fill,
-                              scale: 0.5,
-                            ),
-                          )
-                        : null,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Constants.greyColor,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    child: IconButton(
-                      icon: (widget.users[0].url == 'null')
-                          ? const Icon(
-                              Icons.add_photo_alternate_rounded,
-                              color: Constants.primarycolor,
-                            )
-                          : Image.asset(widget.users[0].url),
-                      iconSize: 50,
-                      onPressed: () {},
-                    ),
-                  ),
-                ),
-              ),
+              CachedNetworkImage(imageUrl: widget.users.url),
+              // Padding(
+              //   padding: const EdgeInsets.all(16.0),
+              //   child: Align(
+              //     alignment: Alignment.center,
+              //     child: Container(
+              //       height: 70,
+              //       width: 70,
+              //       foregroundDecoration: (widget.users.url != 'null')
+              //           ? BoxDecoration(
+              //               image: DecorationImage(
+              //                 image:
+              //                     CachedNetworkImageProvider(widget.users.url),
+              //                 fit: BoxFit.fill,
+              //                 scale: 0.5,
+              //               ),
+              //             )
+              //           : null,
+              //       decoration: BoxDecoration(
+              //         border: Border.all(
+              //           color: Constants.greyColor,
+              //         ),
+              //         borderRadius: const BorderRadius.all(
+              //           Radius.circular(10),
+              //         ),
+              //       ),
+              //       child: IconButton(
+              //         icon: (widget.users.url == 'null')
+              //             ? const Icon(
+              //                 Icons.add_photo_alternate_rounded,
+              //                 color: Constants.primarycolor,
+              //               )
+              //             : Image.asset(widget.users.url),
+              //         iconSize: 50,
+              //         onPressed: () {},
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    widget.users[0].fullName,
+                    widget.users.fullName,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -193,7 +188,7 @@ class ProfileStreamState extends State<ProfileStream> {
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    widget.users[0].email,
+                    widget.users.email,
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -204,42 +199,42 @@ class ProfileStreamState extends State<ProfileStream> {
               ),
               InputField(
                 labeltext: 'Full Name',
-                hintText: widget.users[0].fullName,
+                hintText: widget.users.fullName,
                 readOnly: true,
               ),
               InputField(
                 labeltext: 'Email',
-                hintText: widget.users[0].email,
+                hintText: widget.users.email,
                 readOnly: true,
               ),
               InputField(
                 labeltext: 'CNIC',
-                hintText: widget.users[0].cnic,
+                hintText: widget.users.cnic,
                 readOnly: true,
               ),
               InputField(
                 labeltext: 'Date of Expiry',
-                hintText: widget.users[0].doe,
+                hintText: widget.users.doe,
                 readOnly: true,
               ),
               InputField(
                 labeltext: 'Phone Number',
-                hintText: widget.users[0].number,
+                hintText: widget.users.number,
                 readOnly: true,
               ),
               InputField(
                 labeltext: "Mother's Name",
-                hintText: widget.users[0].mName,
+                hintText: widget.users.mName,
                 readOnly: true,
               ),
               InputField(
                 labeltext: 'Permanent Address',
-                hintText: widget.users[0].perAddress,
+                hintText: widget.users.perAddress,
                 readOnly: true,
               ),
               InputField(
                 labeltext: 'Current Address',
-                hintText: widget.users[0].currAddress,
+                hintText: widget.users.currAddress,
                 readOnly: true,
               ),
               const SizedBox(

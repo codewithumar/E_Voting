@@ -3,8 +3,6 @@
 import 'dart:io';
 import 'dart:developer';
 
-import 'package:e_voting/screens/dashboard.dart';
-import 'package:e_voting/screens/voter_Screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +14,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/snackbar.dart';
+import 'package:e_voting/screens/dashboard.dart';
 import 'package:e_voting/models/user_data.dart';
 
 import 'package:e_voting/services/firestore_service.dart';
@@ -33,8 +32,8 @@ class _CreateProfileState extends State<CreateProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<UserData>>(
-        stream: FirestoreServices.readUsers(),
+      body: StreamBuilder<UserData>(
+        stream: FirestoreService.readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('${snapshot.data}');
@@ -71,7 +70,7 @@ class CreateProfileStream extends StatefulWidget {
   }) : super(key: key);
   final String _name;
 
-  List<UserData> users;
+  UserData users;
 
   @override
   State<CreateProfileStream> createState() => _CreateProfileStreamState();
@@ -151,7 +150,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                           color: Constants.primarycolor,
                         ),
                         onPressed: () {
-                          _selectFile(widget.users[0].id);
+                          _selectFile(widget.users.id);
                         },
                       ),
                     ),
@@ -257,7 +256,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
   Future<void> _createProfile() async {
     final docUser = FirebaseFirestore.instance
         .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(widget.users[0].id);
+        .doc(FirebaseAuth.instance.currentUser!.uid);
     docUser.update(
       {
         "motherName": _mothernamecontroller.text,
@@ -284,7 +283,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
     });
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => const VoterScreen(),
+          builder: (context) => const Dashboard(),
         ),
         (route) => false);
   }

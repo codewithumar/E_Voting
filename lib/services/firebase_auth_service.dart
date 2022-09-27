@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class WrongPasswordException implements Exception {
@@ -63,6 +65,14 @@ class FirebaseAuthService {
       } else if (e.code == 'weak-password') {
         throw PasswordLengthException('Password length should be 8 - 50');
       }
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

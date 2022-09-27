@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_voting/models/party_model.dart';
 import 'package:e_voting/screens/create_party_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -47,19 +49,48 @@ class PartiesScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              PartiesTiles(),
-              SizedBox(
+            children: [
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Parties")
+                      .snapshots()
+                      .map(
+                        (event) => event.docs
+                            .map(
+                              (e) => PartyModel.fromJson(
+                                e.data(),
+                              ),
+                            )
+                            .toList(),
+                      ),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(child: Text("Error"));
+                    }
+                    if (snapshot.hasData) {
+                      final data = snapshot.data;
+                      return SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: data!.length,
+                          itemBuilder: (context, index) {
+                            return PartiesTiles(
+                              patryname: data[index].partyname,
+                              index: index,
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: Text("No Data"),
+                      );
+                    }
+                    return const CircularProgressIndicator();
+                  }),
+              const SizedBox(
                 height: 100,
               ),
             ],
