@@ -19,8 +19,12 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => FirestoreProvider()),
-        ChangeNotifierProvider(create: (context) => FirebaseAuthProvider()),
+        ChangeNotifierProvider<FirestoreProvider>(
+          create: (context) => FirestoreProvider(),
+        ),
+        ChangeNotifierProvider<FirebaseAuthProvider>(
+          create: (context) => FirebaseAuthProvider(),
+        ),
       ],
       child: const MyApp(),
     ),

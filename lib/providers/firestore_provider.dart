@@ -6,12 +6,21 @@ import 'package:flutter/cupertino.dart';
 
 class FirestoreProvider with ChangeNotifier {
   UserData? _user;
-  Role _role = Role.voter;
-  Role get role => _role;
+
+  Stream<UserData?>? readUsers() {
+    try {
+      final data = FirestoreService.readUsers();
+      return data;
+    } catch (e) {
+      log(e.toString());
+    }
+    notifyListeners();
+    return null;
+  }
+
   Future<UserData> getUser() async {
     try {
       _user = await FirestoreService.getUser();
-      _role = _user!.role;
     } catch (e) {
       log(e.toString());
     }

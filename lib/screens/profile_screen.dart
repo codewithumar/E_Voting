@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_voting/providers/firebase_auth_provider.dart';
+import 'package:e_voting/providers/firestore_provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,12 +41,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 onPressed: () async {
                   await context.read<FirebaseAuthProvider>().signOut();
                   if (!mounted) return;
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                      (route) => false);
                   ScaffoldMessenger.of(context).showSnackBar(
                     showsnackbar(
                       Colors.black,
@@ -53,6 +48,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       context,
                     ),
                   );
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                      (route) => false);
                 },
                 icon: const Icon(
                   Icons.logout_outlined,
@@ -82,8 +83,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             )
           : null,
-      body: StreamBuilder<UserData>(
-        stream: FirestoreService.readUsers(),
+      body: StreamBuilder<UserData?>(
+        stream: context.read<FirestoreProvider>().readUsers(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text(' ${snapshot.error}'));
@@ -93,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: CircularProgressIndicator(),
             );
           }
-          return ProfileStream(snapshot.requireData);
+          return ProfileStream(snapshot.requireData!);
         },
       ),
     );
@@ -130,45 +131,20 @@ class ProfileStreamState extends State<ProfileStream> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CachedNetworkImage(imageUrl: widget.users.url),
-              // Padding(
-              //   padding: const EdgeInsets.all(16.0),
-              //   child: Align(
-              //     alignment: Alignment.center,
-              //     child: Container(
-              //       height: 70,
-              //       width: 70,
-              //       foregroundDecoration: (widget.users.url != 'null')
-              //           ? BoxDecoration(
-              //               image: DecorationImage(
-              //                 image:
-              //                     CachedNetworkImageProvider(widget.users.url),
-              //                 fit: BoxFit.fill,
-              //                 scale: 0.5,
-              //               ),
-              //             )
-              //           : null,
-              //       decoration: BoxDecoration(
-              //         border: Border.all(
-              //           color: Constants.greyColor,
-              //         ),
-              //         borderRadius: const BorderRadius.all(
-              //           Radius.circular(10),
-              //         ),
-              //       ),
-              //       child: IconButton(
-              //         icon: (widget.users.url == 'null')
-              //             ? const Icon(
-              //                 Icons.add_photo_alternate_rounded,
-              //                 color: Constants.primarycolor,
-              //               )
-              //             : Image.asset(widget.users.url),
-              //         iconSize: 50,
-              //         onPressed: () {},
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(40),
+                  ),
+                ),
+                height: 70,
+                width: 70,
+                child: CachedNetworkImage(
+                  imageUrl: widget.users.url,
+                  placeholder: (context, url) =>
+                      const CircularProgressIndicator(),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: Align(

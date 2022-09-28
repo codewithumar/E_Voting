@@ -1,12 +1,11 @@
 // ignore_for_file: file_names
 
+import 'package:flutter/material.dart';
 import 'package:e_voting/models/user_data.dart';
 
 import 'package:e_voting/providers/firestore_provider.dart';
 
 import 'package:e_voting/screens/voter_screen.dart';
-
-import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
 import 'package:e_voting/utils/constants.dart';
@@ -34,7 +33,7 @@ class _DashboardState extends State<Dashboard> {
     return Scaffold(
       body: Stack(
         children: [
-          FutureBuilder<UserData>(
+          FutureBuilder<UserData?>(
             future: context.read<FirestoreProvider>().getUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -48,7 +47,7 @@ class _DashboardState extends State<Dashboard> {
                 );
               }
               return [
-                (context.watch<FirestoreProvider>().role == Role.admin)
+                (snapshot.data!.role == Role.admin)
                     ? const AdminHomeScreen()
                     : const VoterScreen(),
                 const ProfileScreen(),

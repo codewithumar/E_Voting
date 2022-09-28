@@ -29,6 +29,10 @@ class Constants {
     return role;
   }
 
+  static String convertRoleToString(Role value) {
+    return value.name;
+  }
+
   static const appname = 'E-Voting';
 
   static const primarycolor = Color(0xFF027314);

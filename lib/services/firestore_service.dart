@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:e_voting/models/party_model.dart';
-import 'package:e_voting/services/firebase_auth_service.dart';
+
 import 'package:e_voting/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,17 +9,23 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_data.dart';
 
 class FirestoreService {
-  static final _user = FirebaseAuthService().user;
   static final _firestore = FirebaseFirestore.instance;
-  static Stream<UserData> readUsers() =>
-      _firestore.collection(_user!.email!).doc(_user!.uid).snapshots().map(
-            (event) => UserData.fromJson(event.data()!),
-          );
+  static Stream<UserData> readUsers() => _firestore
+      .collection(FirebaseAuth.instance.currentUser!.email!)
+      .doc(FirebaseAuth.instance.currentUser!.uid)
+      .snapshots()
+      .map(
+        (event) => UserData.fromJson(
+          event.data()!,
+        ),
+      );
 
   static Future<UserData?> getUser() async {
     try {
-      final jsonData =
-          await _firestore.collection(_user!.email!).doc(_user!.uid).get();
+      final jsonData = await _firestore
+          .collection(FirebaseAuth.instance.currentUser!.email!)
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
       log(jsonData.data().toString());
       return UserData.fromJson(jsonData.data()!);
     } catch (e) {

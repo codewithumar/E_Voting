@@ -83,9 +83,9 @@ class PartiesScreen extends StatelessWidget {
                         ),
                       );
                     }
-                    if (!snapshot.hasData) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
-                        child: Text("No Data"),
+                        child: CircularProgressIndicator(),
                       );
                     }
                     return const CircularProgressIndicator();

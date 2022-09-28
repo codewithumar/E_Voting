@@ -37,8 +37,10 @@ class FirebaseAuthProvider with ChangeNotifier {
     _isLoading = true;
 
     try {
-      await _authservices.signupWithEmailAndPassword(email, password);
-      //_userRole = await FirestoreService.checkUserRole();
+      await _authservices.signupWithEmailAndPassword(
+        email,
+        password,
+      );
     } on EmailAlreadyInUse catch (e) {
       _errorMsg = e.message;
       _hasError = true;

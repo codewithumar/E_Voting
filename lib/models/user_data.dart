@@ -42,7 +42,7 @@ class UserData {
         'perAddress': perAddress,
         'currAddress': currAddress,
         'dpURL': url,
-        'role': role,
+        'role': Constants.convertRoleToString(role),
       };
 
   static UserData fromJson(Map<String, dynamic> json) => UserData(

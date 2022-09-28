@@ -21,7 +21,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late double height = MediaQuery.of(context).size.height;
   final TextEditingController _emailcontroller = TextEditingController();
   final TextEditingController _passwordcontroller = TextEditingController();
   final _loginformkey = GlobalKey<FormState>();
@@ -37,11 +36,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emailcontroller.dispose();
     _passwordcontroller.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Form(
         key: _loginformkey,
@@ -76,12 +77,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: height * 0.1,
                   ),
-                  const InputField(
-                    labeltext: 'Cnic',
-                    hintText: '33303-1234567-8',
-                    fieldmessage: FieldMsgs.cnic,
-                    errormessage: "Please input valid Cnic",
-                  ),
+                  // const InputField(
+                  //   labeltext: 'Cnic',
+                  //   hintText: '33303-1234567-8',
+                  //   fieldmessage: FieldMsgs.cnic,
+                  //   errormessage: "Please input valid Cnic",
+                  // ),
                   InputField(
                     labeltext: 'Email',
                     hintText: 'example@gmail.com',
@@ -189,7 +190,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (!mounted) return;
-
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
         builder: (context) => const Dashboard(),
