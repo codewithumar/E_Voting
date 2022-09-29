@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'dart:developer';
 import 'dart:io';
+import 'package:e_voting/services/firebase%20_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -48,7 +49,7 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
       body: StreamBuilder<UserData>(
-        stream: FirestoreService.readUsers(),
+        stream: FirestoreService.readUser(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text('${snapshot.error}'));
@@ -130,7 +131,8 @@ class EditProfileStream extends StatelessWidget {
                         color: Constants.primarycolor,
                       ),
                       onPressed: () {
-                        selectFile(users.id);
+                        FirebaseStorageService.selectFile(
+                            users.id, "profileimages", false);
                       },
                     ),
                   ),

@@ -156,6 +156,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loginUser() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {});
     await context.read<FirebaseAuthProvider>().signInwithEmailandPassword(
           _emailcontroller.text,
           _passwordcontroller.text,

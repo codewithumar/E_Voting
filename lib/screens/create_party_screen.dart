@@ -1,14 +1,20 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:e_voting/models/user_data.dart';
+import 'package:e_voting/providers/firestore_provider.dart';
+import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:e_voting/services/firebase%20_storage_service.dart';
 import 'package:e_voting/widgets/toast.dart';
-import 'package:flutter/material.dart';
+
 import 'package:e_voting/models/party_model.dart';
 import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class CreatePartyScreen extends StatefulWidget {
   const CreatePartyScreen({super.key});
@@ -37,7 +43,11 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserData? d;
+    final user = context.read<FirestoreProvider>().readUsers();
+    user!.map((event) => d = event);
     final createpartyformkey = GlobalKey<FormState>();
+    File? file;
 
     return Scaffold(
       appBar: AppBar(
@@ -64,22 +74,28 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerLeft,
                   child: Container(
-                    height: 70,
-                    width: 70,
-                    // foregroundDecoration: (users[0].url != 'null')
-                    //     ? BoxDecoration(
-                    //         image: DecorationImage(
-                    //           image: NetworkImage(users[0].url),
-                    //           fit: BoxFit.fill,
-                    //         ),
-                    //       )
-                    //     : null,
+                    height: 58,
+                    width: 58,
+                    foregroundDecoration: (file != null)
+                        ? BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(d!.url),
+                              fit: BoxFit.fill,
+                            ),
+                          )
+                        : null,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Constants.greyColor,
                       ),
+                      image: file != null
+                          ? DecorationImage(
+                              image: FileImage(file),
+                              fit: BoxFit.fill,
+                            )
+                          : null,
                       borderRadius: const BorderRadius.all(
                         Radius.circular(10),
                       ),
@@ -89,7 +105,17 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
                         Icons.add_photo_alternate_rounded,
                         color: Constants.primarycolor,
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_partynamecontroller.text == "") {
+                          Fluttertoast.showToast(
+                              msg: "Please Enter Party Name Fitrst");
+                          return;
+                        } else {
+                          await FirebaseStorageService.selectFile(
+                              _partynamecontroller.text, "partyImage", true);
+                          setState(() {});
+                        }
+                      },
                     ),
                   ),
                 ),
@@ -118,6 +144,7 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
   }
 
   Future<void> cerateparty() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (listpartiesname.contains(_partynamecontroller.text.toUpperCase())) {
       _toast.showToast(
         child: buildtoast("Party Already Exists", "error"),
@@ -134,6 +161,7 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
       child: buildtoast("Party Created Success", "success"),
       gravity: ToastGravity.BOTTOM,
     );
+    _partynamecontroller.clear();
   }
 
   Future<void> checkexistingpartieslist() async {

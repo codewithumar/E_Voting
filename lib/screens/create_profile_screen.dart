@@ -3,13 +3,12 @@
 import 'dart:io';
 import 'dart:developer';
 
+import 'package:e_voting/services/firebase%20_storage_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/widgets/input_field.dart';
@@ -33,7 +32,7 @@ class _CreateProfileState extends State<CreateProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<UserData>(
-        stream: FirestoreService.readUsers(),
+        stream: FirestoreService.readUser(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('${snapshot.data}');
@@ -150,7 +149,8 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                           color: Constants.primarycolor,
                         ),
                         onPressed: () {
-                          _selectFile(widget.users.id);
+                          FirebaseStorageService.selectFile(
+                              widget.users.id, "profileimages", false);
                         },
                       ),
                     ),
@@ -286,49 +286,5 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
           builder: (context) => const Dashboard(),
         ),
         (route) => false);
-  }
-
-  Future _selectFile(String docID) async {
-    String? urlDownload;
-
-    final id = FirebaseFirestore.instance
-        .collection(
-          FirebaseAuth.instance.currentUser!.email!,
-        )
-        .doc(docID);
-
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png'],
-    );
-
-    PlatformFile? pickedFile;
-
-    if (result != null) {
-      setState(() {
-        pickedFile = result.files.first;
-        log(pickedFile.toString());
-        _file = File(pickedFile!.path!);
-        log(_file.toString());
-      });
-    }
-
-    final path = '/profileimages/$id/${pickedFile?.name}';
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(_file!);
-    final upload = ref.putFile(_file!);
-    final snapshot = await upload.whenComplete(() {});
-    urlDownload = await snapshot.ref.getDownloadURL();
-    log('url is = $urlDownload');
-
-    final docUser = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(docID);
-
-    docUser.update(
-      {
-        "dpURL": urlDownload,
-      },
-    );
   }
 }

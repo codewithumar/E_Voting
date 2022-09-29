@@ -1,4 +1,5 @@
 import 'package:e_voting/utils/constants.dart';
+import 'package:e_voting/widgets/dropdownmenu.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,11 @@ class CreateElectionScreen extends StatelessWidget {
                 hintText: "10:52 AM",
                 fieldmessage: FieldMsgs.time,
               ),
+              const InputField(
+                labeltext: 'Max Votes',
+                hintText: "120",
+              ),
+              const DropDownMenu(),
               const SizedBox(height: 23),
               SignupLoginButton(
                 isLoading: false,

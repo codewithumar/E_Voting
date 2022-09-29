@@ -49,7 +49,9 @@ class _DashboardState extends State<Dashboard> {
               return [
                 (snapshot.data!.role == Role.admin)
                     ? const AdminHomeScreen()
-                    : const VoterScreen(),
+                    : VoterScreen(
+                        data: snapshot.data!,
+                      ),
                 const ProfileScreen(),
               ].elementAt(_selectedIndex);
             },

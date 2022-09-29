@@ -9,7 +9,7 @@ class FirestoreProvider with ChangeNotifier {
 
   Stream<UserData?>? readUsers() {
     try {
-      final data = FirestoreService.readUsers();
+      final data = FirestoreService.readUser();
       return data;
     } catch (e) {
       log(e.toString());

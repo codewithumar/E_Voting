@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:e_voting/models/party_model.dart';
+import 'package:e_voting/services/firebase_auth_service.dart';
 
 import 'package:e_voting/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,7 +11,8 @@ import '../models/user_data.dart';
 
 class FirestoreService {
   static final _firestore = FirebaseFirestore.instance;
-  static Stream<UserData> readUsers() => _firestore
+  final auth = FirebaseAuthService();
+  static Stream<UserData> readUser() => _firestore
       .collection(FirebaseAuth.instance.currentUser!.email!)
       .doc(FirebaseAuth.instance.currentUser!.uid)
       .snapshots()
@@ -23,8 +25,8 @@ class FirestoreService {
   static Future<UserData?> getUser() async {
     try {
       final jsonData = await _firestore
-          .collection(FirebaseAuth.instance.currentUser!.email!)
-          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection(FirebaseAuthService().user!.email!)
+          .doc(FirebaseAuthService().user!.uid)
           .get();
       log(jsonData.data().toString());
       return UserData.fromJson(jsonData.data()!);

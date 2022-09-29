@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:e_voting/models/user_data.dart';
+import 'package:flutter/material.dart';
 
 enum FieldMsgs {
   name,
@@ -15,6 +14,8 @@ enum FieldMsgs {
   mothername,
   time,
 }
+
+enum PopMenuOption { edit, delete }
 
 class Constants {
   static Role convertStringToRole(
@@ -46,6 +47,7 @@ class Constants {
   static const textcolor = Color(0xffffffff);
   static const errorcolor = Color(0xffff0000);
   static const adminiconcolor = Color(0xff68A368);
+  static const popupmenutextcolor = Colors.black;
 
   static List<Color> colors = [
     const Color.fromARGB(255, 150, 220, 150),

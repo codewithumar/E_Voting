@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_voting/providers/firebase_auth_provider.dart';
 import 'package:e_voting/providers/firestore_provider.dart';
-import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,7 +13,7 @@ import 'package:e_voting/widgets/snackbar.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/screens/login_screen.dart';
-import 'package:e_voting/services/firestore_service.dart';
+
 import 'package:e_voting/screens/edit_profile_screen.dart';
 import 'package:provider/provider.dart';
 

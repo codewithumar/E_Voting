@@ -44,7 +44,7 @@ class SignupLoginButton extends StatelessWidget {
           child: context.watch<FirebaseAuthProvider>().isLoading
               ? const Center(
                   child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation(Colors.black),
+                    valueColor: AlwaysStoppedAnimation(Constants.primarycolor),
                   ),
                 )
               : Text(

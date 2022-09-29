@@ -48,9 +48,7 @@ class EditPartyScren extends StatelessWidget {
                       Icons.add_photo_alternate_rounded,
                       color: Constants.primarycolor,
                     ),
-                    onPressed: () {
-                      // selectFile(users[0].id);
-                    },
+                    onPressed: () {},
                   ),
                 ),
               ),
@@ -59,12 +57,11 @@ class EditPartyScren extends StatelessWidget {
             const InputField(
               labeltext: 'Party Name  ',
               hintText: "Example",
-              //controller: doeController,
             ),
             const SizedBox(height: 23),
             SignupLoginButton(
               isLoading: false,
-              btnText: 'Add',
+              btnText: 'Update',
               function: () {},
             ),
           ],

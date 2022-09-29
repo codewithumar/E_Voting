@@ -68,14 +68,15 @@ class PartiesScreen extends StatelessWidget {
                       return const Center(child: Text("Error"));
                     }
                     if (snapshot.hasData) {
-                      final data = snapshot.data;
+                      final data = snapshot.requireData;
                       return SizedBox(
                         height: MediaQuery.of(context).size.height,
                         child: ListView.builder(
                           scrollDirection: Axis.vertical,
-                          itemCount: data!.length,
+                          itemCount: data.length,
                           itemBuilder: (context, index) {
                             return PartiesTiles(
+                              url: data[index].imgURl,
                               patryname: data[index].partyname,
                               index: index,
                             );

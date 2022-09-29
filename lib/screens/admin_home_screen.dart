@@ -36,7 +36,7 @@ class AdminHomeScreen extends StatelessWidget {
                 children: [
                   AdminScreenButton(
                     "parties",
-                    "Create Party",
+                    "Parties",
                     type: AdminButton.party,
                   ),
                   AdminScreenButton(

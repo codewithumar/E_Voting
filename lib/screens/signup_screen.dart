@@ -159,6 +159,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<void> _registeruser() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() {});
     await context.read<FirebaseAuthProvider>().signupwithEmailandPassword(
           _emailcontroller.text,
           _passwordcontroller.text,
