@@ -13,6 +13,7 @@ enum FieldMsgs {
   successmsgicon,
   mothername,
   time,
+  electiontime
 }
 
 enum PopMenuOption { edit, delete }
@@ -35,6 +36,8 @@ class Constants {
   }
 
   static const appname = 'E-Voting';
+  static const electionstring = 'Be a part of the decision vote today';
+  static const noelectionstring2 = 'Seems no elections going on!';
 
   static const primarycolor = Color(0xFF027314);
   static const lightGreen = Color(0xFF7FB787);

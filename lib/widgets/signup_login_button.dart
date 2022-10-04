@@ -11,12 +11,12 @@ class SignupLoginButton extends StatelessWidget {
     Key? key,
     required this.btnText,
     required this.function,
-    this.formkey,
+    required this.formkey,
     required this.isLoading,
   }) : super(key: key);
   final String btnText;
   final VoidCallback function;
-  final GlobalKey<FormState>? formkey;
+  final GlobalKey<FormState> formkey;
   final bool isLoading;
 
   @override
@@ -37,7 +37,7 @@ class SignupLoginButton extends StatelessWidget {
           onPressed: context.watch<FirebaseAuthProvider>().isLoading
               ? null
               : () async {
-                  if (formkey!.currentState!.validate()) {
+                  if (formkey.currentState!.validate()) {
                     function();
                   }
                 },

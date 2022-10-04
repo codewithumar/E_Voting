@@ -62,8 +62,16 @@ class _InputFieldState extends State<InputField> {
                 ? () async {
                     DateTime? pickedDate = await showDatePicker(
                       context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime.now(),
+                      initialDate: DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day + 1,
+                      ),
+                      firstDate: DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day + 1,
+                      ),
                       lastDate: DateTime(2032, 12, 31),
                     );
                     if (pickedDate != null) {
@@ -75,7 +83,22 @@ class _InputFieldState extends State<InputField> {
                       );
                     }
                   }
-                : () {},
+                : (widget.fieldmessage == FieldMsgs.electiontime)
+                    ? () async {
+                        TimeOfDay? pickedtime = await showTimePicker(
+                          context: context,
+                          initialTime: const TimeOfDay(hour: 8, minute: 00),
+                        );
+                        if (pickedtime != null) {
+                          setState(
+                            () {
+                              widget.controller!.text =
+                                  pickedtime.format(context);
+                            },
+                          );
+                        }
+                      }
+                    : () {},
             inputFormatters: (widget.fieldmessage == FieldMsgs.cnic)
                 ? [
                     LengthLimitingTextInputFormatter(15),
@@ -93,7 +116,7 @@ class _InputFieldState extends State<InputField> {
                         "assets/images/icons/calendar.png",
                       ),
                     )
-                  : (widget.fieldmessage == FieldMsgs.time)
+                  : (widget.fieldmessage == FieldMsgs.electiontime)
                       ? const Image(
                           image: AssetImage(
                             "assets/images/icons/clock.png",

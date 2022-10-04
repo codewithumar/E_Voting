@@ -43,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
               }
               if (snapshot.hasError) {
                 return const Center(
-                  child: Text("Error"),
+                  child: Text("Error in data"),
                 );
               }
               return [

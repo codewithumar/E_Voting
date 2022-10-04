@@ -1,6 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:e_voting/providers/firestore_provider.dart';
+
+import 'package:e_voting/widgets/voterelectiontiles.dart';
 
 import '../utils/constants.dart';
 
@@ -24,7 +29,7 @@ class VoterScreen extends StatelessWidget {
             )
           : null,
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
@@ -45,7 +50,7 @@ class VoterScreen extends StatelessWidget {
                           color: Constants.primarycolor),
                     ),
                     const Text(
-                      "Be a part of the decision vote today",
+                      Constants.electionstring,
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -80,7 +85,74 @@ class VoterScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
                 color: Constants.popupmenutextcolor),
-          )
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.7,
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: StreamBuilder(
+                stream: context.read<FirestoreProvider>().getElections(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Column(
+                      children: const [
+                        Image(
+                          image: AssetImage(
+                            "assets/images/Manworking.png",
+                          ),
+                        ),
+                        Text(
+                          Constants.noelectionstring2,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Constants.popupmenutextcolor),
+                        ),
+                      ],
+                    );
+                  }
+
+                  if (snapshot.hasData) {
+                    final data = snapshot.requireData;
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return VoterElectionTiles(
+                            data: data[index],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return Column(
+                    children: const [
+                      Image(
+                        image: AssetImage(
+                          "assets/images/Manworking.png",
+                        ),
+                      ),
+                      Text(
+                        "Seems no elections going on!",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Constants.popupmenutextcolor),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

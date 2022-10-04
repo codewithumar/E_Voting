@@ -11,6 +11,10 @@ class FirebaseAuthProvider with ChangeNotifier {
   String _errorMsg = '';
 
   bool get isLoading => _isLoading;
+  set(bool isload) {
+    _isLoading = isload;
+  }
+
   bool get hasError => _hasError;
   String get errorMsg => _errorMsg;
 

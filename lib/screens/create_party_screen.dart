@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/providers/firestore_provider.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -90,9 +91,9 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
                       border: Border.all(
                         color: Constants.greyColor,
                       ),
-                      image: file != null
+                      image: FirebaseStorageService.file != null
                           ? DecorationImage(
-                              image: FileImage(file),
+                              image: FileImage(FirebaseStorageService.file!),
                               fit: BoxFit.fill,
                             )
                           : null,
@@ -111,8 +112,7 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
                               msg: "Please Enter Party Name Fitrst");
                           return;
                         } else {
-                          await FirebaseStorageService.selectFile(
-                              _partynamecontroller.text, "partyImage", true);
+                          await FirebaseStorageService.selectFile();
                           setState(() {});
                         }
                       },
@@ -134,6 +134,7 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
                 formkey: createpartyformkey,
                 function: () async {
                   await cerateparty();
+                  _partynamecontroller.clear();
                 },
               ),
             ],
@@ -147,21 +148,38 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
     FocusManager.instance.primaryFocus?.unfocus();
     if (listpartiesname.contains(_partynamecontroller.text.toUpperCase())) {
       _toast.showToast(
-        child: buildtoast("Party Already Exists", "error"),
+        child: buildtoast(
+          "Party Already Exists",
+          "error",
+        ),
         gravity: ToastGravity.BOTTOM,
       );
       return;
     }
+    String id = FirebaseFirestore.instance.collection("Parties").doc().id;
     final party = PartyModel(
+      id: id,
       partyname: _partynamecontroller.text.toUpperCase(),
       imgURl: "",
     );
-    FirestoreService.createparty(party);
+
+    await FirestoreService.createparty(party);
+    _toast.showToast(
+      child: buildtoast(
+        "Uploading",
+        "success",
+      ),
+      gravity: ToastGravity.BOTTOM,
+    );
+
+    await FirebaseStorageService.uploadimage("partyImage", id, true);
     _toast.showToast(
       child: buildtoast("Party Created Success", "success"),
       gravity: ToastGravity.BOTTOM,
     );
-    _partynamecontroller.clear();
+    FirebaseStorageService.file = null;
+    if (!mounted) return;
+    Navigator.pop(context);
   }
 
   Future<void> checkexistingpartieslist() async {

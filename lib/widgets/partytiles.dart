@@ -1,18 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+
 import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:e_voting/models/party_model.dart';
+import 'package:e_voting/services/firebase%20_storage_service.dart';
 import 'package:e_voting/screens/edit_party-screen.dart';
 import 'package:e_voting/utils/constants.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class PartiesTiles extends StatelessWidget {
-  const PartiesTiles(
-      {required this.patryname,
-      required this.url,
-      required this.index,
-      super.key});
-  final String? patryname;
-  final int index;
-  final String url;
+  const PartiesTiles({required this.data, super.key});
+  final PartyModel data;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,12 +53,12 @@ class PartiesTiles extends StatelessWidget {
                 foregroundColor: Constants.textcolor,
                 radius: 25,
                 backgroundImage: CachedNetworkImageProvider(
-                  url,
+                  data.imgURl,
                 ),
               ),
             ),
             Text(
-              patryname ?? "",
+              data.partyname,
               style: const TextStyle(
                 fontSize: 18,
               ),
@@ -66,28 +66,33 @@ class PartiesTiles extends StatelessWidget {
             const Expanded(
               child: SizedBox(),
             ),
-            PopupMenuButton(
+            PopupMenuButton<PopMenuOption>(
               elevation: 4,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
-              itemBuilder: (BuildContext context) =>
-                  <PopupMenuEntry<PopMenuOption>>[
-                PopupMenuItem<PopMenuOption>(
-                  value: PopMenuOption.edit,
-                  padding: const EdgeInsets.all(10),
-                  onTap: () async {
-                    Fluttertoast.showToast(msg: "Edit");
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const EditPartyScren(),
+              onSelected: (value) async {
+                if (value == PopMenuOption.edit) {
+                  log(data.id!);
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => EditPartyScren(
+                        data: data,
                       ),
-                    );
-                  },
+                    ),
+                  );
+                }
+                if (value == PopMenuOption.delete) {
+                  await FirebaseStorageService.deleteParty(data.id!);
+                }
+              },
+              itemBuilder: (context) => <PopupMenuEntry<PopMenuOption>>[
+                const PopupMenuItem<PopMenuOption>(
+                  value: PopMenuOption.edit,
                   height: 26.5,
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       "Edit",
                       style: TextStyle(
@@ -97,13 +102,11 @@ class PartiesTiles extends StatelessWidget {
                     ),
                   ),
                 ),
-                PopupMenuItem(
-                  padding: const EdgeInsets.all(10),
-                  onTap: () {
-                    Fluttertoast.showToast(msg: "Delete");
-                  },
+                const PopupMenuItem<PopMenuOption>(
+                  padding: EdgeInsets.all(10),
                   height: 26.5,
-                  child: const Center(
+                  value: PopMenuOption.delete,
+                  child: Center(
                     child: Text(
                       "Delete",
                       style: TextStyle(

@@ -1,10 +1,15 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:e_voting/models/election_model.dart';
+import 'package:e_voting/widgets/stackedwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/utils/constants.dart';
 
 enum AdminButton { party, election }
 
-class ElectionTiles extends StatelessWidget {
-  const ElectionTiles({super.key});
+class AdminElectionTiles extends StatelessWidget {
+  AdminElectionTiles({required this.data, super.key});
+  ElectionModel data;
 
   @override
   Widget build(BuildContext context) {
@@ -38,14 +43,14 @@ class ElectionTiles extends StatelessWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(10, 14, 10, 15),
+              padding: const EdgeInsets.fromLTRB(10, 14, 10, 5),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Presidential Elections",
-                    style: TextStyle(
+                  Text(
+                    data.electioname,
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),
@@ -87,23 +92,23 @@ class ElectionTiles extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Stack(
-                    fit: StackFit.loose,
-                    children: const [
-                      Positioned(
-                        child: Image(
-                          image:
-                              AssetImage("assets/images/partiesimage/pmln.png"),
-                        ),
-                      ),
-                    ],
-                  ),
+                  buildStackedImages(),
                   const Text(
-                    "60/120",
+                    " +5",
                     style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const Expanded(
+                    child: Text(""),
+                  ),
+                  Text(
+                    data.electionmaxvotetime,
+                    style: const TextStyle(
                       fontSize: 18,
                     ),
                   ),

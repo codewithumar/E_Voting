@@ -51,48 +51,47 @@ class PartiesScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection("Parties")
-                      .snapshots()
-                      .map(
-                        (event) => event.docs
-                            .map(
-                              (e) => PartyModel.fromJson(
-                                e.data(),
-                              ),
-                            )
-                            .toList(),
+                stream: FirebaseFirestore.instance
+                    .collection("Parties")
+                    .snapshots()
+                    .map(
+                      (event) => event.docs
+                          .map(
+                            (e) => PartyModel.fromJson(
+                              e.data(),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Error"));
+                  }
+
+                  if (snapshot.hasData) {
+                    final data = snapshot.requireData;
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return PartiesTiles(
+                            data: data[index],
+                          );
+                        },
                       ),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return const Center(child: Text("Error"));
-                    }
-                    if (snapshot.hasData) {
-                      final data = snapshot.requireData;
-                      return SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          itemCount: data.length,
-                          itemBuilder: (context, index) {
-                            return PartiesTiles(
-                              url: data[index].imgURl,
-                              patryname: data[index].partyname,
-                              index: index,
-                            );
-                          },
-                        ),
-                      );
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    return const CircularProgressIndicator();
-                  }),
-              const SizedBox(
-                height: 100,
+                    );
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return const Center(
+                    child: Text("No Data"),
+                  );
+                },
               ),
             ],
           ),

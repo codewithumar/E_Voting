@@ -1,19 +1,16 @@
 // ignore_for_file: must_be_immutable
 import 'dart:developer';
-import 'dart:io';
+
 import 'package:e_voting/services/firebase%20_storage_service.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:file_picker/file_picker.dart';
-
 import 'package:e_voting/utils/constants.dart';
 import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/widgets/snackbar.dart';
-import 'package:e_voting/screens/dashboard.dart';
+
 import 'package:e_voting/widgets/input_field.dart';
 import 'package:e_voting/widgets/signup_login_button.dart';
 import 'package:e_voting/services/firestore_service.dart';
@@ -82,7 +79,7 @@ class EditProfileStream extends StatelessWidget {
   final UserData users;
   BuildContext context;
 
-  File? _file;
+  //File? _file;
   late TextEditingController numberController =
       TextEditingController(text: users.number);
   late TextEditingController curAddressController =
@@ -109,7 +106,7 @@ class EditProfileStream extends StatelessWidget {
                   child: Container(
                     height: 70,
                     width: 70,
-                    foregroundDecoration: (users.url != 'null')
+                    foregroundDecoration: (FirebaseStorageService.file != null)
                         ? BoxDecoration(
                             image: DecorationImage(
                               image: NetworkImage(users.url),
@@ -131,8 +128,7 @@ class EditProfileStream extends StatelessWidget {
                         color: Constants.primarycolor,
                       ),
                       onPressed: () {
-                        FirebaseStorageService.selectFile(
-                            users.id, "profileimages", false);
+                        FirebaseStorageService.selectFile();
                       },
                     ),
                   ),
@@ -201,12 +197,12 @@ class EditProfileStream extends StatelessWidget {
   }
 
   Future<void> updateProfile() async {
-    final docUser = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(users.id);
-    log(FirebaseAuth.instance.currentUser!.email!);
+    final auth = FirebaseAuth.instance.currentUser!.email!;
+    final docUser = FirebaseFirestore.instance.collection(auth).doc(users.id);
+    log(auth);
     log('${doeController.text}, ${numberController.text}');
-
+    await FirebaseStorageService.uploadimage(
+        "profileimages", FirebaseAuth.instance.currentUser!.uid, false);
     docUser.update(
       {
         "DoE": doeController.text,
@@ -222,11 +218,7 @@ class EditProfileStream extends StatelessWidget {
             context,
           ),
         );
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Dashboard(),
-            ),
-            (route) => false);
+        Navigator.pop(context);
       },
     ).onError(
       (error, stackTrace) {
@@ -237,44 +229,6 @@ class EditProfileStream extends StatelessWidget {
             context,
           ),
         );
-      },
-    );
-  }
-
-  Future selectFile(String docID) async {
-    String? urlDownload;
-    final id = FirebaseFirestore.instance
-        .collection(
-          FirebaseAuth.instance.currentUser!.email!,
-        )
-        .doc(docID);
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'jpeg', 'png'],
-    );
-
-    PlatformFile? pickedFile;
-
-    if (result != null) {
-      pickedFile = result.files.first;
-      _file = File(pickedFile.path!);
-    }
-
-    final path = '/profileimages/$id/${pickedFile?.name}';
-    final ref = FirebaseStorage.instance.ref().child(path);
-    ref.putFile(_file!);
-    final upload = ref.putFile(_file!);
-    final snapshot = await upload.whenComplete(() {});
-    urlDownload = await snapshot.ref.getDownloadURL();
-    log('url is = $urlDownload');
-
-    final docUser = FirebaseFirestore.instance
-        .collection(FirebaseAuth.instance.currentUser!.email!)
-        .doc(docID);
-
-    docUser.update(
-      {
-        "dpURL": urlDownload,
       },
     );
   }

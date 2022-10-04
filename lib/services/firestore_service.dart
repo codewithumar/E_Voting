@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:e_voting/models/election_model.dart';
 import 'package:e_voting/models/party_model.dart';
 import 'package:e_voting/services/firebase_auth_service.dart';
 
@@ -36,6 +37,26 @@ class FirestoreService {
     return null;
   }
 
+  static Stream? getEections() {
+    try {
+      final data =
+          FirebaseFirestore.instance.collection("election").snapshots().map(
+                (event) => event.docs
+                    .map(
+                      (e) => ElectionModel.fromJson(
+                        e.data(),
+                      ),
+                    )
+                    .toList(),
+              );
+
+      return data;
+    } catch (e) {
+      log(e.toString());
+    }
+    return null;
+  }
+
   static Future savePassToFirestore(UserData user) async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
     final docUser = FirebaseFirestore.instance
@@ -45,13 +66,28 @@ class FirestoreService {
     await docUser.set(user.toJson());
   }
 
-  static Future createparty(PartyModel partydata) async {
-    final partyDoc = FirebaseFirestore.instance
-        .collection("Parties")
-        .doc(partydata.partyname);
-    await partyDoc.set(
-      partydata.toJson(),
+  static Future<void> createparty(PartyModel partydata) async {
+    try {
+      final partyDoc =
+          FirebaseFirestore.instance.collection("Parties").doc(partydata.id);
+
+      partyDoc.set(
+        partydata.toJson(),
+      );
+    } catch (e) {
+      log(
+        e.toString(),
+      );
+    }
+  }
+
+  static Future<void> createelection(ElectionModel data) async {
+    final docref = _firestore.collection("election").doc();
+    data.id = docref.id;
+    log(
+      data.toJson().toString(),
     );
+    await docref.set(data.toJson());
   }
 
   static Future<Role> checkUserRole() async {

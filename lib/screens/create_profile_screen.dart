@@ -149,8 +149,7 @@ class _CreateProfileStreamState extends State<CreateProfileStream> {
                           color: Constants.primarycolor,
                         ),
                         onPressed: () {
-                          FirebaseStorageService.selectFile(
-                              widget.users.id, "profileimages", false);
+                          FirebaseStorageService.selectFile();
                         },
                       ),
                     ),

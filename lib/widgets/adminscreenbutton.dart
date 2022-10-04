@@ -2,7 +2,7 @@
 
 import 'package:e_voting/screens/create_election_screen.dart';
 import 'package:e_voting/screens/parties_screen.dart';
-import 'package:e_voting/widgets/electiontiles.dart';
+import 'package:e_voting/widgets/adminelectiontiles.dart';
 import 'package:flutter/material.dart';
 
 import 'package:e_voting/utils/constants.dart';
