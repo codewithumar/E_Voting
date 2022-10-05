@@ -1,8 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:e_voting/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_voting/models/user_data.dart';
 import 'package:e_voting/providers/firestore_provider.dart';
 
 import 'package:e_voting/widgets/voterelectiontiles.dart';
@@ -72,19 +71,6 @@ class VoterScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          //const Expanded(child: SizedBox()),
-          const Image(
-            image: AssetImage(
-              "assets/images/Manworking.png",
-            ),
-          ),
-          const Text(
-            "Seems no elections going on!",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Constants.popupmenutextcolor),
           ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.7,

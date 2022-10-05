@@ -127,8 +127,9 @@ class EditProfileStream extends StatelessWidget {
                         Icons.add_photo_alternate_rounded,
                         color: Constants.primarycolor,
                       ),
-                      onPressed: () {
-                        FirebaseStorageService.selectFile();
+                      onPressed: () async {
+                        log(users.id);
+                        await FirebaseStorageService.selectFile();
                       },
                     ),
                   ),

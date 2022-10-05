@@ -75,7 +75,7 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Align(
-                  alignment: Alignment.centerLeft,
+                  alignment: Alignment.center,
                   child: Container(
                     height: 58,
                     width: 58,
@@ -107,14 +107,8 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
                         color: Constants.primarycolor,
                       ),
                       onPressed: () async {
-                        if (_partynamecontroller.text == "") {
-                          Fluttertoast.showToast(
-                              msg: "Please Enter Party Name Fitrst");
-                          return;
-                        } else {
-                          await FirebaseStorageService.selectFile();
-                          setState(() {});
-                        }
+                        await FirebaseStorageService.selectFile();
+                        setState(() {});
                       },
                     ),
                   ),
@@ -146,6 +140,7 @@ class _CreatePartyScreenState extends State<CreatePartyScreen> {
 
   Future<void> cerateparty() async {
     FocusManager.instance.primaryFocus?.unfocus();
+
     if (listpartiesname.contains(_partynamecontroller.text.toUpperCase())) {
       _toast.showToast(
         child: buildtoast(
