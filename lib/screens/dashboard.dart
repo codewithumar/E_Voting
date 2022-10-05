@@ -5,7 +5,7 @@ import 'package:e_voting/models/user_data.dart';
 
 import 'package:e_voting/providers/firestore_provider.dart';
 
-import 'package:e_voting/screens/voter_screen.dart';
+import 'package:e_voting/screens/voter_home_screen.dart';
 
 import 'package:provider/provider.dart';
 import 'package:e_voting/utils/constants.dart';
@@ -49,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
               return [
                 (snapshot.data!.role == Role.admin)
                     ? const AdminHomeScreen()
-                    : VoterScreen(
+                    : VoterHomeScreen(
                         data: snapshot.data!,
                       ),
                 const ProfileScreen(),

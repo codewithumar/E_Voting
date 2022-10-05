@@ -8,8 +8,8 @@ import 'package:e_voting/widgets/voterelectiontiles.dart';
 
 import '../utils/constants.dart';
 
-class VoterScreen extends StatelessWidget {
-  const VoterScreen({required this.data, super.key});
+class VoterHomeScreen extends StatelessWidget {
+  const VoterHomeScreen({required this.data, super.key});
   final UserData data;
   @override
   Widget build(BuildContext context) {

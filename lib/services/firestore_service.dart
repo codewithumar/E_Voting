@@ -7,6 +7,7 @@ import 'package:e_voting/services/firebase_auth_service.dart';
 import 'package:e_voting/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../models/user_data.dart';
 
@@ -81,13 +82,23 @@ class FirestoreService {
     }
   }
 
-  static Future<void> createelection(ElectionModel data) async {
+  static Future<void> createElection(ElectionModel data) async {
     final docref = _firestore.collection("election").doc();
     data.id = docref.id;
-    log(
-      data.toJson().toString(),
-    );
+    log(data.toJson().toString());
     await docref.set(data.toJson());
+  }
+
+  static Future<void> updateElection(ElectionModel data) async {
+    final docref = _firestore.collection("election").doc(data.id);
+    await docref.update(data.toJson());
+  }
+
+  static Future<void> deleteElection(ElectionModel data) async {
+    final docref = _firestore.collection("election").doc(data.id);
+    await docref.delete().then(
+          (value) => Fluttertoast.showToast(msg: "Deleted"),
+        );
   }
 
   static Future<Role> checkUserRole() async {

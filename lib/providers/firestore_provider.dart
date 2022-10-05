@@ -11,7 +11,17 @@ class FirestoreProvider with ChangeNotifier {
 
   Future<void> createelection(ElectionModel data) async {
     try {
-      await FirestoreService.createelection(data);
+      await FirestoreService.createElection(data);
+    } catch (e) {
+      log(
+        e.toString(),
+      );
+    }
+  }
+
+  Future<void> updateElection(ElectionModel data) async {
+    try {
+      await FirestoreService.updateElection(data);
     } catch (e) {
       log(
         e.toString(),
@@ -36,7 +46,7 @@ class FirestoreProvider with ChangeNotifier {
     } catch (e) {
       log(e.toString());
     }
-    notifyListeners();
+    //  notifyListeners();
     return _elections!;
   }
 

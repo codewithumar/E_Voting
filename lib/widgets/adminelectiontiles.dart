@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:e_voting/models/election_model.dart';
+import 'package:e_voting/screens/edit_election_screen.dart';
+import 'package:e_voting/services/firestore_service.dart';
 import 'package:e_voting/widgets/stackedwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:e_voting/utils/constants.dart';
@@ -54,16 +56,31 @@ class AdminElectionTiles extends StatelessWidget {
                       fontSize: 18,
                     ),
                   ),
-                  PopupMenuButton(
+                  PopupMenuButton<PopMenuOption>(
                     elevation: 4,
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),
                       ),
                     ),
+                    onSelected: (value) {
+                      if (value == PopMenuOption.edit) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EditElectionScreen(
+                              data: data,
+                            ),
+                          ),
+                        );
+                      }
+                      if (value == PopMenuOption.delete) {
+                        FirestoreService.deleteElection(data);
+                      }
+                    },
                     itemBuilder: (BuildContext context) => const [
-                      PopupMenuItem(
+                      PopupMenuItem<PopMenuOption>(
                         height: 26.5,
+                        value: PopMenuOption.edit,
                         child: Center(
                           child: Text("Edit",
                               style: TextStyle(
@@ -72,8 +89,9 @@ class AdminElectionTiles extends StatelessWidget {
                               )),
                         ),
                       ),
-                      PopupMenuItem(
+                      PopupMenuItem<PopMenuOption>(
                         height: 26.5,
+                        value: PopMenuOption.delete,
                         child: Center(
                           child: Text(
                             "Delete",
