@@ -59,4 +59,16 @@ class FirestoreProvider with ChangeNotifier {
     notifyListeners();
     return _user!;
   }
+
+  Future<String?> checkvoted() async {
+    String? _docref;
+    try {
+      _docref = await FirestoreService.checkvoted();
+      log(_docref.toString());
+    } catch (e) {
+      log(e.toString());
+    }
+    notifyListeners();
+    return _docref;
+  }
 }

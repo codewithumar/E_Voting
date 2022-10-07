@@ -51,6 +51,7 @@ class Constants {
   static const errorcolor = Color(0xffff0000);
   static const adminiconcolor = Color(0xff68A368);
   static const popupmenutextcolor = Colors.black;
+  static const alertdialoagcolor = Color(0xffE0EEE2);
 
   static List<Color> colors = [
     const Color.fromARGB(255, 150, 220, 150),

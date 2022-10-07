@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:intl/intl.dart';
 import 'package:email_validator/email_validator.dart';
 
 import 'package:e_voting/utils/constants.dart';
@@ -31,6 +30,7 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
+  TimeOfDay T = TimeOfDay.now();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,20 +65,24 @@ class _InputFieldState extends State<InputField> {
                       initialDate: DateTime(
                         DateTime.now().year,
                         DateTime.now().month,
-                        DateTime.now().day + 1,
+                        DateTime.now().day,
                       ),
                       firstDate: DateTime(
                         DateTime.now().year,
                         DateTime.now().month,
-                        DateTime.now().day + 1,
+                        DateTime.now().day,
                       ),
-                      lastDate: DateTime(2032, 12, 31),
+                      lastDate: DateTime(
+                        DateTime.now().year + 10,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                      ),
                     );
                     if (pickedDate != null) {
                       setState(
                         () {
-                          widget.controller!.text =
-                              DateFormat('dd/MM/yyyy').format(pickedDate);
+                          widget.controller!.text = pickedDate.toString();
+                          log(pickedDate.toString());
                         },
                       );
                     }
@@ -90,12 +94,13 @@ class _InputFieldState extends State<InputField> {
                           initialTime: const TimeOfDay(hour: 8, minute: 00),
                         );
                         if (pickedtime != null) {
-                          setState(
-                            () {
-                              widget.controller!.text =
-                                  pickedtime.format(context);
-                            },
-                          );
+                          widget.controller!.text = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            pickedtime.hour,
+                            pickedtime.minute,
+                          ).toString();
                         }
                       }
                     : () {},
@@ -178,11 +183,13 @@ class _InputFieldState extends State<InputField> {
                   (value.length != 13 || value.isEmpty || value[5] != '-')) {
                 log("phone validation error");
                 return "Please enter correct Number e.g 92333-1234567";
-              } else if (widget.fieldmessage == FieldMsgs.doe &&
-                  (value.isEmpty || value[2] != '/')) {
-                log("DOE validation error");
-                return "Please enter correct date";
-              } else if (widget.fieldmessage == FieldMsgs.email &&
+              }
+              // else if (widget.fieldmessage == FieldMsgs.doe &&
+              //     (value.isEmpty || value[2] != '/')) {
+              //   log("DOE validation error");
+              //   return "Please enter correct date";
+              // }
+              else if (widget.fieldmessage == FieldMsgs.email &&
                   !EmailValidator.validate(value)) {
                 log("Email validation error");
                 return widget.errormessage;

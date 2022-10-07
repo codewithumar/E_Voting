@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:e_voting/models/election_model.dart';
 import 'package:e_voting/models/party_model.dart';
+import 'package:e_voting/models/votecountmodel.dart';
 import 'package:e_voting/services/firebase_auth_service.dart';
 
 import 'package:e_voting/utils/constants.dart';
@@ -86,7 +87,13 @@ class FirestoreService {
     final docref = _firestore.collection("election").doc();
     data.id = docref.id;
     log(data.toJson().toString());
-    await docref.set(data.toJson());
+    await docref
+        .set(
+          data.toJson(),
+        )
+        .then(
+          (value) => Fluttertoast.showToast(msg: "Election Created"),
+        );
   }
 
   static Future<void> updateElection(ElectionModel data) async {
@@ -116,5 +123,35 @@ class FirestoreService {
     );
 
     return role;
+  }
+
+  static Future<void> submitVote(
+    PartyModel partydata,
+    VoteCountModel votecountmodel,
+    ElectionModel electiondata,
+  ) async {
+    final docref = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("voting")
+        .doc(
+          electiondata.id,
+        );
+
+    docref.set(
+      votecountmodel.toJson(),
+    );
+  }
+
+  static Future<String> checkvoted() async {
+    final docref = FirebaseFirestore.instance
+        .collection(FirebaseAuth.instance.currentUser!.email!)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("voting")
+        .doc()
+        .id;
+
+    log(docref);
+    return docref;
   }
 }

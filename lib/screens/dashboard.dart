@@ -57,12 +57,12 @@ class _DashboardState extends State<Dashboard> {
             },
           ),
           Positioned(
-            left: MediaQuery.of(context).size.width * .045,
-            right: MediaQuery.of(context).size.width * .03,
+            left: MediaQuery.of(context).size.width * .030,
+            right: MediaQuery.of(context).size.width * .01,
             bottom: 19,
             child: Container(
               height: 77,
-              width: 197,
+              width: 250,
               margin: const EdgeInsets.fromLTRB(100, 0, 100, 5),
               foregroundDecoration: const BoxDecoration(
                 color: Colors.transparent,
