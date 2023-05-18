@@ -4,7 +4,7 @@
             "name": "Flutter (lib/widgets/adminelectiontiles.dart)",
             "type": "dart",
             "request": "launch",
-            "program": "lib/widgets/adminelectiontiles.dart"
+            "program": "lib/main.dart"
         }
     ]
 }
